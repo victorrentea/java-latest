@@ -20,15 +20,19 @@ public class NonBlockingNetworkCalls {
   @GetMapping("/beer")
   public Beer seq() {
     int requestId = indexCounter.getAndIncrement();
+
     log.info("Start{} in {}", requestId, currentThread());
     UserPreferences prefs = rest.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
+    // cand JVM vede ca blochezi threadul, el va elibera threadul fizic (de OS) si-l va pune sa faca altceva, lasand aici blocat un thread VIRTUAL
+
     log.info("Got{} prefs in {}",requestId, currentThread());
+
     Beer beer = rest.getForObject("http://localhost:9999/api/beer/"+prefs.favoriteBeerType(), Beer.class);
     log.info("Got{} beer in {}",requestId, currentThread());
+
     System.out.println("Got beer " + beer);
     return beer;
   }
-
 }
 record UserPreferences(String favoriteBeerType, boolean iceInVodka) {}
 

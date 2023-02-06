@@ -28,9 +28,10 @@ public class SpringApp {
     SpringApplication.run(SpringApp.class, args);
   }
 
-//  @Bean
-//  public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
-//    return protocolHandler -> protocolHandler.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
-//  }
+  @Bean
+  public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
+    return protocolHandler -> protocolHandler.setExecutor(
+            Executors.newVirtualThreadPerTaskExecutor());
+  }
 
 }
