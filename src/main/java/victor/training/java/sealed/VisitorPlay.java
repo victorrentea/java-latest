@@ -15,7 +15,8 @@ public class VisitorPlay {
         List<Shape> shapes = List.of(
                 new Square(10), // 4 * E
                 new Circle(5), // 2 * PI * R
-                new Square(5));
+                new Square(5),
+                new Square(1));
 
         // ## OOP cu apel polimorfic de getPerimeter (ani de liceu)
 //        double totalPerimeter = shapes.stream().mapToDouble(Shape::getPerimeter).sum();
@@ -41,16 +42,20 @@ public class VisitorPlay {
 //        double totalPerimeter = visitor.getTotalPerimeter();
 
         // ## sealed classes + switch pe ierarhie
-
+// patratele cu edge < 2 sa fie ignorate
         double totalPerimeter = 0;
         for (Shape shape : shapes) {
             totalPerimeter += switch (shape) {
                 case Circle(int radius) -> radius * Math.PI * 2;
                 case Rectangle(int w,int h) -> (w + h) * 2;
-                case Square(int edge) -> edge * 4;
+                case Square(int edge) -> {
+                    if (edge < 2) yield 0;
+                    yield edge * 4; // returneaza din switchul curent
+                    // a nu se confunda cu return care iese din metoda !!!
+                }
              };
         }
-        System.out.println("Total perimeter: " + totalPerimeter);
+        System.out.println("Total perimeter (91): " + totalPerimeter);
 
 
 //        double totalArea = 0;// TODO
