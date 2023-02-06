@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -29,7 +28,7 @@ public class ImmutablePlay {
 
   private static void unknownFierceCode(Immutable obj) {
     // TODO what can go wrong here ?
-    obj.getList().clear(); // acum crapa
+    obj.list().clear(); // acum crapa
 //    System.out.println(obj.getList().isEmpty());
   }
 }
