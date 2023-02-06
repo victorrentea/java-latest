@@ -9,7 +9,7 @@ class StrategyTest {
   @Test
   void coversAllPossibleTypesOfMessages() {
     for (MessageType type : MessageType.values()) {
-       new Strategy().handleMessageDePeMQ(new Message(type, ""));
+       new Strategy().handleMessageDePeMQ(new Message(type, "", false));
       // TODO orice exceptie e ok, mai putin "NU ASTA IN PROD"
     }
   }

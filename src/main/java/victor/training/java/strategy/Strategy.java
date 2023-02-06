@@ -52,19 +52,28 @@ class Strategy {
         switch (message.type()) {
             case MARIRE -> handleMareste(message.content());
             case PROMOVARE -> handlePromoveaza(message.content());
-            case CONCEDIERE -> handleConcediaza(message.content());
+//            case CONCEDIERE  -> {
+//                if (message.urgent())
+//                    handleConcediazaUrgent(message.content());
+//                else
+//                    handleConcediazaNormal(message.content());
+//            }
+            case CONCEDIERE when message.urgent() ->
+                    handleConcediazaUrgent(message.content());
+            case CONCEDIERE when !message.urgent() ->
+                    handleConcediazaNormal(message.content());
             default -> throw new IllegalArgumentException("NU ASTA IN PROD");
         };
 //        Void vMereuNull = switch (message.type()) {
 //            case MARIRE -> handleMareste(message.content());
 //            case PROMOVARE -> handlePromoveaza(message.content());
-//            case CONCEDIERE -> handleConcediaza(message.content());
+//            case CONCEDIERE -> handleConcediazaUrgent(message.content());
 //        };
         // java 11, risc sa uiti break
 //        switch (message.type()) {
 //            case MARIRE: handleMareste(message.content());break;
 //            case PROMOVARE: handlePromoveaza(message.content());break;
-//            case CONCEDIERE: handleConcediaza(message.content());break;
+//            case CONCEDIERE: handleConcediazaUrgent(message.content());break;
 //        }
     }
 
@@ -72,7 +81,11 @@ class Strategy {
         return null;
     }
 
-    private Void handleConcediaza(String content) {
+    private Void handleConcediazaUrgent(String content) {
+        System.out.println(":( !!");
+        return null;
+    }
+    private Void handleConcediazaNormal(String content) {
         System.out.println(":( !!");
         return null;
     }
@@ -92,4 +105,4 @@ class Strategy {
 enum MessageType {
     CONCEDIERE,MARIRE,PROMOVARE, ANGAJARE
 }
-record Message(MessageType type, String content){}
+record Message(MessageType type, String content, boolean urgent){}
