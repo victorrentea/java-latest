@@ -16,10 +16,10 @@ public class CaseWhen {
     if (s == null) return; // TODO replace with 'null' case
     switch (s) {
       case Square sq -> {
-        if (sq.calculateArea() > 100) { // TODO replace with when (case refinement)
-          System.out.println("Large Square");
-          break;
-        }
+//        if (sq.calculateArea() > 100) { // TODO replace with when (case refinement)
+//          System.out.println("Large Square");
+//          break;
+//        }
       }
 //      case Shape sh -> { // TODO try this (overlapping case labels); mess with order
 //        break ;

@@ -3,6 +3,7 @@ package victor.training.java.sealed;
 
 import org.checkerframework.checker.units.qual.C;
 import victor.training.java.sealed.model.Circle;
+import victor.training.java.sealed.model.Rectangle;
 import victor.training.java.sealed.model.Shape;
 import victor.training.java.sealed.model.Square;
 
@@ -32,13 +33,23 @@ public class VisitorPlay {
 //        }
 
 
-        PerimeterVisitor visitor = new PerimeterVisitor();
+        // ## Visitor pattern
+//        PerimeterVisitor visitor = new PerimeterVisitor();
+//        for (Shape shape : shapes) {
+//            shape.accept(visitor);
+//        }
+//        double totalPerimeter = visitor.getTotalPerimeter();
+
+        // ## sealed classes + switch pe ierarhie
+
+        double totalPerimeter = 0;
         for (Shape shape : shapes) {
-            shape.accept(visitor);
+            totalPerimeter += switch (shape) {
+                case Circle c -> c.radius() * Math.PI * 2;
+                case Rectangle r -> (r.h() + r.w()) * 2;
+                case Square s -> s.edge() * 4;
+             };
         }
-        double totalPerimeter = visitor.getTotalPerimeter();
-
-
         System.out.println("Total perimeter: " + totalPerimeter);
 
 
@@ -46,6 +57,5 @@ public class VisitorPlay {
 //        System.out.println("Total area: " + totalArea);
     }
 }
-
 
 
