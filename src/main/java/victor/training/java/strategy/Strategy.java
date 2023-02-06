@@ -58,10 +58,12 @@ class Strategy {
 //                else
 //                    handleConcediazaNormal(message.content());
 //            }
-            case CONCEDIERE when message.urgent() ->
+            case CONCEDIERE -> {
+                if (message.urgent())
                     handleConcediazaUrgent(message.content());
-            case CONCEDIERE when !message.urgent() ->
+                else
                     handleConcediazaNormal(message.content());
+            }
             default -> throw new IllegalArgumentException("NU ASTA IN PROD");
         };
 //        Void vMereuNull = switch (message.type()) {

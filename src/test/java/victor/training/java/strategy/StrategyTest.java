@@ -9,7 +9,16 @@ class StrategyTest {
   @Test
   void coversAllPossibleTypesOfMessages() {
     for (MessageType type : MessageType.values()) {
-       new Strategy().handleMessageDePeMQ(new Message(type, "", false));
+
+
+      try {
+        new Strategy().handleMessageDePeMQ(new Message(type, "", false));
+      } catch (Exception e) {
+        if (e instanceof IllegalArgumentException && !e.getMessage().equals("NU ASTA IN PROD")) {
+          continue;
+        }
+        fail("entered default: ");
+      }
       // TODO orice exceptie e ok, mai putin "NU ASTA IN PROD"
     }
   }
