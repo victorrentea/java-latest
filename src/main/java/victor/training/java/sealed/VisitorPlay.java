@@ -1,6 +1,10 @@
 package victor.training.java.sealed;
 
 
+import victor.training.java.sealed.Shape.Circle;
+import victor.training.java.sealed.Shape.Rectangle;
+import victor.training.java.sealed.Shape.Square;
+
 import java.util.List;
 
 public class VisitorPlay {
@@ -41,7 +45,7 @@ public class VisitorPlay {
         for (Shape shape : shapes) {
             totalPerimeter += switch (shape) {
                 case Circle(int radius) -> radius * Math.PI * 2;
-                case Rectangle(int w,int h) -> (w + h) * 2;
+                case Rectangle(int w, int h) -> (w + h) * 2;
                 case Square(int edge) when edge >= 2 -> edge * 4;
                 default -> 0;
              };
