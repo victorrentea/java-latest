@@ -1,5 +1,6 @@
 package victor.training.java.records;
 
+import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class ImmutablePlay {
   @Test
   void immutables() {
     List<Integer> numbers = new ArrayList<>(IntStream.range(1, 10).boxed().toList());
-    Immutable obj = new Immutable("John", new Other("halo"), numbers);
+    Immutable obj = new Immutable("John", new Other("halo"), ImmutableList.copyOf(numbers));
 
     String original = obj.toString();
     System.out.println("Initial: " + obj);

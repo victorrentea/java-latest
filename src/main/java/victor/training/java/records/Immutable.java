@@ -1,5 +1,6 @@
 package victor.training.java.records;
 
+import com.google.common.collect.ImmutableList;
 import jakarta.persistence.Entity;
 
 import java.util.ArrayList;
@@ -10,12 +11,12 @@ import java.util.Objects;
 public class Immutable {
   private final String name;
   private final Other other;
-  private final List<Integer> list;
+  private final ImmutableList<Integer> list;
 
-  public Immutable(String name, Other other, List<Integer> list) {
+  public Immutable(String name, Other other, ImmutableList<Integer> list) {
     this.name = name;
     this.other = other;
-    this.list = Collections.unmodifiableList(list);
+    this.list = list;
   }
 
   public String getName() {
@@ -26,16 +27,19 @@ public class Immutable {
     return other;
   }
 
+  // ** 1
 //  public List<Integer> getList() {
 //    return new ArrayList<>(list);
 //    // 1) ineficient cu mem - malloc;
 //    // 2) minte apelantu : el poate crede ca a sters lista.
 //  }
 
-  // **
-  public List<Integer> getList() {
+  // ** 2:
+  public ImmutableList<Integer> getList() {
     return list;
   }
+  // ** 3: Guava lib : ImmutableList
+
 
   @Override
   public String toString() {
