@@ -1,10 +1,13 @@
 package victor.training.java.records;
 
+import jakarta.persistence.Entity;
+
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
-public
-class Immutable {
+public class Immutable {
   private final String name;
   private final Other other;
   private final List<Integer> list;
@@ -12,7 +15,7 @@ class Immutable {
   public Immutable(String name, Other other, List<Integer> list) {
     this.name = name;
     this.other = other;
-    this.list = list;
+    this.list = Collections.unmodifiableList(list);
   }
 
   public String getName() {
@@ -23,21 +26,15 @@ class Immutable {
     return other;
   }
 
+//  public List<Integer> getList() {
+//    return new ArrayList<>(list);
+//    // 1) ineficient cu mem - malloc;
+//    // 2) minte apelantu : el poate crede ca a sters lista.
+//  }
+
+  // **
   public List<Integer> getList() {
     return list;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Immutable immutable = (Immutable) o;
-    return Objects.equals(name, immutable.name) && Objects.equals(other, immutable.other) && Objects.equals(list, immutable.list);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, other, list);
   }
 
   @Override
