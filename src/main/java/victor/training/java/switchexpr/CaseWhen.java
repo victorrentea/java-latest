@@ -3,7 +3,7 @@ package victor.training.java.switchexpr;
 import victor.training.java.sealed.model.Circle;
 import victor.training.java.sealed.model.Shape;
 import victor.training.java.sealed.model.Square;
-
+// https://openjdk.org/jeps/420
 public class CaseWhen {
 
   public static void main(String[] args) {
