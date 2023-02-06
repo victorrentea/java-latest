@@ -1,5 +1,7 @@
 package victor.training.java.records;
 
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
 
 //@Data
@@ -15,8 +17,17 @@ import java.util.List;
 //  Other other;
 //  List<Integer> list;
 //}
-
-
+//final class Immutable2 { // shallow (<> deep) immutable
+//  private final String name;
+//  private final Other other;
+//  private final ImmutableList<Integer> list;
+//
+//  Immutable2(String name, Other other, ImmutableList<Integer> list) {
+//    this.name = name;
+//    this.other = other;
+//    this.list = list;
+//  }
+//}
 //public class Immutable {
 //  private final String name;
 //  private final Other other;

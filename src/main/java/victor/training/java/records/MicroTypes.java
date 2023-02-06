@@ -1,6 +1,7 @@
 package victor.training.java.records;
 
 import org.jooq.lambda.tuple.Tuple;
+import org.jooq.lambda.tuple.Tuple12;
 import org.jooq.lambda.tuple.Tuple2;
 import org.junit.jupiter.api.Test;
 
@@ -24,8 +25,14 @@ public class MicroTypes {
    
    @Test
    void lackOfAbstractions() {
-      Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
+      var map = extremeFP();
       // Joke: try "var" above :)
+      var i = 1; // var este un trick sa definesti o variab 'mai compact'. de ce au pus var in Java 11 ? de marketing. sa atraga si JS
+//      i += "js"; // merge in JS dar, Slava Domnului, nu merge in Java pt ca java e tot limbaj statically typed.
+      var var = "alb";
+      // CAND SA FOLOSIM VAR; niciodata! poate doar intr-un @Test
+
+      System.out.println(i);
 
       for (Long cid : map.keySet()) {
          String pl = map.get(cid).stream()
