@@ -24,10 +24,4 @@ public final class Circle implements Shape {
 		return "Circle[" +
 			   "getRadius=" + radius + ']';
 	}
-
-
-	@Override
-	public double getPerimeter() {
-		return 2 * Math.PI * radius;
-	}
 }

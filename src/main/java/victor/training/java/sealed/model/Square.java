@@ -25,12 +25,4 @@ public final class Square implements Shape {
 			   "getEdge=" + edge + ']';
 	}
 
-	public int calculateArea() {
-		return edge * edge;
-	}
-
-	@Override
-	public double getPerimeter() {
-		return  4 * edge;
-	}
 }
