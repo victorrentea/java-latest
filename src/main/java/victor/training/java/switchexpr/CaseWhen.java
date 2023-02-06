@@ -1,8 +1,8 @@
 package victor.training.java.switchexpr;
 
-import victor.training.java.sealed.model.Circle;
-import victor.training.java.sealed.model.Shape;
-import victor.training.java.sealed.model.Square;
+import victor.training.java.sealed.Circle;
+import victor.training.java.sealed.Shape;
+import victor.training.java.sealed.Square;
 // https://openjdk.org/jeps/420
 public class CaseWhen {
 

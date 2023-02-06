@@ -19,10 +19,5 @@ import java.util.List;
 //
 //    List<Shape> shapes = List.of(new Shape.Rectangle(2,3), new Shape.Square(2));
 //
-//    double totalPrice = shapes.stream().mapToDouble(shape ->
-//            switch (shape) {
-//              case Rectangle(float w, float h) -> w*h;
-//              case Square(float edge) -> edge * edge;
-//            }
 //  }
 //}

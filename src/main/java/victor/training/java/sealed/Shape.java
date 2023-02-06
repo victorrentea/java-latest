@@ -1,7 +1,7 @@
-package victor.training.java.sealed.model;
+package victor.training.java.sealed;
 
 
-import victor.training.java.sealed.model.Letter.Vocala;
+import victor.training.java.sealed.Letter.Vocala;
 
 // solutia 1: sealed + permits
 sealed public interface Shape

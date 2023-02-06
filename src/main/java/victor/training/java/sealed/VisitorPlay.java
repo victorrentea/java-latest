@@ -1,12 +1,6 @@
 package victor.training.java.sealed;
 
 
-import org.checkerframework.checker.units.qual.C;
-import victor.training.java.sealed.model.Circle;
-import victor.training.java.sealed.model.Rectangle;
-import victor.training.java.sealed.model.Shape;
-import victor.training.java.sealed.model.Square;
-
 import java.util.List;
 
 public class VisitorPlay {
@@ -48,11 +42,8 @@ public class VisitorPlay {
             totalPerimeter += switch (shape) {
                 case Circle(int radius) -> radius * Math.PI * 2;
                 case Rectangle(int w,int h) -> (w + h) * 2;
-                case Square(int edge) -> {
-                    if (edge < 2) yield 0;
-                    yield edge * 4; // returneaza din switchul curent
-                    // a nu se confunda cu return care iese din metoda !!!
-                }
+                case Square(int edge) when edge >= 2 -> edge * 4;
+                default -> 0;
              };
         }
         System.out.println("Total perimeter (91): " + totalPerimeter);
