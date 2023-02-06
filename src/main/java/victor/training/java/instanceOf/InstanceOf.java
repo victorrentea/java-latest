@@ -1,4 +1,4 @@
-package victor.training.java.instance_of;
+package victor.training.java.instanceOf;
 
 public class InstanceOf {
   public static void main(String[] args) {

@@ -27,8 +27,7 @@ public class ImmutablePlay {
   }
 
   private static void unknownFierceCode(Immutable obj) {
-    // TODO what can go wrong here ?
-    obj.list().clear(); // acum crapa
-//    System.out.println(obj.getList().isEmpty());
+//    obj.getList().clear(); // mutate state
+//    System.out.println("size after clear = " + obj.getList().size());
   }
 }

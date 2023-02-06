@@ -1,4 +1,4 @@
-package victor.training.java.strategy;
+package victor.training.java.Switch;
 
 import java.time.LocalDate;
 

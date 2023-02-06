@@ -1,4 +1,4 @@
-package victor.training.java.instance_of;
+package victor.training.java.instanceOf;
 
 public record Color(int r, int g, int b, float a) {
 }

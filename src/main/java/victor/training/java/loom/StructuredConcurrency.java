@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+import victor.training.java.loom.NonBlockingNetworkCalls.Beer;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;

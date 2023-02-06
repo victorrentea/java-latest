@@ -2,6 +2,7 @@ package victor.training.java.loom;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -13,28 +14,30 @@ import static java.lang.Thread.currentThread;
 @RestController
 public class NonBlockingNetworkCalls {
   private static final Logger log = LoggerFactory.getLogger(NonBlockingNetworkCalls.class);
+  private static final ThreadLocal<String> tl = new ThreadLocal<>();
 
   private final RestTemplate rest = new RestTemplate();
-  private static final AtomicInteger indexCounter = new AtomicInteger(0);
+  private static final AtomicInteger indexCounter = new AtomicInteger(1);
 
   @GetMapping("/beer")
   public Beer seq() {
     int requestId = indexCounter.getAndIncrement();
+    tl.set("req"+requestId);
+    MDC.put("reqId", "#%04d".formatted(requestId)); // %X{reqId} in application.properties
 
-    log.info("Start{} in {}", requestId, currentThread());
+    log.info("req#{} START in thread={} (TL={})", requestId, currentThread(),tl.get());
+
     UserPreferences prefs = rest.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
-    // cand JVM vede ca blochezi threadul, el va elibera threadul fizic (de OS) si-l va pune sa faca altceva, lasand aici blocat un thread VIRTUAL
 
-    log.info("Got{} prefs in {}",requestId, currentThread());
+    log.info("req#{} Got prefs in thread={}: {}  (TL={})", requestId, currentThread(), prefs ,tl.get());
 
     Beer beer = rest.getForObject("http://localhost:9999/api/beer/"+prefs.favoriteBeerType(), Beer.class);
-    log.info("Got{} beer in {}",requestId, currentThread());
-
-    System.out.println("Got beer " + beer);
+    log.info("req#{} END Got beer in thread={}: {} (TL={})", requestId, currentThread(), beer, tl.get());
     return beer;
   }
-}
-record UserPreferences(String favoriteBeerType, boolean iceInVodka) {}
 
-record Beer(String type) {
+  record UserPreferences(String favoriteBeerType, boolean iceInVodka) {}
+
+  record Beer(String type) {
+  }
 }

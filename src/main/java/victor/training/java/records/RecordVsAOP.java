@@ -9,15 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 class MyController {
-  private final MyService service; // a proxy has to be injected
-
+  private final MyService service; // Spring has to injected a Proxy, to intercept @Transactional method calls
 }
 
-@Slf4j
 @Service
 /*final*/
 record MyService(MyRepo myRepo) { // CGLIB cannot generate a proxy (dynamic subclass) of a final class
-
   @Transactional
   public void method() {
 
@@ -25,6 +22,4 @@ record MyService(MyRepo myRepo) { // CGLIB cannot generate a proxy (dynamic subc
 }
 
 interface MyRepo {
-
 }
-//class DynamicSubclassCuCGLIB extends MyService

@@ -1,4 +1,4 @@
-package victor.training.java.instance_of;
+package victor.training.java.instanceOf;
 
 public record Point(Position position, Color color) {
 }

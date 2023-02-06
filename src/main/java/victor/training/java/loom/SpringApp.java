@@ -30,6 +30,7 @@ public class SpringApp {
 
   @Bean
   public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
+    // tell Tomcat to create a new virtual thread for every incoming request
     return protocolHandler -> protocolHandler.setExecutor(
             Executors.newVirtualThreadPerTaskExecutor());
   }
