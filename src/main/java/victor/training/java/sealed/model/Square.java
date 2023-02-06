@@ -12,20 +12,12 @@ public final class Square implements Shape {
 		this.edge = edge;
 	}
 
-
-//	@Override
-//	public void accept(ShapeVisitor visitor) {
-//		visitor.visit(this);
-//	}
-
 	public int getEdge() {
 		return edge;
 	}
 
-	@Override
 	public String toString() {
-		return "Square[" +
-			   "getEdge=" + edge + ']';
+		return "Square[" +"getEdge=" + edge + ']';
 	}
 
 }

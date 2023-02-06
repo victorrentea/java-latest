@@ -17,9 +17,7 @@ public class PerimeterVisitor implements ShapeVisitor {
 	public void visit(Rectangle rectangle) {
 		totalPerimeter += (rectangle.getW() + rectangle.getH()) * 2;
 	}
-
 	public double getTotalPerimeter() {
 		return totalPerimeter;
 	}
-
 }
