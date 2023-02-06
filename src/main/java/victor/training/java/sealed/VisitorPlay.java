@@ -45,9 +45,9 @@ public class VisitorPlay {
         double totalPerimeter = 0;
         for (Shape shape : shapes) {
             totalPerimeter += switch (shape) {
-                case Circle c -> c.radius() * Math.PI * 2;
-                case Rectangle r -> (r.h() + r.w()) * 2;
-                case Square s -> s.edge() * 4;
+                case Circle(int radius) -> radius * Math.PI * 2;
+                case Rectangle(int w,int h) -> (w + h) * 2;
+                case Square(int edge) -> edge * 4;
              };
         }
         System.out.println("Total perimeter: " + totalPerimeter);
