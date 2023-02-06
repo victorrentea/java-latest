@@ -1,13 +1,14 @@
 {
   "request": {
     "method": "GET",
-    "urlPathPattern": "/api/beer/blond"
+    "urlPathPattern": "/api/user-preferences"
   },
   "response": {
     "status": 200,
     "jsonBody":
       {
-        "type": "blond"
+        "favoriteBeerType": "blond",
+        "iceInVodka": "false"
       },
     "fixedDelayMilliseconds": 500,
     "headers": {

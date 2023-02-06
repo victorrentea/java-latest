@@ -1,13 +1,13 @@
 {
   "request": {
     "method": "GET",
-    "urlPathPattern": "/api/beer/blond"
+    "urlPathPattern": "/api/vodka"
   },
   "response": {
     "status": 200,
     "jsonBody":
       {
-        "type": "blond"
+        "type": "deadly"
       },
     "fixedDelayMilliseconds": 500,
     "headers": {

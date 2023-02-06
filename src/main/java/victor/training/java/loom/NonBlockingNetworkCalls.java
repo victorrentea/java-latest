@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static java.lang.System.currentTimeMillis;
+import static java.lang.Thread.currentThread;
 
 @RestController
 public class NonBlockingNetworkCalls {
@@ -17,20 +17,20 @@ public class NonBlockingNetworkCalls {
   private final RestTemplate rest = new RestTemplate();
   private static final AtomicInteger indexCounter = new AtomicInteger(0);
 
-  @GetMapping("/seq")
-  public String seq() {
-    long t0 = currentTimeMillis();
-    int index = indexCounter.incrementAndGet();
-    log.info(index + " START in thread " + Thread.currentThread());
-    Beer beer1 = rest.getForObject("http://localhost:9999/api/beer", Beer.class);
-    log.info(index + " GOT BEER 1 in thread " + Thread.currentThread());
-    Beer beer2 = rest.getForObject("http://localhost:9999/api/beer", Beer.class);
-    log.info(index + " GOT BEER 2 in thread " + Thread.currentThread());
-    long t1 = currentTimeMillis();
-    log.info(index + " took " + (t1 - t0));
-
-    return beer1 + " and " + beer2;
+  @GetMapping("/beer")
+  public Beer seq() {
+    int requestId = indexCounter.getAndIncrement();
+    log.info("Start{} in {}", requestId, currentThread());
+    UserPreferences prefs = rest.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
+    log.info("Got{} prefs in {}",requestId, currentThread());
+    Beer beer = rest.getForObject("http://localhost:9999/api/beer/"+prefs.favoriteBeerType(), Beer.class);
+    log.info("Got{} beer in {}",requestId, currentThread());
+    System.out.println("Got beer " + beer);
+    return beer;
   }
 
+}
+record UserPreferences(String favoriteBeerType, boolean iceInVodka) {}
 
+record Beer(String type) {
 }
