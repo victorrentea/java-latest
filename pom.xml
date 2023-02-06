@@ -65,6 +65,12 @@
             <version>2.27.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <!--https://projectlombok.org/changelog-->
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.26</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
