@@ -31,7 +31,12 @@ public class VisitorPlay {
 //            }
 //        }
 
-        double totalPerimeter = 0;
+
+        PerimeterVisitor visitor = new PerimeterVisitor();
+        for (Shape shape : shapes) {
+            shape.accept(visitor);
+        }
+        double totalPerimeter = visitor.getTotalPerimeter();
 
 
         System.out.println("Total perimeter: " + totalPerimeter);
