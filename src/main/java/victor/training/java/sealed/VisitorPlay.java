@@ -21,16 +21,16 @@ public class VisitorPlay {
 //        double totalPerimeter = shapes.stream().mapToDouble(Shape::getPerimeter).sum();
 
         // ## instanceof (tii toata logica tuturor gramada aici)
-//        double totalPerimeter = 0;
-//        for (Shape shape : shapes) {
-//            if (shape instanceof Square sq) { //instanceof cu declaratie de variabila
-//                totalPerimeter += sq.getEdge() * 4;
-//            } else if (shape instanceof Circle c) { //instanceof cu declaratie de variabila
-//                totalPerimeter += c.getRadius() * 2 * Math.PI;
-//            } else { // aka default din switch
-//                throw new IllegalArgumentException("Ce hal de forma e asta: " + shape);
-//            }
-//        }
+        double totalPerimeter2 = 0;
+        for (Shape shape : shapes) {
+            if (shape instanceof Square(int edge)) { //instanceof cu declaratie de variabila
+                totalPerimeter2 += edge * 4;
+            } else if (shape instanceof Circle(int radius)) { //instanceof cu declaratie de variabila
+                totalPerimeter2 += radius * 2 * Math.PI;
+            } else { // aka default din switch
+                throw new IllegalArgumentException("Ce hal de forma e asta: " + shape);
+            }
+        }
 
 
         // ## Visitor pattern
