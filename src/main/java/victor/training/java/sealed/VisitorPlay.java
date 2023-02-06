@@ -11,12 +11,21 @@ public class VisitorPlay {
 
     public static void main(String[] args) {
         List<Shape> shapes = List.of(
-                new Square(10),
-                new Circle(5),
+                new Square(10), // 4 * E
+                new Circle(5), // 2 * PI * R
                 new Square(5));
 
-        double totalPerimeter = 0;
+        // OOP cu apel polimorfic de getPerimeter
+        double totalPerimeter = shapes.stream().mapToDouble(Shape::getPerimeter).sum();
+
+
+
         System.out.println("Total perimeter: " + totalPerimeter);
+
+
+
+
+
 
 //        double totalArea = 0;// TODO
 //        System.out.println("Total area: " + totalArea);

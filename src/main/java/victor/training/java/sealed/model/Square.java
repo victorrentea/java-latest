@@ -9,10 +9,11 @@ public final class Square implements Shape {
 		this.edge = edge;
 	}
 
-	@Override
-	public void accept(ShapeVisitor visitor) {
-		visitor.visit(this);
-	}
+
+//	@Override
+//	public void accept(ShapeVisitor visitor) {
+//		visitor.visit(this);
+//	}
 
 	public int getEdge() {
 		return edge;
@@ -26,5 +27,10 @@ public final class Square implements Shape {
 
 	public int calculateArea() {
 		return edge * edge;
+	}
+
+	@Override
+	public double getPerimeter() {
+		return  4 * edge;
 	}
 }
