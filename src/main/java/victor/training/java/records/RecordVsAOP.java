@@ -15,6 +15,7 @@ class MyController {
 
 @Slf4j
 @Service
+/*final*/
 record MyService(MyRepo myRepo) { // CGLIB cannot generate a proxy (dynamic subclass) of a final class
 
   @Transactional
