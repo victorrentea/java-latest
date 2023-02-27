@@ -26,6 +26,12 @@ class Dot {
 public class RecordLab {
   public static void main(String[] args) {
     Dot dot = new Dot();
+
+
+
+    // TODO la ce sa avem grija inainte sa urmam sfatul intelliJ sa "convert to record" ?
+    // - in loc de getX() o sa apara x() => dar n-ar trebui sa-i pese nimanui de cum numesti getterii
+    // -
   }
 }
 
