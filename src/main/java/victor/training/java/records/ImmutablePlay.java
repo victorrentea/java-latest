@@ -27,7 +27,5 @@ public class ImmutablePlay {
   }
 
   private static void unknownFierceCode(Immutable obj) {
-//    obj.getList().clear(); // mutate state
-//    System.out.println("size after clear = " + obj.getList().size());
   }
 }

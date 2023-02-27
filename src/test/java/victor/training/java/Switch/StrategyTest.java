@@ -12,7 +12,7 @@ class StrategyTest {
 
 
       try {
-        new Strategy().handleMessageDePeMQ(new Message(type, "", false));
+        new Strategy().handleMessage(new Message(type, "", false));
       } catch (Exception e) {
         if (e instanceof IllegalArgumentException && !e.getMessage().equals("NU ASTA IN PROD")) {
           continue;

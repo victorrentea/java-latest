@@ -16,45 +16,12 @@ public class VisitorPlay {
                 new Square(5),
                 new Square(1));
 
-        // ## OOP cu apel polimorfic de getPerimeter (ani de liceu)
-//        double totalPerimeter = shapes.stream().mapToDouble(Shape::getPerimeter).sum();
+        // TASK : compute the total perimeter
 
-        // ## instanceof (tii toata logica tuturor gramada aici)
-        double totalPerimeter2 = 0;
-        for (Shape shape : shapes) {
-            if (shape instanceof Square(int edge)) { //instanceof cu declaratie de variabila
-                totalPerimeter2 += edge * 4;
-            } else if (shape instanceof Circle(int radius)) { //instanceof cu declaratie de variabila
-                totalPerimeter2 += radius * 2 * Math.PI;
-            } else { // aka default din switch
-                throw new IllegalArgumentException("Ce hal de forma e asta: " + shape);
-            }
-        }
-
-
-        // ## Visitor pattern
-//        PerimeterVisitor visitor = new PerimeterVisitor();
-//        for (Shape shape : shapes) {
-//            shape.accept(visitor);
-//        }
-//        double totalPerimeter = visitor.getTotalPerimeter();
-
-        // ## sealed classes + switch pe ierarhie
-// patratele cu edge < 2 sa fie ignorate
-        double totalPerimeter = 0;
-        for (Shape shape : shapes) {
-            totalPerimeter += switch (shape) {
-                case Circle(int radius) -> radius * Math.PI * 2;
-                case Rectangle(int w, int h) -> (w + h) * 2;
-                case Square(int edge) when edge >= 2 -> edge * 4;
-                default -> 0;
-             };
-        }
-        System.out.println("Total perimeter (91): " + totalPerimeter);
-
-
-//        double totalArea = 0;// TODO
-//        System.out.println("Total area: " + totalArea);
+        // ## OOP
+        // ## VISITOR
+        // ## instanceOf
+        // ## switch+sealed
     }
 }
 

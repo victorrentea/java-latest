@@ -33,12 +33,3 @@ public class Immutable {
     return "Immutable{" +"name='" + name + '\'' +", other=" + other +", list=" + list +'}';
   }
 }
-
-@Value //  = all fields private final + ctor + getter + hash/equals + toString
-class ImmutableLombok {
-  String name;
-  Other other;
-  List<Integer> list;
-}
-record Immutable17(String name, Other other, List<Integer> list) {
-}
