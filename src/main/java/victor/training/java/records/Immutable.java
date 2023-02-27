@@ -10,7 +10,8 @@ import java.util.List;
 
 public class Immutable {
   private final String name;
-  private final Other other;
+  private final Other other; // daca un obiect referit de tine este mutabil => tu nu esti DEEP IMMUTABLE,
+  // ci poate doar SHALLOW immutable
   private final List<Integer> list;
 
   public Immutable(String name, Other other, List<Integer> list) {
