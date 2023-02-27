@@ -10,6 +10,8 @@ public record Immutable(String name, Other other, List<Integer> list) {
   }
 }
 
+
+
 //public class Immutable {
 //  private final String name;
 //  private final Other other; // daca un obiect referit de tine este mutabil => tu nu esti DEEP IMMUTABLE,
