@@ -30,9 +30,10 @@ class Switch {
             case FR:
             case ES:
             case RO:
+//            case UA:
                 return parcel.tobaccoValue() / 3;
             default:
-                throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
+                throw new IllegalStateException("Poate ca maine... Unexpected value, dar n-ar trebui sa se intample vreodata: " + parcel.originCountry());
         }
     }
 
