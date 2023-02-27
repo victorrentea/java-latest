@@ -6,9 +6,4 @@ public record Circle(int radius) implements Shape {
   public double perimeter() {
     return 2 * radius * Math.PI;
   }
-
-  @Override
-  public void accept(ShapeVisitor visitor) {
-    visitor.visit(this);
-  }
 }

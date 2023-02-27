@@ -17,6 +17,11 @@ public class PerimeterVisitor implements ShapeVisitor{
     total += 2 * (rectangle.w() + rectangle.h());
   }
 
+  @Override
+  public void visit(Elipsis elipsis) {
+//    total += todo
+  }
+
   public double getTotal() {
     return total;
   }

@@ -38,11 +38,11 @@ public class VisitorPlay {
 
     // ## VISITOR design pattern: sa implem logica specifica unor tipuri concrete dar !!
     // FARA SA ADAUGI LOGICA IN CLASELE RESPECTIVE => Anti-pattern in java 17
-    PerimeterVisitor perimeterVisitor = new PerimeterVisitor();
-    for (Shape shape : shapes) {
-      shape.accept(perimeterVisitor);
-    }
-    totalPerimeter = perimeterVisitor.getTotal();
+//    PerimeterVisitor perimeterVisitor = new PerimeterVisitor();
+//    for (Shape shape : shapes) {
+//      shape.accept(perimeterVisitor);
+//    }
+//    totalPerimeter = perimeterVisitor.getTotal();
 
     System.out.println("Total perimeter = " + totalPerimeter);
 
