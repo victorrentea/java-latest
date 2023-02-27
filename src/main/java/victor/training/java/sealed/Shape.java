@@ -28,7 +28,7 @@ sealed interface Letter {
   record A() implements Letter{}
   record B() implements Letter{}
   final class X implements Letter {}
-  sealed class Y implements Letter permits Y2,Y3 {}
+  sealed abstract class Y implements Letter permits Y2,Y3 {}
 }
 
 final class Y2 extends Y {}
