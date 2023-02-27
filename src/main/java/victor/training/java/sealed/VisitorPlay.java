@@ -17,20 +17,27 @@ public class VisitorPlay {
     double totalPerimeter = 0;
 
     // ### instanceof
+//    for (Shape shape : shapes) {
+//      if (shape instanceof Square sq) { // test de instanceof + declaratie de variabila 2-in-1
+//        totalPerimeter += sq.edge() * 4;
+//      } else if (shape instanceof Circle c) {
+//        totalPerimeter += c.radius() * 2 * Math.PI;
+//      } else {
+//        throw new IllegalArgumentException("Unsupported type: " + shape.getClass().getSimpleName());
+//      }
+//      // PROBLEMA: daca apare maine si Dreptungiul => sare cu exceptie.
+//        // pot mai bine (mai devreme => la compilare) sa vad lipsa?
+//    }
+
+
+    // ## OOP
     for (Shape shape : shapes) {
-      if (shape instanceof Square sq) { // test de instanceof + declaratie de variabila 2-in-1
-        totalPerimeter += sq.edge() * 4;
-      } else if (shape instanceof Circle c) {
-        totalPerimeter += c.radius() * 2 * Math.PI;
-      } else {
-        throw new IllegalArgumentException("Unsupported type: " + shape.getClass().getSimpleName());
-      }
-      // PROBLEMA: daca apare maine si Dreptungiul
+      totalPerimeter += shape.perimeter();
     }
 
     System.out.println("Total perimeter = " + totalPerimeter);
 
-    // ## OOP
+
     // ## VISITOR
     // ## instanceOf
     // ## switch+sealed
