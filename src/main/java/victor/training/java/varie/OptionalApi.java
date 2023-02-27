@@ -10,11 +10,9 @@ public class OptionalApi {
   public static void main(String[] args) {
     Optional<Foo> fooOpt = repoFindById(1);
     // if not found in my DB, fetch from external API
+    Foo resolved = fooOpt.orElse(networkCallToRemoteSystem(1));
 
-    Foo resolved = fooOpt.orElse(networkCallToRemoteSystem(1)); // performs the network call even if findById returns it
-
-    //Foo resolved = fooOpt.or(() -> Optional.of(networkCallToRemoteSystem(1))).orElseThrow();
-
+    // TODO what's wrong with this?
     System.out.println(resolved);
   }
   private static Foo networkCallToRemoteSystem(int id) {

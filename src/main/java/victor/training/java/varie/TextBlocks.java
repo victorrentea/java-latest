@@ -16,19 +16,17 @@ public class TextBlocks {
 
    // ## 1 copy-paste from SQL editor :)
    interface SomeSpringDataRepo extends JpaRepository<TeachingActivity, Long> {
-      @Query(nativeQuery = true, value = """
-                select t.id                       
-                from TEACHER t 
-                where (?1 is null or upper(t.name) like upper(('%'||?1||'%'))) 
-                and (?2 is null or t.grade=?2) 
-                and (cast(?3 as integer)=0 or exists 
-                     select 1 
-                     from TEACHING_ACTIVITY ta 
-                     inner join TEACHING_ACTIVITY_TEACHER tat on ta.id=tat.activities_id 
-                     inner join TEACHER tt on tat.teachers_id=tt.id 
-                     where ta.discr='COURSE' 
-                     and tt.id=t.id))
-            """)
+      @Query(nativeQuery = true, value = "    select t.id\n" +
+                                         "    from TEACHER t\n" +
+                                         "    where (?1 is null or upper(t.name) like upper(('%'||?1||'%')))\n" +
+                                         "    and (?2 is null or t.grade=?2)\n" +
+                                         "    and (cast(?3 as integer)=0 or exists\n" +
+                                         "         select 1\n" +
+                                         "         from TEACHING_ACTIVITY ta\n" +
+                                         "         inner join TEACHING_ACTIVITY_TEACHER tat on ta.id=tat.activities_id\n" +
+                                         "         inner join TEACHER tt on tat.teachers_id=tt.id\n" +
+                                         "         where ta.discr='COURSE'\n" +
+                                         "         and tt.id=t.id))\n")
       List<Long> complexQuery(String namePart, Integer grade, boolean teachingCourses);
    }
 
@@ -40,12 +38,10 @@ public class TextBlocks {
    @Test
    void test() throws Exception {
       // language=json
-      String json = """       
-              {
-                 "name": "%s",
-                 "teachingCourses": true
-              }
-              """.formatted("nume");
+      String json = ("{\n" +
+                     "   \"name\": \"%s\",\n" +
+                     "   \"teachingCourses\": true\n" +
+                     "}\n").formatted("nume");
       mockMvc.perform(post("/product/search")
               .contentType("application/json")
               .content(json) // add one more criteria
