@@ -21,34 +21,33 @@ class Switch {
 
     // #### 1 - switch expression (enum) = exhaustive
     public static double calculateCustomsTax(Parcel parcel) { // UGLY API we CANNOT change
-        double valoare = 0;
+        double result = 0;
         switch (parcel.originCountry()) {
 //            case null: // new in java 18
             case UK:
-                valoare = parcel.tobaccoValue() / 2 + parcel.regularValue();
+                result = parcel.tobaccoValue() / 2 + parcel.regularValue();
                 break;
             case CN:
-                valoare = parcel.tobaccoValue() + parcel.regularValue();
+                result = parcel.tobaccoValue() + parcel.regularValue();
                 break;
             case FR:
             case ES:
             case RO:
-                valoare = parcel.tobaccoValue() / 3;
+                result = parcel.tobaccoValue() / 3;
                 break;
         }
-        return valoare;
+        return result;
     }
 
     // #### 2 - switch expression non exhaustive
-    public int switchOnNonExhaustiveCriteria(
-            String countryIsoCode, int parcelValue) {
+    public int switchNonExhaustive(String countryIsoCode, int parcelValue) {
         switch (countryIsoCode) {
             case "RO":
                 return parcelValue * 2;
             case "FR":
                 return parcelValue + 2;
             default:
-                throw new IllegalArgumentException("Vezi ca nu stiu de tara asta " + countryIsoCode);
+                throw new IllegalArgumentException("Unknown country " + countryIsoCode);
         }
     }
 
