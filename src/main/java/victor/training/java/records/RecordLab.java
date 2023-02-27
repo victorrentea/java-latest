@@ -1,6 +1,8 @@
 package victor.training.java.records;
 
 
+import java.util.Optional;
+
 record Dot(int x, int y) {
   public Dot { // constructorul 'canonic' - ala standard
     if (x < 0 || y < 0) throw new IllegalArgumentException("negative !!Y&Q(&TQ&*RQ#^");
@@ -17,6 +19,11 @@ record Dot(int x, int y) {
   private static int i; // wow, da de ce ?
   public static void raceConditionTeDaAfara() {  i++; } // in context multithreading (pe server side) -> e jale
 
+  @Override
+  public String toString() {
+    return "Dot{x=%d, y=%d}".formatted(x, y);  // poti modifica implem fctiilor generate automat
+  }
+  // @Override public Optional<Integer> x() {return x;} // NU compileaza : sa modif semnatura metodelor auto generate
 }
 // autogenereaza : constructor, getter (fara "get-"), toString, hashCode/equals ~= @Value
 public class RecordLab {
