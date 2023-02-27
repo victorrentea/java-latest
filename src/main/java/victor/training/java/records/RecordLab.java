@@ -6,8 +6,14 @@ import java.util.Optional;
 
 class Oarecare {public int z;}
 
+interface Interf {
+  void method();
+  int x();
+}
 
-record Dot(int x, int y) /*extends Oarecare*/{ // automat este 'final', si nu poate extinde alte clase
+// automat este 'final', si nu poate extinde alte clase
+// DA: recordul poate implementa interfete
+record Dot(int x, int y) implements Interf /*extends Oarecare*/{
   public Dot { // constructorul 'canonic' - ala standard
     if (x < 0 || y < 0) throw new IllegalArgumentException("negative !!Y&Q(&TQ&*RQ#^");
   }
