@@ -1,11 +1,5 @@
 package victor.training.java.records;
 
-// final
-// fields
-// methods
-// constructors
-// hashcode equals
-// polymorphism
 
 class Dot {
   private int x;
@@ -35,3 +29,13 @@ public class RecordLab {
     Dot dot = new Dot();
   }
 }
+
+// final
+// fields
+// methods
+// statics
+// constructors: validation + overloaded
+// hashcode equals
+// override generated methods
+// polymorphism
+
