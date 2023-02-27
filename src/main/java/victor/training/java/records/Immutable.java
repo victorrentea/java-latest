@@ -1,13 +1,16 @@
 package victor.training.java.records;
 
 import java.util.List;
+import java.util.Optional;
 
-public record Immutable(String name, Other other, List<Integer> list) {
-  public Immutable(String name, Other other, List<Integer> list) {
-    this.name = name;
-    this.other = other;
-    this.list = List.copyOf(list);
-  }
+// in java 8 si 11 e bad practice sa folosesti Optional<> ca si tip al campului.
+// in recorduri n-ai de ales daca vrei sa fii null-safe
+public record Immutable(Optional<String> name, Other other, List<Integer> list) {
+
+//  @Override
+//  public Optional<String> name() { // problema: nu poti schimba getterul mostenit sa intoarca Optional<>
+//    return name;
+//  }
 }
 
 

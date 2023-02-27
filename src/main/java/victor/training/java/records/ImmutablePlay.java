@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,7 +16,7 @@ public class ImmutablePlay {
   @Test
   void immutables() {
     List<Integer> numbers = new ArrayList<>(IntStream.range(1, 10).boxed().toList());
-    Immutable obj = new Immutable("John",
+    Immutable obj = new Immutable(Optional.empty(), // valid sa fie null
             new Other("halo"),
             numbers);
 
@@ -23,8 +24,6 @@ public class ImmutablePlay {
     System.out.println("Initial: " + obj);
 
     int price = computePrice(obj); // CQS
-
-//    sendMessageKafka(obj);
 
     System.out.println("After:   " + obj);
 
@@ -37,6 +36,7 @@ public class ImmutablePlay {
 //    System.out.println(obj.getList());
 //    obj.getOther().setData("oups");
     System.out.println(obj.list());
+    System.out.println(obj.name().map(s->s.toUpperCase()).orElse("N/A"));
     return 0;
   }
 }
