@@ -19,6 +19,8 @@ public class Marketing {
     //    doamneFereste = "surpriza!!";
 
     var var = "alb";
+
+    // let / const👌
   }
 }
 
