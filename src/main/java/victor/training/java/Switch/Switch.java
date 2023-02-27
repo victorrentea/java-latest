@@ -19,6 +19,8 @@ class Switch {
         System.out.println("Tax for (null,100,100) = " + calculateCustomsTax(
                 new Parcel(null, 100, 100, LocalDate.now())));
     }
+    // Java 11 -> java.lang.NullPointerException: null
+    // Java 17 -> java.lang.NullPointerException: Cannot invoke "victor.training.java.Switch.Parcel$CountryEnum.ordinal()" because "countryEnum" is null
 
     // #### 1 - switch expression (enum) = exhaustive
     public static double calculateCustomsTax(Parcel parcel) { // UGLY API we CANNOT change
@@ -26,9 +28,7 @@ class Switch {
         CountryEnum countryEnum = parcel.originCountry();
         return switch (countryEnum) {
             // daca countryEnum e null -> switch arunca NPE in orice vers de Java
-            // Java 11 -> java.lang.NullPointerException: null
-            // Java 17 -> java.lang.NullPointerException: Cannot invoke "victor.training.java.Switch.Parcel$CountryEnum.ordinal()" because "countryEnum" is null
-
+            case null -> 10; // din java > 17 se poate case null ->
             case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
             case CN -> parcel.tobaccoValue() + parcel.regularValue();
             case FR, ES, RO, UA -> parcel.tobaccoValue() / 3;
