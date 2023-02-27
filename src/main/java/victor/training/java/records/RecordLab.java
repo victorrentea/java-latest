@@ -6,16 +6,16 @@ record Dot(int x, int y) {
     if (x < 0 || y < 0) throw new IllegalArgumentException("negative !!Y&Q(&TQ&*RQ#^");
   }
   public Dot(String spec) { // Overloaded Constructors must delegate to the canonical one
-    this(Integer.parseInt(spec.split(",")[0]),
-          Integer.parseInt(spec.split(",")[1]));
+    this(Integer.parseInt(spec.split(",")[0]), Integer.parseInt(spec.split(",")[1]));
   }
+
   public void method() { // DA poti metoda
 //    x = 2; // NU compileaza -> campurile sunt FINALE
   }
 //  final int z; // NU compileaza -> nu ai voie campuri decat prin "semnatura" clasei
 
   private static int i; // wow, da de ce ?
-  public void raceConditionTeDaAfara() {  i++; } // in context multithreading (pe server side) -> e jale
+  public static void raceConditionTeDaAfara() {  i++; } // in context multithreading (pe server side) -> e jale
 
 }
 // autogenereaza : constructor, getter (fara "get-"), toString, hashCode/equals ~= @Value
