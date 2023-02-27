@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 
 
-class Strategy {
+class Switch {
     public static void main(String[] args) {
         System.out.println("Tax for (RO,100,100) = " + calculateCustomsTax(
                 new Parcel(Parcel.CountryEnum.RO, 100, 100, LocalDate.now())));
