@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.Value;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,9 +35,18 @@ public class Immutable {
 //  }
 
   // #2 hard core: ii returnezi o interfata mai restransa, care-i da voie doar sa faca for
-  public Iterable<Integer> getList() {
-    return list;
+//  public Iterable<Integer> getList() {
+//    return list;
+//  }
+
+  // #3 decorator peste lista originala care blocheaza orice modificare
+  public List<Integer> getList() {
+    return Collections.unmodifiableList(list); // callerul primeste o exceptie
   }
+
+
+  // #4 Guava collections (ImmutableList)
+
 
   @Override
   public String toString() {
