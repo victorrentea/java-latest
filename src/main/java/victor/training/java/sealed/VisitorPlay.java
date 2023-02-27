@@ -30,7 +30,7 @@ public class VisitorPlay {
 //    }
 
 
-    // ## OOP
+    // ## OOP : keep behavior next to state + javac crapa daca NU ai implem metoda din interfata.
     for (Shape shape : shapes) {
       totalPerimeter += shape.perimeter();
     }
