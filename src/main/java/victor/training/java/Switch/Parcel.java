@@ -8,6 +8,6 @@ public record Parcel(CountryEnum originCountry,
 
   public enum CountryEnum {
     RO, ES, FR, UK, CN,
-//    UA
+    UA
   }
 }

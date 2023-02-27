@@ -2,6 +2,7 @@ package victor.training.java.Switch;
 
 
 import org.springframework.context.event.EventListener;
+import victor.training.java.Switch.Parcel.CountryEnum;
 
 import java.time.LocalDate;
 
@@ -21,20 +22,30 @@ class Switch {
 
     // #### 1 - switch expression (enum) = exhaustive
     public static double calculateCustomsTax(Parcel parcel) { // UGLY API we CANNOT change
-        switch (parcel.originCountry()) {
-//            case null: // new in java 18
-            case UK:
-                return parcel.tobaccoValue() / 2 + parcel.regularValue();
-            case CN:
-                return parcel.tobaccoValue() + parcel.regularValue();
-            case FR:
-            case ES:
-            case RO:
-//            case UA:
-                return parcel.tobaccoValue() / 3;
-            default:
-                throw new IllegalStateException("Poate ca maine... Unexpected value, dar n-ar trebui sa se intample vreodata: " + parcel.originCountry());
-        }
+        // in java 17 switch enhanced poate fi folosit expresie: da rezultat
+        CountryEnum countryEnum = parcel.originCountry();
+        double valoare = switch (countryEnum) {
+            case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
+            case CN -> parcel.tobaccoValue() + parcel.regularValue();
+            case FR, ES, RO -> parcel.tobaccoValue() / 3;
+            case UA -> 0;
+            // in java 17 daca folosesti switch (enum) ca o expresie (sa intoarca valoare),
+            // e contraindicat sa pui default pentru crapa compilarea daca nu ai acoperit toate bransele
+        };
+        return valoare;
+        // java < 17 switch era doar statement.
+//        switch (parcel.originCountry()) {
+//            case UK:
+//                return parcel.tobaccoValue() / 2 + parcel.regularValue();
+//            case CN:
+//                return parcel.tobaccoValue() + parcel.regularValue();
+//            case FR:
+//            case ES:
+//            case RO:
+//                return parcel.tobaccoValue() / 3;
+//            default:
+//                throw new IllegalStateException("Poate ca maine... Unexpected value, dar n-ar trebui sa se intample vreodata: " + parcel.originCountry());
+//        }
     }
 
     // #### 2 - switch expression non exhaustive
