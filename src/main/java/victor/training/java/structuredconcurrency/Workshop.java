@@ -9,14 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 @Slf4j
 @RestController
 @SpringBootApplication
-public class StructuredConcurrencyWorkshop {
+public class Workshop {
   @Component
   @SuppressWarnings("unchecked")
   static class ApiClient {
@@ -32,27 +30,26 @@ public class StructuredConcurrencyWorkshop {
   @Autowired
   ApiClient apiClient;
 
-  // TODO call booking offers and get weather in parallel
+  // TODO call getBookingOffers and getWeather in p01_parallel.
   @GetMapping("parallel")
-  public BookingOffersDto parallel() throws InterruptedException {
+  public BookingOffersDto p01_parallel() throws InterruptedException {
     List<String> offers = apiClient.getBookingOffers(1);
     String weather = apiClient.getWeather();
     return new BookingOffersDto(offers, weather);
   }
 
-  // TODO call booking offers and get weather in parallel. Allow max 500 millis to complete.
-  //   return the offers retrieved (if any), error if offers timed out
+  // TODO call getBookingOffers and getWeather in p01_parallel. <-- idem as above
+  //  After 500 milliseconds (aka p02_timeout),
+  //  - throw error if getBookingOffers did not complete
+  //  - default weather to "Probably Sunny" if getWeather did not complete
   @GetMapping("timeout")
-  public BookingOffersDto timeout() throws InterruptedException {
-    // Hint: copy&adjust the solution from previous exercise
-    List<String> offers = apiClient.getBookingOffers(1);
-    String weather = apiClient.getWeather();
-    return new BookingOffersDto(offers, weather);
+  public BookingOffersDto p02_timeout() throws InterruptedException {
+    return null; // copy-paste from above
   }
 
   // TODO run all
   @GetMapping("timely-offers")
-  public BookingOffersDto timelyOffers() throws InterruptedException {
+  public BookingOffersDto p03_timelyOffers() throws InterruptedException {
     List<String> offers1 = apiClient.getBookingOffers(1);
     List<String> offers2 = apiClient.getBookingOffers(2);
     String weather = apiClient.getWeather();
@@ -60,6 +57,6 @@ public class StructuredConcurrencyWorkshop {
     return new BookingOffersDto(allOffers, weather);
   }
 
-record BookingOffersDto(List<String> offers, String weather) {
-}
+  record BookingOffersDto(List<String> offers, String weather) {
+  }
 }

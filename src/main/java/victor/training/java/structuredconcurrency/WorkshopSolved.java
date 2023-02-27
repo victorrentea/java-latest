@@ -7,9 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Stream;
 
-public class StructuredConcurrencyWorkshopSolved extends StructuredConcurrencyWorkshop {
-  public BookingOffersDto parallel() throws InterruptedException {
+public class WorkshopSolved extends Workshop {
+  public BookingOffersDto p01_parallel() throws InterruptedException {
     try (ShutdownOnFailure scope = new ShutdownOnFailure()) {
       Future<List<String>> futureOffers = scope.fork(() -> apiClient.getBookingOffers(1));
       Future<String> futureWeather = scope.fork(() -> apiClient.getWeather());
@@ -20,13 +21,15 @@ public class StructuredConcurrencyWorkshopSolved extends StructuredConcurrencyWo
     }
   }
 
-  public BookingOffersDto timeout() throws InterruptedException {
+  public BookingOffersDto p02_timeout() throws InterruptedException {
     try (ShutdownOnFailure scope = new ShutdownOnFailure()) {
       Future<List<String>> futureOffers = scope.fork(() -> apiClient.getBookingOffers(1));
       Future<String> futureWeather = scope.fork(() -> apiClient.getWeather());
 
       try {
-        scope.joinUntil(Instant.now().plusMillis(500));
+        Instant deadline = Instant.now().plusMillis(500);
+        scope.joinUntil(deadline);
+        return new BookingOffersDto(futureOffers.resultNow(), futureWeather.resultNow());
       } catch (TimeoutException e) {
         if (futureOffers.isDone()) {
           return new BookingOffersDto(futureOffers.resultNow(), "Probably Sunny");
@@ -34,18 +37,22 @@ public class StructuredConcurrencyWorkshopSolved extends StructuredConcurrencyWo
           throw new RuntimeException(e);
         }
       }
-      return new BookingOffersDto(futureOffers.resultNow(), futureWeather.resultNow());
     }
   }
 
-  public BookingOffersDto timelyOffers() throws InterruptedException {
+  public BookingOffersDto p03_timelyOffers() throws InterruptedException {
     try (ShutdownOnFailure scope = new ShutdownOnFailure()) {
       Future<List<String>> futureOffers1 = scope.fork(() -> apiClient.getBookingOffers(1));
       Future<List<String>> futureOffers2 = scope.fork(() -> apiClient.getBookingOffers(2));
       Future<String> futureWeather = scope.fork(() -> apiClient.getWeather());
 
       try {
-        scope.joinUntil(Instant.now().plusMillis(500));
+        Instant deadline = Instant.now().plusMillis(500);
+        scope.joinUntil(deadline);
+
+        // all 3 subtasks completed successfully
+        List<String> allOffers = Stream.concat(futureOffers1.resultNow().stream(), futureOffers2.resultNow().stream()).toList();
+        return new BookingOffersDto(allOffers, futureWeather.resultNow());
       } catch (TimeoutException e) {
         List<String> allOffers = new ArrayList<>();
         if (futureOffers1.isDone()) {
@@ -54,10 +61,12 @@ public class StructuredConcurrencyWorkshopSolved extends StructuredConcurrencyWo
         if (futureOffers2.isDone()) {
           allOffers.addAll(futureOffers2.resultNow());
         }
-        if (allOffers.isEmpty()) throw new RuntimeException(e);
-        return new BookingOffersDto(allOffers, "Probably Sunny");
+        if (allOffers.isEmpty()) throw new RuntimeException("No offer received in time", e);
+
+        String weather = futureWeather.isDone() ? futureWeather.resultNow() : "Probably Sunny";
+
+        return new BookingOffersDto(allOffers, weather);
       }
-      return new BookingOffersDto(futureOffers1.resultNow(), futureWeather.resultNow());
     }
   }
 }

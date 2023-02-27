@@ -1,5 +1,6 @@
 package victor.training.java.loom;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -11,9 +12,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Thread.currentThread;
 
+@Slf4j
 @RestController
 public class NonBlockingNetworkCalls {
-  private static final Logger log = LoggerFactory.getLogger(NonBlockingNetworkCalls.class);
   private static final ThreadLocal<String> tl = new ThreadLocal<>();
 
   private final RestTemplate rest = new RestTemplate();

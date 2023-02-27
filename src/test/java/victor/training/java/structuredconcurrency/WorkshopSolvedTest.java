@@ -3,9 +3,9 @@ package victor.training.java.structuredconcurrency;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
 
-public class WorkshopSolvedTest extends StructuredConcurrencyWorkshopTest{
+public class WorkshopSolvedTest extends WorkshopTest {
   @InjectMocks
-  StructuredConcurrencyWorkshopSolved workshopSolved;
+  WorkshopSolved workshopSolved;
 
   @BeforeEach
   final void setSolved() {
