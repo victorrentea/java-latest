@@ -18,3 +18,5 @@ sealed public interface Shape {
   record Square(int edge) implements Shape {
   }
 }
+
+
