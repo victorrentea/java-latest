@@ -67,13 +67,7 @@ class Switch {
         Void degeaba = switch (message.type()) {
             case RAISE -> handleRaiseSalary(message.content());
             case PROMOTE-> handlePromote(message.content());
-            case DISMISS-> {
-                if (message.urgent()) {
-                    yield handleDismissUrgent(message.content());
-                }
-                else
-                    yield handleDismiss(message.content());
-            }
+            case DISMISS-> message.urgent() ? handleDismissUrgent(message.content()) : handleDismiss(message.content());
 //            default-> throw new IllegalArgumentException("JDD should never happen in prod");
             case HIRE -> null; //daca n-ai nimic de facut pe HIRE, mai bine pui asa decat
             // default->null;
