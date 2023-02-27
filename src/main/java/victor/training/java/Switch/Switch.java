@@ -21,22 +21,19 @@ class Switch {
 
     // #### 1 - switch expression (enum) = exhaustive
     public static double calculateCustomsTax(Parcel parcel) { // UGLY API we CANNOT change
-        double result = 0;
         switch (parcel.originCountry()) {
 //            case null: // new in java 18
             case UK:
-                result = parcel.tobaccoValue() / 2 + parcel.regularValue();
-                break;
+                return parcel.tobaccoValue() / 2 + parcel.regularValue();
             case CN:
-                result = parcel.tobaccoValue() + parcel.regularValue();
-                break;
+                return parcel.tobaccoValue() + parcel.regularValue();
             case FR:
             case ES:
             case RO:
-                result = parcel.tobaccoValue() / 3;
-                break;
+                return parcel.tobaccoValue() / 3;
+            default:
+                throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
         }
-        return result;
     }
 
     // #### 2 - switch expression non exhaustive
