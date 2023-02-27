@@ -24,15 +24,13 @@ class Switch {
     public static double calculateCustomsTax(Parcel parcel) { // UGLY API we CANNOT change
         // in java 17 switch enhanced poate fi folosit expresie: da rezultat
         CountryEnum countryEnum = parcel.originCountry();
-        double valoare = switch (countryEnum) {
+        return switch (countryEnum) {
             case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
             case CN -> parcel.tobaccoValue() + parcel.regularValue();
-            case FR, ES, RO -> parcel.tobaccoValue() / 3;
-            case UA -> 0;
+            case FR, ES, RO, UA -> parcel.tobaccoValue() / 3;
             // in java 17 daca folosesti switch (enum) ca o expresie (sa intoarca valoare),
             // e contraindicat sa pui default pentru crapa compilarea daca nu ai acoperit toate bransele
         };
-        return valoare;
         // java < 17 switch era doar statement.
 //        switch (parcel.originCountry()) {
 //            case UK:
