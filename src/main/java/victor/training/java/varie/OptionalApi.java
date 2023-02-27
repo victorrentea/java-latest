@@ -14,6 +14,7 @@ public class OptionalApi {
     Optional<Foo> fooOpt = repoFindById(id);
 
 
+
 //    Foo foo1 = fooOpt.get(); // PROST< au gresit numele metodei asteia in Java8 ~> nu sugereaza ca arunca ex
 //    Foo foo2 = fooOpt.orElseThrow(); // BUN (java 11) din cauza numelui - e mai bun!
 

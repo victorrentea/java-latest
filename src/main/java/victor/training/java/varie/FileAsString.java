@@ -9,6 +9,7 @@ public class FileAsString {
     File f = new File("pom.xml");
     System.out.println(f.isFile());
 
+//    IOUtils.toString(file)
     String str = Files.readString(f.toPath());
     System.out.println(str.length());
     System.out.println(str.lines().count());
