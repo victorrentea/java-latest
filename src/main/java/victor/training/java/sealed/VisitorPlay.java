@@ -31,16 +31,22 @@ public class VisitorPlay {
 
 
     // ## OOP : keep behavior next to state + javac crapa daca NU ai implem metoda din interfata.
+//    for (Shape shape : shapes) {
+//      totalPerimeter += shape.perimeter();
+//    }
+
+
+    // ## VISITOR design pattern: sa implem logica specifica unor tipuri concrete dar !!
+    // FARA SA ADAUGI LOGICA IN CLASELE RESPECTIVE => Anti-pattern in java 17
+    PerimeterVisitor perimeterVisitor = new PerimeterVisitor();
     for (Shape shape : shapes) {
-      totalPerimeter += shape.perimeter();
+      shape.accept(perimeterVisitor);
     }
+    totalPerimeter = perimeterVisitor.getTotal();
 
     System.out.println("Total perimeter = " + totalPerimeter);
 
-
-    // ## VISITOR
-    // ## instanceOf
-    // ## switch+sealed
+    // ## switch+sealed : switch(shape) - java 21
   }
 }
 
