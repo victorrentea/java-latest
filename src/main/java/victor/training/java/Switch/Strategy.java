@@ -10,17 +10,20 @@ import java.time.LocalDate;
 class Strategy {
     public static void main(String[] args) {
         System.out.println("Tax for (RO,100,100) = " + calculateCustomsTax(
-                new Parcel(CountryEnum.RO, 100, 100, LocalDate.now())));
+                new Parcel(Parcel.CountryEnum.RO, 100, 100, LocalDate.now())));
         System.out.println("Tax for (CN,100,100) = " + calculateCustomsTax(
-                new Parcel(CountryEnum.CN, 100, 100, LocalDate.now())));
+                new Parcel(Parcel.CountryEnum.CN, 100, 100, LocalDate.now())));
         System.out.println("Tax for (UK,100,100) = " + calculateCustomsTax(
-                new Parcel(CountryEnum.UK, 100, 100, LocalDate.now())));
+                new Parcel(Parcel.CountryEnum.UK, 100, 100, LocalDate.now())));
+        System.out.println("Tax for (null,100,100) = " + calculateCustomsTax(
+                new Parcel(null, 100, 100, LocalDate.now())));
     }
 
-    // #### 1 - switch expressions
+    // #### 1 - switch expression (enum) = exhaustive
     public static double calculateCustomsTax(Parcel parcel) { // UGLY API we CANNOT change
         double valoare = 0;
         switch (parcel.originCountry()) {
+//            case null: // new in java 18
             case UK:
                 valoare = parcel.tobaccoValue() / 2 + parcel.regularValue();
                 break;
@@ -32,17 +35,13 @@ class Strategy {
             case RO:
                 valoare = parcel.tobaccoValue() / 3;
                 break;
-            case UA:
-                valoare = 0;
-                break;
         }
         return valoare;
     }
 
-    // #### 2 - switch expressions
+    // #### 2 - switch expression non exhaustive
     public int switchOnNonExhaustiveCriteria(
             String countryIsoCode, int parcelValue) {
-        // atunci cand nu poate valida javac ca ai acoperit toate cazurile (eg switch pe string)
         switch (countryIsoCode) {
             case "RO":
                 return parcelValue * 2;
@@ -53,41 +52,40 @@ class Strategy {
         }
     }
 
-    // ## 3 - switch nu intoarce nimic (nu mai este expresie ci statement)
-
-    public void handleMessage(Message message) {
+    // #### 3 - enhanced switch statement (returning void)
+    public void handleMessage(HRMessage message) {
         switch (message.type()) {
-            case MARIRE:
-                handleMareste(message.content());
+            case RAISE:
+                handleRaiseSalary(message.content());
                 break;
-            case PROMOVARE:
-                handlePromoveaza(message.content());
+            case PROMOTE:
+                handlePromote(message.content());
                 break;
-            case CONCEDIERE:
+            case DISMISS:
                 if (message.urgent())
-                    handleConcediazaUrgent(message.content());
+                    handleDismissUrgent(message.content());
                 else
-                    handleConcediazaNormal(message.content());
+                    handleDismiss(message.content());
                 break;
             default:
-                throw new IllegalArgumentException("NU ASTA IN PROD");
+                throw new IllegalArgumentException("JDD should never happen in prod");
         }
     }
 
-    private Void handlePromoveaza(String content) {
+    private Void handlePromote(String content) {
         return null;
     }
 
-    private Void handleConcediazaUrgent(String content) {
+    private Void handleDismissUrgent(String content) {
         System.out.println(":( !!");
         return null;
     }
-    private Void handleConcediazaNormal(String content) {
+    private Void handleDismiss(String content) {
         System.out.println(":( !!");
         return null;
     }
 
-    private Void handleMareste(String content) {
+    private Void handleRaiseSalary(String content) {
         System.out.println(":)");
         return null;
     }
@@ -99,7 +97,3 @@ class Strategy {
 
 }
 
-enum MessageType {
-    CONCEDIERE,MARIRE,PROMOVARE, ANGAJARE
-}
-record Message(MessageType type, String content, boolean urgent){}
