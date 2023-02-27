@@ -16,6 +16,7 @@ public class Immutable {
   public Immutable(String name, Other other, List<Integer> list) {
     this.name = name;
     this.other = other;
+    // ImmutableList.copyOf() // guava lib
     this.list = List.copyOf(list); // copiaza lista initiala si o tine minte ca imutabila.
   }
 
@@ -39,7 +40,7 @@ public class Immutable {
 //    return list;
 //  }
 
-  // #3 decorator peste lista originala care blocheaza orice modificare
+  // #3 decorator peste lista originala care blocheaza orice modificare Java <=8
 //  public List<Integer> getList() {
 //    return Collections.unmodifiableList(list); // callerul primeste o exceptie
 //  }
@@ -48,13 +49,12 @@ public class Immutable {
   // #4 List.of / copyOf
   // + callerul primeste o exceptie
   // - aloca memorie la fiecare get
+  // pe ctor e mai cool.
   public List<Integer> getList() {
     return list;
   }
 
-
   // #5 Guava collections (ImmutableList)
-
 
   @Override
   public String toString() {

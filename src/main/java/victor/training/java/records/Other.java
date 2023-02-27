@@ -2,6 +2,9 @@ package victor.training.java.records;
 
 public class Other {
   private String data;
+  static {
+    System.out.println("Si eu !");
+  }
 
   public Other(String data) {
     this.data = data;
