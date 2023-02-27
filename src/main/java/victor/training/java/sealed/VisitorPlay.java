@@ -44,9 +44,18 @@ public class VisitorPlay {
 //    }
 //    totalPerimeter = perimeterVisitor.getTotal();
 
+
+    // ## sealed interface + switch(shape) - java 21
+    for (Shape shape : shapes) {
+      totalPerimeter += switch (shape) {
+        case Circle c -> 2 * c.radius() * Math.PI;
+        case Rectangle r -> 2 * (r.w() + r.h());
+        case Square s -> 4 * s.edge();
+      };
+    }
+
     System.out.println("Total perimeter = " + totalPerimeter);
 
-    // ## switch+sealed : switch(shape) - java 21
   }
 }
 
