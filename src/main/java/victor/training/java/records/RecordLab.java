@@ -4,7 +4,10 @@ package victor.training.java.records;
 import java.util.Objects;
 import java.util.Optional;
 
-record Dot(int x, int y) { // automat este 'final'
+class Oarecare {public int z;}
+
+
+record Dot(int x, int y) /*extends Oarecare*/{ // automat este 'final', si nu poate extinde alte clase
   public Dot { // constructorul 'canonic' - ala standard
     if (x < 0 || y < 0) throw new IllegalArgumentException("negative !!Y&Q(&TQ&*RQ#^");
   }
