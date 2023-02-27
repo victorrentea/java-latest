@@ -63,20 +63,15 @@ class Switch {
     // #### 3 - enhanced switch statement (returning void)
     public void handleMessage(HRMessage message) {
         switch (message.type()) {
-            case RAISE:
-                handleRaiseSalary(message.content());
-                break;
-            case PROMOTE:
-                handlePromote(message.content());
-                break;
-            case DISMISS:
+            case RAISE -> handleRaiseSalary(message.content());
+            case PROMOTE-> handlePromote(message.content());
+            case DISMISS-> {
                 if (message.urgent())
                     handleDismissUrgent(message.content());
                 else
                     handleDismiss(message.content());
-                break;
-            default:
-                throw new IllegalArgumentException("JDD should never happen in prod");
+            }
+            default-> throw new IllegalArgumentException("JDD should never happen in prod");
         }
     }
 
