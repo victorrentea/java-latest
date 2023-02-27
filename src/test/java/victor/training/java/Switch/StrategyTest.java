@@ -1,6 +1,7 @@
 package victor.training.java.Switch;
 
 import org.junit.jupiter.api.Test;
+import victor.training.java.Switch.HRMessage.MessageType;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +13,7 @@ class StrategyTest {
 
 
       try {
-        new Strategy().handleMessage(new Message(type, "", false));
+        new Strategy().handleMessage(new HRMessage(type, "", false));
       } catch (Exception e) {
         if (e instanceof IllegalArgumentException && !e.getMessage().equals("NU ASTA IN PROD")) {
           continue;

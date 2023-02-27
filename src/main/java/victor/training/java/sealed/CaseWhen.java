@@ -13,7 +13,6 @@
 //    testSquare(null);
 //  }
 //  static void testSquare(Shape s) {
-//    if (s == null) return; // TODO replace with 'null' case
 //    switch (s) {
 //      case Square sq -> {
 ////        if (sq.calculateArea() > 100) { // TODO replace with when (case refinement)
