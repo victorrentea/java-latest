@@ -5,7 +5,10 @@ record Dot(int x, int y) {
   public Dot { // constructorul 'canonic' - ala standard
     if (x < 0 || y < 0) throw new IllegalArgumentException("negative !!Y&Q(&TQ&*RQ#^");
   }
-
+  public Dot(String spec) { // Overloaded Constructors must delegate to the canonical one
+    this(Integer.parseInt(spec.split(",")[0]),
+          Integer.parseInt(spec.split(",")[1]));
+  }
   public void method() { // DA poti metoda
 //    x = 2; // NU compileaza -> campurile sunt FINALE
   }
@@ -21,7 +24,7 @@ public class RecordLab {
     Dot dot = new Dot(1, 2);
     System.out.println(dot.x());
     System.out.println(dot);
-    System.out.println(new Dot(1, 2).equals(dot));
+    System.out.println(new Dot("1,2").equals(dot));
     dot.method();
 //    new Dot(-1, 2); throws ca valideaza ctorul
 
