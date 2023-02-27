@@ -1,6 +1,5 @@
 package victor.training.java.varie;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import victor.training.java.Util;
 
 import java.util.Optional;
@@ -8,19 +7,28 @@ import java.util.Optional;
 public class OptionalApi {
 
   public static void main(String[] args) {
-    Optional<Foo> fooOpt = repoFindById(1);
+    fetchFromDBOrRemoteAPI(1);
+  }
+
+  private static void fetchFromDBOrRemoteAPI(int id) {
+    Optional<Foo> fooOpt = repoFindById(id);
     // if not found in my DB, fetch from external API
-    Foo resolved = fooOpt.orElse(networkCallToRemoteSystem(1));
+//    Foo resolved = fooOpt.orElse(networkCallToRemoteSystem(id));
+    Foo resolved = fooOpt
+            .or(() -> networkCallToRemoteSystem(id)) // executa functie daca era Optionalul empty.
+            .orElseThrow();
 
     // TODO what's wrong with this?
     System.out.println(resolved);
   }
-  private static Foo networkCallToRemoteSystem(int id) {
+
+  private static Optional<Foo> networkCallToRemoteSystem(int id) {
+    System.out.println("Performing expensive network call");
     Util.sleepMillis(3000);
-    return new Foo("API");
+    return Optional.of(new Foo("From API id=" + id));
   }
   private static Optional<Foo> repoFindById(int id) {
-    return Optional.of(new Foo("DB"));
+    return Optional.of(new Foo("From DB id=" + id));
   }
 
   record Foo(String value) {}
