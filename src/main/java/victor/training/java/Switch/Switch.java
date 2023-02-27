@@ -62,17 +62,22 @@ class Switch {
 
     // #### 3 - enhanced switch statement (returning void)
     public void handleMessage(HRMessage message) {
-        switch (message.type()) {
+        // cum sa transform acest switch care doar face chestii intr-o expresie.
+        // nu am nevoie de la el sa imi intoarca nimic, doar ca mi-ar placea sa-mi int0arca ceva sa folosec "return switch(enum)"
+        Void degeaba = switch (message.type()) {
             case RAISE -> handleRaiseSalary(message.content());
             case PROMOTE-> handlePromote(message.content());
             case DISMISS-> {
-                if (message.urgent())
-                    handleDismissUrgent(message.content());
+                if (message.urgent()) {
+                    yield handleDismissUrgent(message.content());
+                }
                 else
-                    handleDismiss(message.content());
+                    yield handleDismiss(message.content());
             }
-            default-> throw new IllegalArgumentException("JDD should never happen in prod");
-        }
+//            default-> throw new IllegalArgumentException("JDD should never happen in prod");
+            case HIRE -> null; //daca n-ai nimic de facut pe HIRE, mai bine pui asa decat
+            // default->null;
+        };
     }
 
     private Void handlePromote(String content) {
@@ -92,6 +97,10 @@ class Switch {
         System.out.println(":)");
         return null;
     }
+    // Void mai poate fi gasit in:
+    // - ResponseEntity<Void> in controller method (bad practice, ar trebui sa folosesti un @RestControllerAdvice + @ExceptionMapper
+    // - CompletableFuture<Void> sau Mono<Void>
+    // - aici
 
 
     @EventListener
