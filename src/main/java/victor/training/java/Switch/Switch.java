@@ -25,9 +25,14 @@ class Switch {
         // in java 17 switch enhanced poate fi folosit expresie: da rezultat
         CountryEnum countryEnum = parcel.originCountry();
         return switch (countryEnum) {
+            // daca countryEnum e null -> switch arunca NPE in orice vers de Java
+            // Java 11 -> java.lang.NullPointerException: null
+            // Java 17 -> java.lang.NullPointerException: Cannot invoke "victor.training.java.Switch.Parcel$CountryEnum.ordinal()" because "countryEnum" is null
+
             case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
             case CN -> parcel.tobaccoValue() + parcel.regularValue();
             case FR, ES, RO, UA -> parcel.tobaccoValue() / 3;
+//            default -> throw new IllegalArgumentException("valeu " + countryEnum); // mai rau asa ca-mi crapa abia in runtime
             // in java 17 daca folosesti switch (enum) ca o expresie (sa intoarca valoare),
             // e contraindicat sa pui default pentru crapa compilarea daca nu ai acoperit toate bransele
         };
@@ -48,14 +53,11 @@ class Switch {
 
     // #### 2 - switch expression non exhaustive
     public int switchNonExhaustive(String countryIsoCode, int parcelValue) {
-        switch (countryIsoCode) {
-            case "RO":
-                return parcelValue * 2;
-            case "FR":
-                return parcelValue + 2;
-            default:
-                throw new IllegalArgumentException("Unknown country " + countryIsoCode);
-        }
+        return switch (countryIsoCode) {
+            case "RO" -> parcelValue * 2;
+            case "FR" -> parcelValue + 2;
+            default -> throw new IllegalArgumentException("Unknown country " + countryIsoCode);
+        };
     }
 
     // #### 3 - enhanced switch statement (returning void)
