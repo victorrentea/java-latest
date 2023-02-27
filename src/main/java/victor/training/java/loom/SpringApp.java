@@ -1,6 +1,7 @@
 package victor.training.java.loom;
 
 import jdk.incubator.concurrent.StructuredTaskScope.ShutdownOnFailure;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
@@ -19,10 +20,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.lang.System.currentTimeMillis;
 import static java.lang.System.in;
 
+@Slf4j
 @SpringBootApplication
 @RestController
 public class SpringApp {
-  private static final Logger log = LoggerFactory.getLogger(SpringApp.class);
 
   public static void main(String[] args) {
     SpringApplication.run(SpringApp.class, args);
