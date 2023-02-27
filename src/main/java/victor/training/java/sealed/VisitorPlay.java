@@ -49,8 +49,9 @@ public class VisitorPlay {
     for (Shape shape : shapes) {
       totalPerimeter += switch (shape) {
         case Circle(int r) -> 2 * r * Math.PI;
-        case Rectangle(int w, int h) -> 2 * (w + h);
+        case Rectangle(int w, int h) /*when w>10*/ -> 2 * (w + h);
         case Square(int edge) -> 4 * edge;
+//        case Rectangle rectangle -> 10;
       };
     }
 
