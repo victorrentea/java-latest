@@ -1,9 +1,10 @@
 package victor.training.java.records;
 
 
+import java.util.Objects;
 import java.util.Optional;
 
-record Dot(int x, int y) {
+record Dot(int x, int y) { // automat este 'final'
   public Dot { // constructorul 'canonic' - ala standard
     if (x < 0 || y < 0) throw new IllegalArgumentException("negative !!Y&Q(&TQ&*RQ#^");
   }
@@ -25,6 +26,8 @@ record Dot(int x, int y) {
   }
   // @Override public Optional<Integer> x() {return x;} // NU compileaza : sa modif semnatura metodelor auto generate
 }
+//class Dot3D extends Dot {} // NU compileaza - record e final
+
 // autogenereaza : constructor, getter (fara "get-"), toString, hashCode/equals ~= @Value
 public class RecordLab {
   public static void main(String[] args) {
