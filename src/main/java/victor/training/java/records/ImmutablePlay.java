@@ -36,6 +36,7 @@ public class ImmutablePlay {
 //    obj.getList().add(-1); // dirty hack
 //    System.out.println(obj.getList());
 //    obj.getOther().setData("oups");
+    System.out.println(obj.list());
     return 0;
   }
 }
