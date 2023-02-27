@@ -40,12 +40,19 @@ public class Immutable {
 //  }
 
   // #3 decorator peste lista originala care blocheaza orice modificare
+//  public List<Integer> getList() {
+//    return Collections.unmodifiableList(list); // callerul primeste o exceptie
+//  }
+
+
+  // + callerul primeste o exceptie
+  // - aloca memorie la fiecare get
   public List<Integer> getList() {
-    return Collections.unmodifiableList(list); // callerul primeste o exceptie
+    return List.copyOf(list);
   }
 
 
-  // #4 Guava collections (ImmutableList)
+  // #5 Guava collections (ImmutableList)
 
 
   @Override

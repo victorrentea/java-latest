@@ -1,9 +1,6 @@
 package victor.training.java.varie;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.util.Map.entry;
 
@@ -11,16 +8,20 @@ public class CollectionOf {
   public static void main(String[] args) {
     ListOf_vs_ArraysAsList();
 
-    System.out.println(classicButTooMuchToWrite());
-    System.out.println(geekButPotentialMemLeak());
-    System.out.println(java11());
+//    System.out.println(classicButTooMuchToWrite());
+//    System.out.println(geekButPotentialMemLeak());
+//    System.out.println(java11());
   }
 
   private static void ListOf_vs_ArraysAsList() {
     List<Integer> list8 = Arrays.asList(1, 2, 3, 4);
+//    list8.add(99);
+    list8.set(0, -99);
     System.out.println("Java8 style:" + list8);
 
     List<Integer> list11 = List.of(1, 2, 3, 4);
+//    list11.add(99);
+    list11.set(0, -99);
     System.out.println("Java11 style:" + list11);
     // TODO what's the difference ?
   }
