@@ -1,10 +1,7 @@
 package victor.training.java.records;
 
 public class Other {
-  private String data;
-  static {
-    System.out.println("Si eu !");
-  }
+  private final String data;
 
   public Other(String data) {
     this.data = data;
@@ -12,11 +9,6 @@ public class Other {
 
   public String getData() {
     return data;
-  }
-
-  public Other setData(String data) {
-    this.data = data;
-    return this;
   }
 
   @Override

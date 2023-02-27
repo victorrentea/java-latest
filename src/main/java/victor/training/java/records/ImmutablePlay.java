@@ -35,7 +35,7 @@ public class ImmutablePlay {
     // cod foarte mult si complex: are nevoie de 17 teste in total
 //    obj.getList().add(-1); // dirty hack
 //    System.out.println(obj.getList());
-    obj.getOther().setData("oups");
+//    obj.getOther().setData("oups");
     return 0;
   }
 }
