@@ -1,6 +1,5 @@
 package victor.training.java.records;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -21,13 +20,19 @@ public class ImmutablePlay {
     String original = obj.toString();
     System.out.println("Initial: " + obj);
 
-    unknownFierceCode(obj);
+    int price = computePrice(obj); // CQS
+
+//    sendMessageKafka(obj);
 
     System.out.println("After:   " + obj);
 
     assertThat(original).describedAs("State should not change!").isEqualTo(obj.toString());
   }
 
-  private static void unknownFierceCode(Immutable obj) {
+  private static int computePrice(Immutable obj) {
+    // cod foarte mult si complex: are nevoie de 17 teste in total
+    obj.getList().add(-1); // dirty hack
+    System.out.println(obj.getList());
+    return 0;
   }
 }

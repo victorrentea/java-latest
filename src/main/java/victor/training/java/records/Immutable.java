@@ -3,6 +3,7 @@ package victor.training.java.records;
 import com.google.common.collect.ImmutableList;
 import lombok.Value;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Immutable {
@@ -24,8 +25,11 @@ public class Immutable {
     return other;
   }
 
+  // #1: intorc o copie; rau pt ca
+  // 1) aloci memorie aiurea + GC
+  // 2) misleading pt ca lasa pe caller sa creada ca a mers add()
   public List<Integer> getList() {
-    return list;
+    return new ArrayList<>(list);
   }
 
   @Override
