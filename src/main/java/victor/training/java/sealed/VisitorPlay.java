@@ -1,6 +1,7 @@
 package victor.training.java.sealed;
 
 
+import victor.training.java.sealed.Letter.A;
 import victor.training.java.sealed.Shape.Circle;
 import victor.training.java.sealed.Shape.Rectangle;
 import victor.training.java.sealed.Shape.Square;
@@ -62,9 +63,11 @@ public class VisitorPlay {
     System.out.println("Total perimeter = " + totalPerimeter);
 
   }
-
   public void method() {
+//    A a;
 //    Rectangle(int w,int h) = f(); // not in scope
+  }
+  class X { // inner
   }
 }
 
