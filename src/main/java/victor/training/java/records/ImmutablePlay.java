@@ -14,7 +14,9 @@ public class ImmutablePlay {
   @Test
   void immutables() {
     List<Integer> numbers = new ArrayList<>(IntStream.range(1, 10).boxed().toList());
-    Immutable obj = new Immutable("John", new Other("halo"), ImmutableList.copyOf(numbers));
+    Immutable obj = new Immutable("John",
+            new Other("halo"),
+            numbers);
 
     String original = obj.toString();
     System.out.println("Initial: " + obj);

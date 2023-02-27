@@ -1,9 +1,6 @@
 package victor.training.java.sealed;
 
 
-import victor.training.java.sealed.Shape.Circle;
-import victor.training.java.sealed.Shape.Rectangle;
-import victor.training.java.sealed.Shape.Square;
 
 import java.util.List;
 
