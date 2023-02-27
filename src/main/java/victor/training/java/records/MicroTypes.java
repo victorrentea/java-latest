@@ -24,11 +24,11 @@ public class MicroTypes {
    
    @Test
    void lackOfAbstractions() {
-      Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
+      var map = extremeFP(); // pierzi semantica codului. greu de urmarit
       // Joke: try "var" above :)
 
-      for (Long cid : map.keySet()) {
-         String pl = map.get(cid).stream()
+      for (var cid : map.keySet()) {
+         var pl = map.get(cid).stream()
              .map(t -> t.v2 + " of " + t.v1)
              .collect(joining(", "));
          System.out.println("cid=" + cid + " got " + pl);
