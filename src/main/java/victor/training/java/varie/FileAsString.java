@@ -6,11 +6,13 @@ import java.nio.file.Files;
 
 public class FileAsString {
   public static void main(String[] args) throws IOException {
-    File f = new File("pom.xml");
-    System.out.println(f.isFile());
+    File file = new File("pom.xml");
+    System.out.println("File path = " + file.getAbsolutePath());
+    System.out.println("File found = " + file.isFile());
 
-    String str = Files.readString(f.toPath());
-    System.out.println(str.length());
-    System.out.println(str.lines().count());
+    String fullContents = Files.readString(file.toPath());
+
+    System.out.println(fullContents.length());
+    System.out.println(fullContents.lines().count());
   }
 }

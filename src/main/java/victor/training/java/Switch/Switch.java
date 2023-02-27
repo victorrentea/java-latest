@@ -2,19 +2,22 @@ package victor.training.java.Switch;
 
 
 import org.springframework.context.event.EventListener;
+import victor.training.java.Switch.Parcel.CountryEnum;
 
 import java.time.LocalDate;
 
+import static victor.training.java.Switch.Parcel.CountryEnum.*;
+import static victor.training.java.Switch.Parcel.CountryEnum.RO;
 
 
 class Switch {
     public static void main(String[] args) {
         System.out.println("Tax for (RO,100,100) = " + calculateCustomsTax(
-                new Parcel(Parcel.CountryEnum.RO, 100, 100, LocalDate.now())));
+                new Parcel(RO, 100, 100, LocalDate.now())));
         System.out.println("Tax for (CN,100,100) = " + calculateCustomsTax(
-                new Parcel(Parcel.CountryEnum.CN, 100, 100, LocalDate.now())));
+                new Parcel(CN, 100, 100, LocalDate.now())));
         System.out.println("Tax for (UK,100,100) = " + calculateCustomsTax(
-                new Parcel(Parcel.CountryEnum.UK, 100, 100, LocalDate.now())));
+                new Parcel(UK, 100, 100, LocalDate.now())));
         System.out.println("Tax for (null,100,100) = " + calculateCustomsTax(
                 new Parcel(null, 100, 100, LocalDate.now())));
     }
@@ -67,7 +70,7 @@ class Switch {
                     handleDismiss(message.content());
                 break;
             default:
-                throw new IllegalArgumentException("JDD should never happen in prod");
+                throw new IllegalArgumentException("Should never happen in prod: unknown message type" + message.type());
         }
     }
 
