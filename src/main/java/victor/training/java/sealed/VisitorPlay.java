@@ -48,14 +48,18 @@ public class VisitorPlay {
     // ## sealed interface + switch(shape) - java 21
     for (Shape shape : shapes) {
       totalPerimeter += switch (shape) {
-        case Circle c -> 2 * c.radius() * Math.PI;
-        case Rectangle r -> 2 * (r.w() + r.h());
-        case Square s -> 4 * s.edge();
+        case Circle(int r) -> 2 * r * Math.PI;
+        case Rectangle(int w, int h) -> 2 * (w + h);
+        case Square(int edge) -> 4 * edge;
       };
     }
 
     System.out.println("Total perimeter = " + totalPerimeter);
 
+  }
+
+  public void method() {
+//    Rectangle(int w,int h) = f(); // not in scope
   }
 }
 

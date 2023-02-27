@@ -10,15 +10,12 @@ public class InstanceOf {
   }
 
   private static void method(Object obj) {
-    if (obj instanceof Point) {
-      Point point = (Point) obj;
-      Position position = point.position();
+    if (obj instanceof Point(Position position, Color(int r, int g, int b, float a))) {
       System.out.println("At position = " + position);
-      float a = point.color().a();
       System.out.println("Transparency:" + a);
-      System.out.println("R=" + point.color().r());
-      System.out.println("G=" + point.color().g());
-      System.out.println("B=" + point.color().b());
+      System.out.println("R=" + r);
+      System.out.println("G=" + g);
+      System.out.println("B=" + b);
     }
   }
 }
