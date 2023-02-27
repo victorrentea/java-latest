@@ -16,7 +16,7 @@ public class Immutable {
   public Immutable(String name, Other other, List<Integer> list) {
     this.name = name;
     this.other = other;
-    this.list = list;
+    this.list = List.copyOf(list); // copiaza lista initiala si o tine minte ca imutabila.
   }
 
   public String getName() {
@@ -45,10 +45,11 @@ public class Immutable {
 //  }
 
 
+  // #4 List.of / copyOf
   // + callerul primeste o exceptie
   // - aloca memorie la fiecare get
   public List<Integer> getList() {
-    return List.copyOf(list);
+    return list;
   }
 
 
