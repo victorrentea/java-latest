@@ -12,11 +12,18 @@ public class OptionalApi {
 
   private static void fetchFromDBOrRemoteAPI(int id) {
     Optional<Foo> fooOpt = repoFindById(id);
+
+
+//    Foo foo1 = fooOpt.get(); // PROST< au gresit numele metodei asteia in Java8 ~> nu sugereaza ca arunca ex
+//    Foo foo2 = fooOpt.orElseThrow(); // BUN (java 11) din cauza numelui - e mai bun!
+
     // if not found in my DB, fetch from external API
 //    Foo resolved = fooOpt.orElse(networkCallToRemoteSystem(id));
     Foo resolved = fooOpt
             .or(() -> networkCallToRemoteSystem(id)) // executa functie daca era Optionalul empty.
-            .orElseThrow();
+//            .orElseThrow(()->new IllegalArgumentException("Java8")) // java 8
+            .orElseThrow() // java11
+            ;
 
     // TODO what's wrong with this?
     System.out.println(resolved);
