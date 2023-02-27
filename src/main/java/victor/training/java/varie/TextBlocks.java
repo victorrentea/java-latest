@@ -47,6 +47,7 @@ public class TextBlocks {
                  "age": 12
               }
               """).formatted("nume");
+      System.out.println(json);
       mockMvc.perform(post("/product/search")
               .contentType("application/json")
               .content(json) // add one more criteria
