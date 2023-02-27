@@ -1,6 +1,10 @@
 package victor.training.java.records;
 
 
+import com.google.common.collect.ImmutableList;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -9,6 +13,10 @@ class Oarecare {public int z;}
 interface Interf {
   void method();
   int x();
+//  default void evil() {
+//    xyz().add(-1);
+//  }
+//  List<Integer> xyz();
 }
 
 // automat este 'final', si nu poate extinde alte clase
@@ -16,6 +24,7 @@ interface Interf {
 record Dot(int x, int y) implements Interf /*extends Oarecare*/{
   public Dot { // constructorul 'canonic' - ala standard
     if (x < 0 || y < 0) throw new IllegalArgumentException("negative !!Y&Q(&TQ&*RQ#^");
+//    this.xyz = ImmutableList.copyOf(xyz); // limitare: nu poti sa 'imbraci' lista din exterior intr-o varianta imutabila
   }
   public Dot(String spec) { // Overloaded Constructors must delegate to the canonical one
     this(Integer.parseInt(spec.split(",")[0]), Integer.parseInt(spec.split(",")[1]));
@@ -45,6 +54,7 @@ public class RecordLab {
     System.out.println(dot);
     System.out.println(new Dot("1,2").equals(dot));
     dot.method();
+//    dot.xyz().add(1);
 //    new Dot(-1, 2); throws ca valideaza ctorul
 
 
