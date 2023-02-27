@@ -3,6 +3,7 @@ package victor.training.java.records;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -31,8 +32,11 @@ public class ImmutablePlay {
 
   private static int computePrice(Immutable obj) {
     // cod foarte mult si complex: are nevoie de 17 teste in total
-    obj.getList().add(-1); // dirty hack
-    System.out.println(obj.getList());
+//    obj.getList().add(-1); // dirty hack
+//    System.out.println(obj.getList());
+    for (Integer integer : obj.getList()) { // java5 style
+      System.out.println();
+    }
     return 0;
   }
 }

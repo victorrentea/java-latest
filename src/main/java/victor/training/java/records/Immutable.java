@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.Value;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Immutable {
@@ -28,8 +29,13 @@ public class Immutable {
   // #1: intorc o copie; rau pt ca
   // 1) aloci memorie aiurea + GC
   // 2) misleading pt ca lasa pe caller sa creada ca a mers add()
-  public List<Integer> getList() {
-    return new ArrayList<>(list);
+//  public List<Integer> getList() {
+//    return new ArrayList<>(list);
+//  }
+
+  // #2 hard core: ii returnezi o interfata mai restransa, care-i da voie doar sa faca for
+  public Iterable<Integer> getList() {
+    return list;
   }
 
   @Override
