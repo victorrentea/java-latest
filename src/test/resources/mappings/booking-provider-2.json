@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/booking-provider-2"
+  },
+  "response": {
+    "status": 200,
+    "body":"Wow!",
+    "fixedDelayMilliseconds": 500,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
