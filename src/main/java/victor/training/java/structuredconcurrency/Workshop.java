@@ -40,14 +40,15 @@ public class Workshop {
 
   // TODO call getBookingOffers and getWeather in p01_parallel. <-- idem as above
   //  After 500 milliseconds (aka p02_timeout),
-  //  - throw error if getBookingOffers did not complete
+  //  - throw error if getBookingOffers did not complete in time
   //  - default weather to "Probably Sunny" if getWeather did not complete
   @GetMapping("timeout")
   public BookingOffersDto p02_timeout() throws InterruptedException {
     return null; // copy-paste from above
   }
 
-  // TODO run all
+  // TODO same as above +
+  //  Return only the offers that came back in the allocated time
   @GetMapping("timely-offers")
   public BookingOffersDto p03_timelyOffers() throws InterruptedException {
     List<String> offers1 = apiClient.getBookingOffers(1);
