@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -16,7 +17,7 @@ public class BookingApi {
   private static final ExecutorService threadPool = Executors.newFixedThreadPool(20);
   RestTemplate rest = new RestTemplate();
   @GetMapping("booking")
-  public String booking() throws ExecutionException, InterruptedException, IOException {
+  public String booking() throws ExecutionException, InterruptedException, IOException, TimeoutException {
     String result;
     try (ShutdownOnFailure scope = new ShutdownOnFailure()) { // daca oricare sub task crapa, intrerupele pe celelalte si termina cu exceptie
       // forkez executia : startez mai multe sub taskuri
@@ -25,7 +26,7 @@ public class BookingApi {
       // aici req http deja s-au dus (sau pleaca fff curand din backgroud)
       System.out.println("Eventual ceva munca ce CPU ce pot sa o fac fara datele alea");
 
-      scope.join(); // join a iesit pentru ca provider-1 a dat 500 iar provider-2 a fost intrerupt din apel
+      scope.joinUntil(Instant.now().plusMillis(300)); // join a iesit pentru ca provider-1 a dat 500 iar provider-2 a fost intrerupt din apel
       // aici toate future-urile sunt terminate (cu succes sau exceptii)
 
       result =  futureOffer1.resultNow() + " + " + futureOffer2.resultNow();
