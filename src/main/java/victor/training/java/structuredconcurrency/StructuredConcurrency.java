@@ -1,14 +1,10 @@
-package victor.training.java.loom;
+package victor.training.java.structuredconcurrency;
 
-import jdk.incubator.concurrent.StructuredTaskScope;
 import jdk.incubator.concurrent.StructuredTaskScope.ShutdownOnFailure;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import victor.training.java.loom.NonBlockingNetworkCalls.Beer;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -17,9 +13,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static java.lang.System.currentTimeMillis;
 
 // https://openjdk.org/jeps/428
+@Slf4j
 @RestController
 public class StructuredConcurrency {
-  private static final Logger log = LoggerFactory.getLogger(StructuredConcurrency.class);
 
   private final RestTemplate rest = new RestTemplate();
   private static final AtomicInteger indexCounter = new AtomicInteger(0);
@@ -45,5 +41,8 @@ public class StructuredConcurrency {
 
   private Beer fetchBeer() {
     return rest.getForObject("http://localhost:9999/api/beer", Beer.class);
+  }
+
+  record Beer(String type) {
   }
 }
