@@ -4,9 +4,9 @@
     "urlPathPattern": "/booking-provider-1"
   },
   "response": {
-    "status": 200,
+    "status": 500,
     "body":"Wow1!",
-    "fixedDelayMilliseconds": 500,
+    "fixedDelayMilliseconds": 1,
     "headers": {
       "Content-Type": "application/json"
     }
