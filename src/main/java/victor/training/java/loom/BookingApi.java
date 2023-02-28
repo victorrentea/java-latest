@@ -34,6 +34,9 @@ public class BookingApi {
 
     System.out.println("Logica cu "+result);
 
+    // TODO : sa aduni raspunsurile de la booking provideri care vin in < 300 millis
+
+
     return result;
   }
 
