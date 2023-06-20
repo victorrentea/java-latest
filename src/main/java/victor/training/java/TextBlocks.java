@@ -1,4 +1,4 @@
-package victor.training.java.varie;
+package victor.training.java;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,17 +16,17 @@ public class TextBlocks {
 
    // ## 1 copy-paste from SQL editor :)
    interface SomeSpringDataRepo extends JpaRepository<TeachingActivity, Long> {
-      @Query(nativeQuery = true, value = "    select t.id\n" +
-                                         "    from TEACHER t\n" +
-                                         "    where (?1 is null or upper(t.name) like upper(('%'||?1||'%')))\n" +
-                                         "    and (?2 is null or t.grade=?2)\n" +
-                                         "    and (cast(?3 as integer)=0 or exists\n" +
-                                         "         select 1\n" +
-                                         "         from TEACHING_ACTIVITY ta\n" +
-                                         "         inner join TEACHING_ACTIVITY_TEACHER tat on ta.id=tat.activities_id\n" +
-                                         "         inner join TEACHER tt on tat.teachers_id=tt.id\n" +
-                                         "         where ta.discr='COURSE'\n" +
-                                         "         and tt.id=t.id))\n")
+      @Query(value = "select t.id\n" +
+                    "    from TEACHER t\n" +
+                    "    where (?1 is null or upper(t.name) like upper(('%'||?1||'%')))\n" +
+                    "    and (?2 is null or t.grade=?2)\n" +
+                    "    and (cast(?3 as integer)=0 or exists\n" +
+                    "         select 1\n" +
+                    "         from TEACHING_ACTIVITY ta\n" +
+                    "         inner join TEACHING_ACTIVITY_TEACHER tat on ta.id=tat.activities_id\n" +
+                    "         inner join TEACHER tt on tat.teachers_id=tt.id\n" +
+                    "         where ta.discr='COURSE'\n" +
+                    "         and tt.id=t.id))\n", nativeQuery = true)
       List<Long> complexQuery(String namePart, Integer grade, boolean teachingCourses);
    }
 
@@ -37,7 +37,7 @@ public class TextBlocks {
 
    @Test
    void test() throws Exception {
-      // the next comment tells IntelliJ to suggest editing the string as a JSON fragment
+      // the next line tells IntelliJ to suggest editing the string as a JSON fragment
       // language=json
       String jsonTemplate = "{\n" +
                  "   \"name\": \"%s\",\n" +
