@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.util.Map.entry;
-
 public class CollectionOf {
   public static void main(String[] args) {
     ListOf_vs_ArraysAsList();
 
-    System.out.println(classicButTooMuchToWrite());
+    System.out.println(classicButALotOfBoilerplate());
     System.out.println(geekButPotentialMemLeak());
     System.out.println(java11());
   }
@@ -27,7 +25,7 @@ public class CollectionOf {
 
 
 
-  public static Map<String,Integer> classicButTooMuchToWrite() {
+  public static Map<String,Integer> classicButALotOfBoilerplate() {
     Map<String,Integer> map = new HashMap<>();
     map.put("a",1);
     map.put("b",2);

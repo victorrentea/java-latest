@@ -39,10 +39,11 @@ public class TextBlocks {
    void test() throws Exception {
       // the next comment tells IntelliJ to suggest editing the string as a JSON fragment
       // language=json
-      String json = ("{\n" +
-                     "   \"name\": \"%s\",\n" +
-                     "   \"teachingCourses\": true\n" +
-                     "}\n").formatted("John");
+      String jsonTemplate = "{\n" +
+                 "   \"name\": \"%s\",\n" +
+                 "   \"teachingCourses\": true\n" +
+                 "}\n";
+      String json = jsonTemplate.formatted("John");
       mockMvc.perform(post("/product/search")
               .contentType("application/json")
               .content(json) // add one more criteria
