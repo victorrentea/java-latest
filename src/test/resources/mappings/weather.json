@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/weather"
+  },
+  "response": {
+    "status": 200,
+    "body": "Cloudy",
+    "fixedDelayMilliseconds": 500,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

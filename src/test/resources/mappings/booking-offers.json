@@ -1,0 +1,14 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/booking-offers-.*"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": ["Offer1","Offer2"],
+    "fixedDelayMilliseconds": 500,
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
