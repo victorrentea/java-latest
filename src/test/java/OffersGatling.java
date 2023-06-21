@@ -14,8 +14,7 @@ public class OffersGatling extends Simulation {
 
     setUp(scenario(getClass().getSimpleName()).exec(
             http("").get("/offers"))
-//        .injectClosed(rampConcurrentUsers(200).to(1000).during(ofSeconds(7)))
-            .injectClosed(constantConcurrentUsers(500).during(ofSeconds(7)))
+            .injectClosed(constantConcurrentUsers(500).during(ofSeconds(5)))
       )
 
         .protocols(http.baseUrl(host));
