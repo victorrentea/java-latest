@@ -1,7 +1,10 @@
 package victor.training.java;
 
-// TODO make this a POJO
-// TODO make it immutable (Value Object design pattern)
+// TODO make this
+//  POJO
+//  immutable❤️
+//  record
+//  Lombok
 class Interval {
   private int start;
   private int end;
