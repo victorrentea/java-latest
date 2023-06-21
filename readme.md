@@ -1,5 +1,5 @@
-## The Java Revolution: Best new Language Features since Java 8
-- 👋 Hi! I'm https://victorrentea.ro
+## The Java Revolution: Best new Language Features since Java 8 (2014)
+- 👋 Hi! I'm VictorRentea.ro
 - Java Language - background and position today
 - var [11]
 - Verbosity and Project Lombok (https://projectlombok.org/) [8] 
