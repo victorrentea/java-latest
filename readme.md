@@ -16,6 +16,7 @@
 - Virtual threads (Project Loom) [21]
 
 The features above are supported
-since Java LTS version [ver]
-- Java [17] was released in Sep 2021 and is now production ready.
+ since Java LTS version [ver].
+Java [17] was released in Sep 2021
+ and is now production ready.
 
