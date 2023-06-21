@@ -17,13 +17,14 @@ import static java.util.stream.Collectors.joining;
 
 public class Var {
 
-  //region Source of data
-  public Map<Long, List<Tuple2<String, Integer>>> extremeFP() {
-    return Map.of();
-  }
-  //endregion
-
   @Test
+  public void heavyGenerics() {
+    RequestEntity<Object> request = new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url"));
+    ResponseEntity<List<String>> response = new RestTemplate().exchange(request, new ParameterizedTypeReference<List<String>>() {
+    });
+    System.out.println(response.getBody());
+  }
+
   void lackOfAbstractions() {
     Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
 
@@ -35,9 +36,9 @@ public class Var {
     }
   }
 
-  public void heavyGenerics() {
-    ResponseEntity<List<String>> response = new RestTemplate().exchange(new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url")), new ParameterizedTypeReference<List<String>>() {
-    });
+  //region Source of data
+  public Map<Long, List<Tuple2<String, Integer>>> extremeFP() {
+    return Map.of();
   }
-
+  //endregion
 }

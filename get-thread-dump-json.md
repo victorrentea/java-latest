@@ -1,1 +1,0 @@
-jcmd <pid> Thread.dump_to_file -format=json threads.json
