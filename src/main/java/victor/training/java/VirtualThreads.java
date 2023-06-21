@@ -2,6 +2,7 @@ package victor.training.java;
 
 import jdk.incubator.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,10 +16,12 @@ import java.util.concurrent.Future;
 @RestController
 @SpringBootApplication
 public class VirtualThreads {
-  record BookingOffersDto(List<String> offers, String weather) {
-
+  public static void main(String[] args) {
+      SpringApplication.run(VirtualThreads.class, args);
   }
-  @GetMapping("parallel")
+  record BookingOffersDto(List<String> offers, String weather) {
+  }
+  @GetMapping("/offers")
   public BookingOffersDto offersAndWeather() throws InterruptedException {
     try (var scope = new ShutdownOnFailure()) {
 
