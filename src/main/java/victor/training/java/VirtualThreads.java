@@ -4,11 +4,14 @@ import jdk.incubator.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 @SuppressWarnings("ALL")
@@ -17,10 +20,14 @@ import java.util.concurrent.Future;
 @SpringBootApplication
 public class VirtualThreads {
   public static void main(String[] args) {
-      SpringApplication.run(VirtualThreads.class, args);
+    // TODO remember to start this main with the following VM arguments:
+    // --enable-preview --add-modules jdk.incubator.concurrent
+    SpringApplication.run(VirtualThreads.class, args);
   }
+
   record BookingOffersDto(List<String> offers, String weather) {
   }
+
   @GetMapping("/offers")
   public BookingOffersDto offersAndWeather() throws InterruptedException {
     try (var scope = new ShutdownOnFailure()) {
@@ -41,17 +48,17 @@ public class VirtualThreads {
     String url = "http://localhost:9999/booking-offers-" + providerId;
     return rest.getForObject(url, List.class);
   }
+
   public String getWeather() {
     String url = "http://localhost:9999/weather";
     return rest.getForObject(url, String.class);
   }
 
 
-
-//  @Bean
-//  public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
-//    // tell Tomcat to create a new virtual thread for every incoming request
-//    return protocolHandler -> protocolHandler.setExecutor(
-//        Executors.newVirtualThreadPerTaskExecutor());
-//  }
+  @Bean
+  public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
+    // tell Tomcat to create a new virtual thread for every incoming request
+    return protocolHandler -> protocolHandler.setExecutor(
+        Executors.newVirtualThreadPerTaskExecutor());
+  }
 }

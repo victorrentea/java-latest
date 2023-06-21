@@ -1,7 +1,6 @@
 import io.gatling.javaapi.core.Simulation;
 
-import static io.gatling.javaapi.core.CoreDsl.constantConcurrentUsers;
-import static io.gatling.javaapi.core.CoreDsl.scenario;
+import static io.gatling.javaapi.core.CoreDsl.*;
 import static io.gatling.javaapi.http.HttpDsl.http;
 import static java.time.Duration.ofSeconds;
 
@@ -13,11 +12,12 @@ public class OffersGatling extends Simulation {
   {
     String host = "http://localhost:8080";
 
-    setUp(scenario(getClass().getSimpleName()).exec(http("")
-                            .get("/offers")
-            )
-            .injectClosed(constantConcurrentUsers(1000).during(ofSeconds(5))))
+    setUp(scenario(getClass().getSimpleName()).exec(
+            http("").get("/offers"))
+//        .injectClosed(rampConcurrentUsers(200).to(1000).during(ofSeconds(7)))
+            .injectClosed(constantConcurrentUsers(500).during(ofSeconds(7)))
+      )
 
-            .protocols(http.baseUrl(host));
+        .protocols(http.baseUrl(host));
   }
 }
