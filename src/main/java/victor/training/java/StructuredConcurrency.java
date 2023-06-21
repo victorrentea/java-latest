@@ -15,7 +15,9 @@ import java.util.concurrent.Future;
 @RestController
 @SpringBootApplication
 public class StructuredConcurrency {
+  record BookingOffersDto(List<String> offers, String weather) {
 
+  }
   @GetMapping("parallel")
   public BookingOffersDto offersAndWeather() throws InterruptedException {
     try (var scope = new ShutdownOnFailure()) {
@@ -29,13 +31,24 @@ public class StructuredConcurrency {
       return new BookingOffersDto(futureOffers.resultNow(), futureWeather.resultNow());
     }
   }
+
+  private final RestTemplate rest = new RestTemplate();
+
   public List<String> getBookingOffers(int providerId) {
-    return new RestTemplate().getForObject("http://localhost:9999/booking-offers-" + providerId, List.class);
+    String url = "http://localhost:9999/booking-offers-" + providerId;
+    return rest.getForObject(url, List.class);
   }
   public String getWeather() {
-    return new RestTemplate().getForObject("http://localhost:9999/weather", String.class);
+    String url = "http://localhost:9999/weather";
+    return rest.getForObject(url, String.class);
   }
 
-  record BookingOffersDto(List<String> offers, String weather) {
-  }
+
+
+//  @Bean
+//  public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
+//    // tell Tomcat to create a new virtual thread for every incoming request
+//    return protocolHandler -> protocolHandler.setExecutor(
+//        Executors.newVirtualThreadPerTaskExecutor());
+//  }
 }

@@ -20,8 +20,8 @@ public class Var {
   @Test
   public void heavyGenerics() {
     RequestEntity<Object> request = new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url"));
-    ResponseEntity<List<String>> response = new RestTemplate().exchange(request, new ParameterizedTypeReference<List<String>>() {
-    });
+    ResponseEntity<List<String>> response = new RestTemplate().exchange(request,
+        new ParameterizedTypeReference<List<String>>() {});
     System.out.println(response.getBody());
   }
 

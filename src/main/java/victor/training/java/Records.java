@@ -1,13 +1,13 @@
 package victor.training.java;
 
-// TODO make this an immutable Java object
-//  (Value Object design pattern)
+// TODO make this a POJO
+// TODO make it immutable (Value Object design pattern)
 class Interval {
   private int start;
   private int end;
 }
 
-class ClientCode {
+class Records {
   public void method(Interval interval) {
 
   }
