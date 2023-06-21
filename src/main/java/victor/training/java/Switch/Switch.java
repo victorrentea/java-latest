@@ -2,7 +2,7 @@ package victor.training.java.Switch;
 
 class Switch {
   enum CountryEnum {
-    RO, ES, FR, UK, CN,
+    RO, ES, FR, UK, CN, US
   }
   record Parcel(CountryEnum originCountry, double tobaccoValue, double regularValue) {
   }
@@ -13,21 +13,20 @@ class Switch {
   }
 
   public static double computeTax(Parcel parcel) {
-    double tax = 0;
-    switch (parcel.originCountry()) {
+    switch (parcel.originCountry()) { // #3
       case UK:
-        tax = parcel.tobaccoValue() / 2 + parcel.regularValue();
-        break;
-      case CN:
-        tax = parcel.tobaccoValue() + parcel.regularValue();
-        break;
+        return parcel.tobaccoValue() / 2 + parcel.regularValue();
+      case CN: // #1
+        return parcel.tobaccoValue() + parcel.regularValue();
       case FR:
       case ES:
       case RO:
-        tax = parcel.tobaccoValue() / 3;
-        break;
+        return parcel.tobaccoValue() / 3;
+      default: // #2
+        // YOLO developer
+        /// "i do not test my code, but when I do, I do it in PRODUCTION"
+        throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
     }
-    return tax;
   }
 
 }

@@ -15,14 +15,16 @@ public class ImmutableCollections {
     // TODO find the negative numbers
     List<Integer> negatives = numbers.stream()
         .filter(n -> n < 0)
-        .collect(Collectors.toList());
+        .toList();
+    negatives.add(+4);
     System.out.println(negatives);
   }
 
   public static Map<String,Integer> mapInit() {
-    Map<String,Integer> map = new HashMap<>();
-    map.put("a",1);
-    map.put("b",2);
-    return map;
+//    Map<String,Integer> map = new HashMap<>();
+//    map.put("a",1);
+//    map.put("b",2);
+//    return map;
+    return Map.of("a", 1, "b", 2);
   }
 }

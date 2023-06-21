@@ -1,12 +1,12 @@
 ## The Java Revolution: Best new Language Features since Java 8 (2014)
 - 👋 Hi! I'm VictorRentea.ro
 - Java Language - history
-- var [11]
-- Verbosity andProject Lombok [8]
-- records ⭐️ [17]
-- List/Map.of [11] + .toList [17]
-- text blocks """ [17]
-- string interpolation \{x} [24]
+v var [11]
+v Verbosity andProject Lombok [8]
+v records ⭐️ [17]
+v List/Map.of [11] + .toList [17]
+v text blocks """ [17]
+v string interpolation \{x} [24]
 - switch statement: problems
 - switch expressions ⭐️ [17]
 - return switch(enum) [17]
