@@ -14,7 +14,7 @@ import java.util.concurrent.Future;
 @Slf4j
 @RestController
 @SpringBootApplication
-public class StructuredConcurrency {
+public class VirtualThreads {
   record BookingOffersDto(List<String> offers, String weather) {
 
   }
