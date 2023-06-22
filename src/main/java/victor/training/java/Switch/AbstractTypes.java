@@ -4,6 +4,23 @@ class AbstractTypes {
   enum CountryEnum {
     RO, ES, FR, UK, CN,
   }
+
+  interface Country {
+    double computeTax(Parcel parcel);
+  }
+
+  class ROCountry implements Country {
+    @Override
+    public double computeTax(Parcel parcel) {
+      return 0;
+    }
+  }
+  class ESCountry implements Country{
+    @Override
+    public double computeTax(Parcel parcel) {
+      return 0;
+    }
+  }
   record Parcel(CountryEnum originCountry, double tobaccoValue, double regularValue) {
   }
   public static void main(String[] args) {

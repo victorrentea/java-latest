@@ -13,20 +13,14 @@ class Switch {
   }
 
   public static double computeTax(Parcel parcel) {
-    switch (parcel.originCountry()) { // #3
-      case UK:
-        return parcel.tobaccoValue() / 2 + parcel.regularValue();
-      case CN: // #1
-        return parcel.tobaccoValue() + parcel.regularValue();
-      case FR:
-      case ES:
-      case RO:
-        return parcel.tobaccoValue() / 3;
-      default: // #2
-        // YOLO developer
-        /// "i do not test my code, but when I do, I do it in PRODUCTION"
-        throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
-    }
+    double valueOMG = switch (parcel.originCountry()) { // #3
+      case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
+      case CN -> // #1
+          parcel.tobaccoValue() + parcel.regularValue();
+      case FR, ES, RO -> parcel.tobaccoValue() / 3;
+      case US -> 1;
+    };
+    return valueOMG;
   }
 
 }
