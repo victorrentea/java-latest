@@ -9,6 +9,13 @@ public class InstanceOf {
     method(point);
   }
 
+  record Color(int r, int g, int b, float a) {
+  }
+  record Point(Position position, Color color) {
+  }
+  record Position(int x,int y, int z) {
+  }
+  
   private static void method(Object obj) {
     if (obj instanceof Point) {
       Point point = (Point) obj;
@@ -22,3 +29,4 @@ public class InstanceOf {
     }
   }
 }
+

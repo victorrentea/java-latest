@@ -39,9 +39,6 @@ public class NonBlockingNetworkCalls {
 
   record UserPreferences(String favoriteBeerType, boolean iceInVodka) {}
 
-  record Beer(String type) {
-  }
-  record Vodka(String type) {
-
-  }
+  record Beer(String type) {  }
+  record Vodka(String type) {  }
 }

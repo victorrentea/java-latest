@@ -42,7 +42,7 @@ public class RecordUsagesSpringApp {
 
 @Service
 @RequiredArgsConstructor
-//record MyService(MyRepo myRepo) { // CGLIB cannot generate a proxy (dynamic subclass) of a final class
+//record MyService(MyRepo myRepo) { // 🛑DON'T! => CGLIB cannot generate a proxy (dynamic subclass) of a final class
 class MyService {
   private final MyRepo myRepo;
 

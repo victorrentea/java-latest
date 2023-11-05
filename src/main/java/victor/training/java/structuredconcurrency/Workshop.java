@@ -44,7 +44,7 @@ public class Workshop {
   //  - default weather to "Probably Sunny" if getWeather did not complete
   @GetMapping("timeout")
   public BookingOffersDto p02_timeout() throws InterruptedException {
-    return null; // copy-paste from above
+    return null; // copy-paste from above and edit...
   }
 
   // TODO run all
