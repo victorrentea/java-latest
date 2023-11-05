@@ -41,4 +41,7 @@ public class NonBlockingNetworkCalls {
 
   record Beer(String type) {
   }
+  record Vodka(String type) {
+
+  }
 }

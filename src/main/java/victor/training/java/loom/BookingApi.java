@@ -10,9 +10,9 @@ import java.util.List;
 public class BookingApi {
   @GetMapping("booking")
   public BookingOffersDto booking() {
-//    RestTemplate rest = new RestTemplate();
-//    String bookingOffer1 = rest.getForObject("http://localhost:9999/booking-provider-1", String.class);
-//    String bookingOffer2 = rest.getForObject("http://localhost:9999/booking-provider-1", String.class);
+    RestTemplate rest = new RestTemplate();
+    String bookingOffer1 = rest.getForObject("http://localhost:9999/booking-provider-1", String.class);
+    String bookingOffer2 = rest.getForObject("http://localhost:9999/booking-provider-1", String.class);
     return null;
   }
 

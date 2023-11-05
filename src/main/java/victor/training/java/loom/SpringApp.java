@@ -1,6 +1,5 @@
 package victor.training.java.loom;
 
-import jdk.incubator.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +31,8 @@ public class SpringApp {
   @Bean
   public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
     // tell Tomcat to create a new virtual thread for every incoming request
+    // this has no LIMIT of the number of threads, because virtual threads are extremely LIGHT
+    // ThreadPools will die. It makes NO SENSE recycling virtual threads.
     return protocolHandler -> protocolHandler.setExecutor(
             Executors.newVirtualThreadPerTaskExecutor());
   }
