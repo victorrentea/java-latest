@@ -1,4 +1,4 @@
-package victor.training.java.loom;
+package victor.training.java.virtualthread;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.BeforeAll;

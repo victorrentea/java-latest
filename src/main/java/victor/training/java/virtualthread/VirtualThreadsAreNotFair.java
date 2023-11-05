@@ -1,4 +1,4 @@
-package victor.training.java.loom;
+package victor.training.java.virtualthread;
 
 import java.math.BigInteger;
 import java.time.Instant;

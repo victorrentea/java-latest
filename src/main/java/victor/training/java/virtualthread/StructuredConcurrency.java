@@ -1,20 +1,15 @@
-package victor.training.java.loom;
+package victor.training.java.virtualthread;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import victor.training.java.loom.NonBlockingNetworkCalls.Beer;
-import victor.training.java.loom.NonBlockingNetworkCalls.Vodka;
+import victor.training.java.virtualthread.NonBlockingNetworkCalls.Beer;
+import victor.training.java.virtualthread.NonBlockingNetworkCalls.Vodka;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.StructuredTaskScope;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import java.util.concurrent.StructuredTaskScope.Subtask;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.System.currentTimeMillis;
 

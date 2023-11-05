@@ -1,4 +1,4 @@
-package victor.training.java.loom;
+package victor.training.java.virtualthread;
 
 import lombok.extern.slf4j.Slf4j;
 import victor.training.java.Util;
