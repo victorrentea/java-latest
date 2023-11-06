@@ -1,13 +1,48 @@
 package victor.training.java.records;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
 
+@Builder(toBuilder = true)
+record UberRecord(
+    String a,
+    String b,
+    String c,
+    String d,
+    String e,
+    String f,
+    Long i
+) {}
+
 public class Records {
   public static void main(String[] args) {
+//    new UberRecord(
+//        args[0],
+//        args[1],
+//        args[2],
+//        args[3],
+//        args[4],
+//        args[5],
+//        1l); // greu de citit -> go to builder
+    UberRecord request0 = UberRecord.builder()
+        .a(args[0])
+        .b(args[0])
+        .c(args[0])
+        .d(args[0])
+        .e(args[0])
+        .f(args[0])
+        .i(1L)
+        .build();
+
+    UberRecord altR = new UberRecord(request0.a(), request0.b(), request0.c(), request0.d(), "altE", request0.e(), request0.i());
+
+    // less error prone, more readable
+    UberRecord altR2 = request0.toBuilder().e("altE").build();
+
     User user = new User("John", Optional.empty());
     System.out.println(user.name());
     System.out.println(user);
