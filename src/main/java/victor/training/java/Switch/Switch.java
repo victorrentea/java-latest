@@ -24,49 +24,50 @@ class Switch {
 
     // #### 1 - switch expression (enum) = exhaustive
     public static double calculateCustomsTax(Parcel parcel) { // UGLY API we CANNOT change
-        double result = switch (parcel.originCountry()) {
+        double v = switch (parcel.originCountry()) {
             case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
-            case CN -> parcel.tobaccoValue() + parcel.regularValue();
-            case FR,ES,RO -> parcel.tobaccoValue() / 3;
-            default->
-                throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
+            case CN -> {
+                if (parcel.regularValue() + parcel.tobaccoValue() < 100) {
+                    yield 5; //BR
+                }
+                yield parcel.tobaccoValue() + parcel.regularValue();
+            }
+            case FR, ES, RO -> parcel.tobaccoValue() / 3;
+//          default -> throw new IllegalArgumentException();
+            // in java 17 daca faci switch(enum) ca expresie
+            // este ANTI-PATTERN DEFAULT! vrei javac sa  crape cat mai repede.
         };
-        return result;
+
+        System.out.println("Alte chestii");
+        return v;
     }
 
 
 
 
-    // #### 2 - switch expression non exhaustive
+    // #### 2 - switch expression non exhaustive (eg e pe String) => trebuie default
     public int switchNonExhaustive(String countryIsoCode, int parcelValue) {
-        switch (countryIsoCode) {
-            case "RO":
-                return parcelValue * 2;
-            case "FR":
-                return parcelValue + 2;
-            default:
-                throw new IllegalArgumentException("Unknown country " + countryIsoCode);
-        }
+        // CountryEnum en = valueOf(countryIsoCode); // arunca exceptie daca nu gaseste enum cu valoarea
+        return switch (countryIsoCode) {
+            case "RO" -> parcelValue * 2;
+            case "FR" -> parcelValue + 2;
+            default -> throw new IllegalArgumentException("Unknown country " + countryIsoCode);
+      };
     }
 
     // #### 3 - enhanced switch statement (returning void)
     public void handleMessage(HRMessage message) {
-        switch (message.type()) {
-            case RAISE:
-                handleRaiseSalary(message.content());
-                break;
-            case PROMOTE:
-                handlePromote(message.content());
-                break;
-            case DISMISS:
-                if (message.urgent())
-                    handleDismissUrgent(message.content());
-                else
-                    handleDismiss(message.content());
-                break;
-            default:
-                throw new IllegalArgumentException("Should never happen in prod: unknown message type" + message.type());
+      var degeaba = switch (message.type()) {
+        case RAISE -> handleRaiseSalary(message.content());
+        case PROMOTE -> handlePromote(message.content());
+        case DISMISS -> {
+          if (message.urgent())
+            handleDismissUrgent(message.content());
+          else
+            handleDismiss(message.content());
+          yield null; // "return"
         }
+      };
     }
 
     private Void handlePromote(String content) {

@@ -8,11 +8,18 @@ public record Parcel(CountryEnum originCountry,
                      LocalDate date) {
 
   public enum CountryEnum {
-    RO,
+    RO/*{
+      @Override
+      double computeTax(Parcel parcel) {
+        return 0;
+      }
+    }*/,
     ES,
     FR,
     UK,
     CN
-//    ,DB
+//    UNKNOWN?
+//    ,DB;
+//    abstract double computeTax(Parcel parcel);
   }
 }
