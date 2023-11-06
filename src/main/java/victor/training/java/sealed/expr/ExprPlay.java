@@ -7,15 +7,15 @@ import static victor.training.java.sealed.expr.Expr.*;
 public class ExprPlay {
   public static void main(String[] args) {
     // = "1 + 2" = 3
-    Expr expr1 = null; // TODO new Sum(new Const(1), new Const(2));
+    Expr expr1 = new Sum(new Const(1), new Const(2));
     System.out.println(print(expr1) + " => " + eval(expr1));
 
     // = "-5 + 2" = -3
-    Expr expr2 = null; // TODO = new Sum(Neg(Const(5)), Const(2))
+    Expr expr2 = new Sum(new Neg(new Const(5)), new Const(2));
     System.out.println(print(expr2) + " => " + eval(expr2));
 
     // = "-5 + 2 * 7" = 9
-    Expr expr3 = null; // TODO = new Sum(Neg(Const(5)),     Prod(Const(2),Const(7))     )
+    Expr expr3 = new Sum(new Neg(new Const(5)), new Prod(new Const(2), new Const(7)));
     System.out.println(print(expr3) + " => " + eval(expr3));
   }
 
