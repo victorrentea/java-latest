@@ -46,12 +46,13 @@ public class TextBlocks {
 
       // the next comment tells IntelliJ to suggest editing the string as a JSON fragment
       // language=json
-      String jsonTemplate = "{\n" +
-                            "   \"name\": \"%s\",\n" +
-                            "   \"age\": 17,\n" +
-                            "   \"teachingCourses\": true,\n" +
-                            "   \"frate\": true\n" +
-                            "}";
+      String jsonTemplate = """
+          {
+             "name": "%s",
+             "age": 17,
+             "teachingCourses": true,
+             "frate": true
+          }""";
       String json = jsonTemplate.formatted("John");
       mockMvc.perform(post("/product/search")
               .contentType("application/json")
