@@ -64,7 +64,7 @@ public class TextBlocks {
    public static void main(String[] args) {
       // dupa primele """ trebuie enter care insa nu apare in stringul final
       // language=json
-      metoda(new Person("John", 37));
+      metoda(new Person("j".repeat(10), 37));
    }
    record Person(String name, int age) {}
    private static void metoda(Person person) {
