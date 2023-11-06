@@ -41,11 +41,18 @@ public class VisitorPlay {
         // #3 Visitor Pattern (java <=11 )
         // 1) sa fac compilatorul sa crape daca uit sa implem logica pe un tip <- nu mai e folosit Visitor din Java >= 17
         // 2) sa mut logica asta intr-o clasa dedicata.
+//        PerimeterVisitor perimeterVisitor = new PerimeterVisitor() ;
+//        for (Shape shape : shapes) {
+//            shape.accept(perimeterVisitor);
+//        }
 
+        // #4 sealed classes
         double totalPerimeter = 0;
-        PerimeterVisitor perimeterVisitor = new PerimeterVisitor() ;
         for (Shape shape : shapes) {
-            shape.accept(perimeterVisitor);
+            totalPerimeter += switch (shape) { // PR comment: foloseste switch ca expresie nu ca statement
+                case Square s -> s.edge() * 4;
+                case Circle c -> c.radius() * 2 * Math.PI;
+            };
         }
 
         // TASK : compute the total perimeter

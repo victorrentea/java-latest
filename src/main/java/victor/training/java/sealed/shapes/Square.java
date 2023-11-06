@@ -5,10 +5,10 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Inheritance;
 
 public record Square(int edge) implements Shape {
-  @Override
-  public void accept(ShapeVisitor visitor) {
-    visitor.visit(this);
-  }
+//  @Override
+//  public void accept(ShapeVisitor visitor) {
+//    visitor.visit(this);
+//  }
 //  @Override
 //  public double perimeter() {
 //    // #1 OOP logica IN clasa

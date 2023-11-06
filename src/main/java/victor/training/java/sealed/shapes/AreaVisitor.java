@@ -11,8 +11,8 @@ public class AreaVisitor implements ShapeVisitor {
 
   }
 
-  @Override
-  public void visit(Rectangle rectangle) {
-
-  }
+//  @Override
+//  public void visit(Rectangle rectangle) {
+//
+//  }
 }
