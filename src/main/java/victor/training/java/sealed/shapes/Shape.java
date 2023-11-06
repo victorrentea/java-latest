@@ -4,7 +4,7 @@ package victor.training.java.sealed.shapes;
 import java.awt.*;
 
 public sealed interface Shape
-    permits Circle, Square{
+    permits Circle, Square, Rectangle{
 //  double perimeter();
 //  void accept(ShapeVisitor visitor);
 //  default void accept2(ShapeVisitor visitor) {

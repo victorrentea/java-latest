@@ -12,7 +12,7 @@ public class VisitorPlay {
                 new Square(10), // 4 * E
                 new Circle(5), // 2 * PI * R
                 new Square(5),
-//                new Rectangle(1,2),
+                new Rectangle(1,2),
                 new Square(1));
 
         // #1 OOP sa vezi clasele ca Obiect, sa le permiti sa aiba behavior
@@ -52,6 +52,7 @@ public class VisitorPlay {
             totalPerimeter += switch (shape) { // PR comment: foloseste switch ca expresie nu ca statement
                 case Square(var edge) -> edge * 4;
                 case Circle(var radius) -> radius * 2 * Math.PI;
+                case Rectangle(int w, int h) -> 2 * (w + h);
             };
         }
         // destructurare inseamna sa extragi componentele unei structuri intr-un foc
