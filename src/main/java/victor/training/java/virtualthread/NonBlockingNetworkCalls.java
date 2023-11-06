@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Thread.currentThread;
@@ -19,6 +20,8 @@ public class NonBlockingNetworkCalls {
   private static final AtomicInteger indexCounter = new AtomicInteger(1);
 
   @GetMapping("/beer")
+//  public Mono<Beer> seq() { // avoid blocking Tomcat's threads
+//  public CompletableFuture<Beer> seq() { // avoid blocking Tomcat's threads
   public Beer seq() {
     int requestId = indexCounter.getAndIncrement();
     tl.set("req"+requestId);

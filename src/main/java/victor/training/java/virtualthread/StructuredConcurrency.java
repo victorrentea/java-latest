@@ -18,6 +18,7 @@ import static java.lang.System.currentTimeMillis;
 public class StructuredConcurrency {
   private final RestTemplate restTemplate = new RestTemplate();
 
+  // Starting Java 25, nu vom mai folosi Thread Pools, CompletableFuture, executor.submit(
   @GetMapping("/par")
   public String get() throws InterruptedException, ExecutionException {
     long t0 = currentTimeMillis();

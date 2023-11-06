@@ -27,7 +27,7 @@ public class Pinned {
     IntStream.range(0, 50).forEach(id ->
         executor.submit(() -> {
           long tStart = currentTimeMillis();
-          intenseCpu();
+//          intenseCpu(); // nu e atat de grav pt ca pana la urma
           synchronizedIsCppCode();
           long tEnd = currentTimeMillis();
           taskCompletionTimes.put(id, new Times(tStart - tSubmit, tEnd - tSubmit));
@@ -59,7 +59,7 @@ public class Pinned {
 
   public static void synchronizedIsCppCode() {
     synchronized (Pinned.class) {
-      UtilityElf.quietlySleep(1000);
+      UtilityElf.quietlySleep(100);
     }
   }
 }
