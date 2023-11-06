@@ -22,17 +22,13 @@ public class OSThreadHopping {
 
   private static void blockingWork(int taskId) {
     String startThread = currentThread().toString();
-    log.info(startThread + " runs Task #" + taskId + " - START");
+    log.info("Task #{} START", taskId);
     Util.sleepMillis(100); // causes JVM to unpin the virtual thread from OS carrier thread
     String endThread = currentThread().toString();
-    log.info(endThread + " runs Task #" + taskId + " - END");
-
-
-//    while(true);
+    log.info("Task #{} END", taskId);
 
     if (!startThread.equals(endThread)) {
-      log.warn("OS THREAD HOP FOUND: Task #" + taskId + " started in \n" + startThread + "\nbut ended in\n" + endThread + "\n");
+      log.warn("OS THREAD HOP DETECTED: Task #" + taskId + " started in \n" + startThread + "\nbut ended in\n" + endThread + "\n");
     }
   }
-
 }
