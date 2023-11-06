@@ -31,9 +31,10 @@ public class RecordLab {
     dot.setY(2);
 
     // TODO 1 make Dot a record
-    // TODO 2 implement Dot.translate(int dx, int dy):Dot
-    // TODO 3 validate x and y < 1000 in constructor
-    // TODO 4 create overloaded constructor accepting x and y as strings
+    // TODO 2 implement Dot.translate(int deltaX, int deltaY):Dot = nu poti MODIFICA instanta originala, deci mutarea = creerea unui nou Dot
+    //   eg Dot(1,2).translate(3,4).equals(Dot(4,6))
+    // TODO 3 validate x and y < 1000 in constructor !!!
+    // TODO 4 create overloaded constructor accepting x and y as strings! you will have to call this(int,int) // constructorul "canonic"
     // TODO 5 change the default toString to print itself in the format (x,y)
 
     System.out.println("At x = " + dot.getX());
