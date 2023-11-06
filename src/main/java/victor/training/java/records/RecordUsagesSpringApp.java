@@ -1,7 +1,6 @@
 package victor.training.java.records;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @SpringBootApplication
 @RestController
 public class RecordUsagesSpringApp {
@@ -25,24 +26,27 @@ public class RecordUsagesSpringApp {
   @Autowired
   private MyService service;
 
+  // DTO flavors: Request/Response/Criteria/Result
+  public record GetBookResponse(long id, String name){}
   @GetMapping
-  public MyDto get() {
-    return new MyDto(1);
+  public GetBookResponse getBook() {
+    return new GetBookResponse(1, "DDD");
   }
 
+  public record CreateBookRequest(
+      @NotBlank String name,
+      @NotEmpty List<String> authors
+  ) {  }
   @PostMapping
-  public MyDto post(@Validated @RequestBody MyDto dto) {
-    return dto;
-  }
-
-  record MyDto(@Min(0) @NotNull Integer x) {
+  public long createBook(@RequestBody @Validated CreateBookRequest request) {
+    return 1;
   }
 }
 
 
 @Service
 @RequiredArgsConstructor
-//record MyService(MyRepo myRepo) { // 🛑DON'T! => CGLIB cannot generate a proxy (dynamic subclass) of a final class
+//record MyService(MyRepo myRepo) { // 🛑DON'T! => CGLIB won't be able to generate a proxy (dynamic subclass) of a final class
 class MyService {
   private final MyRepo myRepo;
 
