@@ -1,4 +1,4 @@
-package victor.training.java.records;
+package victor.training.java.records.intro;
 
 public class Other {
   private String data;

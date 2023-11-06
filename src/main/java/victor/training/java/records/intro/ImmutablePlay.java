@@ -1,6 +1,5 @@
-package victor.training.java.records;
+package victor.training.java.records.intro;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

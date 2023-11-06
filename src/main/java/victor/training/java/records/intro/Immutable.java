@@ -1,9 +1,7 @@
-package victor.training.java.records;
-
-import com.google.common.collect.ImmutableList;
-import lombok.Value;
+package victor.training.java.records.intro;
 
 import java.util.List;
+import java.util.Objects;
 
 public class Immutable {
   private final String name;
@@ -31,5 +29,18 @@ public class Immutable {
   @Override
   public String toString() {
     return "Immutable{" +"name='" + name + '\'' +", other=" + other +", list=" + list +'}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Immutable immutable = (Immutable) o;
+    return Objects.equals(name, immutable.name) && Objects.equals(other, immutable.other) && Objects.equals(list, immutable.list);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, other, list);
   }
 }
