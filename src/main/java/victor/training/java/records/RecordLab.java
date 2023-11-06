@@ -1,34 +1,28 @@
 package victor.training.java.records;
 
 
-class Dot {
-  private int x;
-  private int y;
-
-  public int getX() {
-    return x;
+record Dot(int x, int y) {
+  public Dot/*(int x, int y) = subintelesi*/ {
+    System.out.println(x()); // soc! campul e inca 0. Recordul e in offside
+    if(x >= 1000) {
+      throw new IllegalArgumentException("Invalid X value (should be less than 1000)");
+    }
+//    x++;
+    if(y >= 1000) {
+      throw new IllegalArgumentException("Invalid X value (should be less than 1000)");
+    }
+//    this.x = x; // subintelesi
+//    this.y = y;
   }
 
-  public Dot setX(int x) {
-    this.x = x;
-    return this;
-  }
-
-  public int getY() {
-    return y;
-  }
-
-  public Dot setY(int y) {
-    this.y = y;
-    return this;
+  public Dot(String x, String y) {
+    this(Integer.parseInt(x), Integer.parseInt(y)); // canonical constructor
   }
 }
 
 public class RecordLab {
   public static void main(String[] args) {
-    Dot dot = new Dot();
-    dot.setX(1);
-    dot.setY(2);
+    Dot dot = new Dot(2222,3333);
 
     // TODO 1 make Dot a record
     // TODO 2 implement Dot.translate(int deltaX, int deltaY):Dot = nu poti MODIFICA instanta originala, deci mutarea = creerea unui nou Dot
@@ -37,7 +31,7 @@ public class RecordLab {
     // TODO 4 create overloaded constructor accepting x and y as strings! you will have to call this(int,int) // constructorul "canonic"
     // TODO 5 change the default toString to print itself in the format (x,y)
 
-    System.out.println("At x = " + dot.getX());
+    System.out.println("At x = " + dot.x());
     System.out.println("dot = " + dot);
   }
 }

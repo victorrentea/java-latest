@@ -1,5 +1,6 @@
 package victor.training.java.records;
 
+import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
@@ -18,12 +19,15 @@ import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MicroTypes {
-   public record ProductCount(@NotNull String productName, int count) {
-
+   // @NotNull si prietenii din javax/jakarta.validation sunt verificate de altcineva
+   public record ProductCount(/*@NotNull*/ String productName, int count) {
+//      public ProductCount
    } // instead of Tuple2<String,Integer>
 
-   public Map<Long, List<ProductCount>> extremeFP() {
-      Long customerId = 1L;
+   public record CustomerId(long id) {} // MIcroTypes/ID Semantic
+
+   public Map<CustomerId, List<ProductCount>> extremeFP() {
+      CustomerId customerId = new CustomerId(1L);
       Integer product1Count = 2;
       Integer product2Count = 4;
       return Map.of(customerId, List.of(
@@ -45,12 +49,11 @@ public class MicroTypes {
       // var LOVE: mai simplu de scris
       // var HATE: tipurile variab pot ajuta la intelegere
 
-      for (Long cid : map.keySet()) {
+      for (CustomerId cid : map.keySet()) {
          String pl = map.get(cid).stream()
              .map(t -> t.count() + " of " + t.productName().toUpperCase())
-
              .collect(joining(", "));
-         System.out.println("cid=" + cid + " got " + pl);
+         System.out.println("cid=" + cid.id() + " got " + pl);
       }
    }
 
