@@ -26,7 +26,6 @@ class Switch {
     public static double calculateCustomsTax(Parcel parcel) { // UGLY API we CANNOT change
         double result = 0;
         switch (parcel.originCountry()) {
-//            case null: // new in java 18
             case UK:
                 result = parcel.tobaccoValue() / 2 + parcel.regularValue();
                 break;
@@ -38,9 +37,14 @@ class Switch {
             case RO:
                 result = parcel.tobaccoValue() / 3;
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
         }
         return result;
     }
+
+
+
 
     // #### 2 - switch expression non exhaustive
     public int switchNonExhaustive(String countryIsoCode, int parcelValue) {

@@ -12,6 +12,7 @@ public record Parcel(CountryEnum originCountry,
     ES,
     FR,
     UK,
-    CN,
+    CN
+//    ,DB
   }
 }
