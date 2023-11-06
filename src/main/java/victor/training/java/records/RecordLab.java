@@ -1,6 +1,7 @@
 package victor.training.java.records;
 
 
+// in loc de Integer ca sa "nu ai dureri de cap" - @Ovidiu (NPE)
 record Dot(int x, int y) {
   public Dot/*(int x, int y) = subintelesi*/ {
     System.out.println(x()); // soc! campul e inca 0. Recordul e in offside
