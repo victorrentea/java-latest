@@ -1,7 +1,10 @@
 package victor.training.java.sealed.shapes;
 
 
-public interface Shape {
+import java.awt.*;
+
+public sealed interface Shape
+    permits Circle, Square{
 //  double perimeter();
 //  void accept(ShapeVisitor visitor);
 //  default void accept2(ShapeVisitor visitor) {
@@ -9,3 +12,7 @@ public interface Shape {
 //  }
 }
 
+//sealed interface AreLaturi
+//  permits Square, Rectangle {
+//  List<String> laturi();
+//}
