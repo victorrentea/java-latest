@@ -2,6 +2,7 @@ package victor.training.java.sealed.expr;
 
 
 
+import static java.lang.String.valueOf;
 import static victor.training.java.sealed.expr.Expr.*;
 
 public class ExprPlay {
@@ -20,11 +21,21 @@ public class ExprPlay {
   }
 
   static int eval(Expr expr) {
-    throw new RuntimeException("Not implemented"); // TODO implement
+   return switch (expr) {
+     case Sum(Expr a, Expr b) -> eval(a) + eval(b);
+     case Const(int c) -> c;
+     case Neg(Expr e) -> -1 * eval(e);
+     case Prod(Expr a, Expr b) -> eval(a) * eval(b);
+   };
   }
 
   static String print(Expr expr) {
-    return "TODO"; // TODO
+    return switch (expr) {
+      case Sum(var a, var b) -> STR."\{print(a)} + \{print(b)}";
+      case Prod(var a, var b) -> print(a) + "*" + print(b);
+      case Const(var c) -> valueOf(c);
+      case Neg(var e) -> "(-" + print(e) + ")";
+    };
   }
 }
 // TODO Model expressions using sealed classes, for example:
