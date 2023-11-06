@@ -50,10 +50,12 @@ public class VisitorPlay {
         double totalPerimeter = 0;
         for (Shape shape : shapes) {
             totalPerimeter += switch (shape) { // PR comment: foloseste switch ca expresie nu ca statement
-                case Square s -> s.edge() * 4;
-                case Circle c -> c.radius() * 2 * Math.PI;
+                case Square(var edge) -> edge * 4;
+                case Circle(var radius) -> radius * 2 * Math.PI;
             };
         }
+        // destructurare inseamna sa extragi componentele unei structuri intr-un foc
+        // let {a, b} = f(); in f() {return {a:1, b:2};}
 
         // TASK : compute the total perimeter
 
