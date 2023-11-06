@@ -1,5 +1,6 @@
 package victor.training.java.records;
 
+import jakarta.validation.constraints.NotNull;
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
 import org.junit.jupiter.api.Test;
@@ -17,25 +18,37 @@ import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MicroTypes {
+   public record ProductCount(@NotNull String productName, int count) {
 
-   public Map<Long, List<Tuple2<String, Integer>>> extremeFP() {
+   } // instead of Tuple2<String,Integer>
+
+   public Map<Long, List<ProductCount>> extremeFP() {
       Long customerId = 1L;
       Integer product1Count = 2;
       Integer product2Count = 4;
       return Map.of(customerId, List.of(
-          Tuple.tuple("Table", product1Count),
-          Tuple.tuple("Chair", product2Count)
+          new ProductCount(null, product1Count),
+          new ProductCount("Chair", product2Count)
       ));
    }
-   
+
    @Test
    void lackOfAbstractions() {
-      Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
+      var x =1;
+      var map = extremeFP();
+      // var = local variable (!NU field, param)
+      //    type inference (isi da seama javac), dar nu se poate schimba tipul acelei variabile ulterior
+//      map = "1"; // asta merge in JS, dar Slava DOMNULUI nu in Java
+//      var map = 2;
+
       // Joke: try "var" above :)
+      // var LOVE: mai simplu de scris
+      // var HATE: tipurile variab pot ajuta la intelegere
 
       for (Long cid : map.keySet()) {
          String pl = map.get(cid).stream()
-             .map(t -> t.v2 + " of " + t.v1)
+             .map(t -> t.count() + " of " + t.productName().toUpperCase())
+
              .collect(joining(", "));
          System.out.println("cid=" + cid + " got " + pl);
       }

@@ -2,10 +2,18 @@ package victor.training.java.records;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import org.aspectj.weaver.ast.Call;
 
 import java.util.Comparator;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.function.Function;
+
+
+class Dto1 {
+
+}
+class Dto2 extends Dto1{}
 
 @Builder(toBuilder = true)
 record UberRecord(
@@ -16,7 +24,18 @@ record UberRecord(
     String e,
     String f,
     Long i
-) {}
+)
+// extends AltaClasa // ilegal pt ca ar putea mosteni campuri mutable
+// record AltRecord // ilegal
+  implements Callable<String> // implements e bun
+{
+  @Override
+  public String call() throws Exception {
+    return null;
+  }
+}
+
+class AltaClasa {}
 
 public class Records {
   public static void main(String[] args) {
