@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -65,14 +64,18 @@ public class TextBlocks {
    public static void main(String[] args) {
       // dupa primele """ trebuie enter care insa nu apare in stringul final
       // language=json
-      String json = """
+      metoda(new Person("John", 37));
+   }
+   record Person(String name, int age) {}
+   private static void metoda(Person person) {
+      String json = STR."""
           {
-             "name": "%s",
-             "age": 17,
+             "name": "\{person.name}",
+             "age": \{person.age},
              "a": 18,
              "teachingCourses": true,
              "frate": true
-           }""".formatted("John");
+           }""";
       System.out.println("Nostalgia %2d %s %.2f ca-n C++".formatted(1, "a", 0.4));
       System.out.println("---");
       System.out.println(json);
