@@ -1,4 +1,4 @@
-package victor.training.java.virtualthread;
+package victor.training.java.virtualthread.experiments;
 
 import lombok.extern.slf4j.Slf4j;
 import victor.training.java.Util;
