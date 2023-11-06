@@ -16,8 +16,13 @@ public class InstanceOf {
   record Position(int x,int y, int z) {
   }
 
+  public boolean expresiiBooleneCuInstanceOf(Object obj) {
+    return obj instanceof Point p && p.color().a()< .2;
+
+  }
   private static void method(Object obj) {
-    if (obj instanceof Point point) {
+    if (obj instanceof Point point) { // instance of pattern matching
+//      Point point = (Point) obj;
       Position position = point.position();
       System.out.println("At position = " + position);
 
