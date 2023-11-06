@@ -2,16 +2,22 @@ package victor.training.java.sealed;
 
 public class PlayGround {
   public void method(Letter l) {
-//    switch (l) {
-//      case AbsC c ->0;
-//    }
+//    var r = switch (l) {
+//      case RA(int i) -> 0;
+////      case NonSealedC() ->0;
+//    };
+//    var RA(i) = f();
 
+  }
+
+  private RA f() {
+    throw new RuntimeException("Method not implemented");
   }
 }
 
 
 sealed interface Letter permits RA, RB, I, NonSealedC {}
-record RA() implements Letter {}
+record RA(int i) implements Letter {}
 record RB() implements Letter {}
 
 sealed interface I extends Letter permits I1A{}
