@@ -11,6 +11,7 @@ public class VisitorPlay {
                 new Square(10), // 4 * E
                 new Circle(5), // 2 * PI * R
                 new Square(5),
+                new Rectangle(1,2),
                 new Square(1));
 
         // #1 OOP sa vezi clasele ca Obiect, sa le permiti sa aiba behavior
@@ -26,10 +27,13 @@ public class VisitorPlay {
         for (Shape shape : shapes) {
             if (shape instanceof Square square) {
                 totalPerimeter += square.edge() * 4;
-            }
-            if (shape instanceof Circle circle) {
+            } else if (shape instanceof Circle circle) {
                 totalPerimeter += 2 * Math.PI * circle.radius();
+            } else {
+                throw new IllegalArgumentException("N-o stiu p-asta: " + shape);
             }
+            // as vrea sa arunc exceptie cand in lista e un nou tip de forma pe care eu nu-l suport
+            // in Java <=11
         }
 
 
