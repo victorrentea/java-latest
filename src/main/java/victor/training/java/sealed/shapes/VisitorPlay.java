@@ -27,6 +27,7 @@ public class VisitorPlay {
         for (Shape shape : shapes) {
             if (shape instanceof Square square) {
                 totalPerimeter += square.edge() * 4;
+//                continue;  break; // nu sunt FP-friendly
             } else if (shape instanceof Circle circle) {
                 totalPerimeter += 2 * Math.PI * circle.radius();
             } else {
