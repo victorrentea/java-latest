@@ -18,9 +18,19 @@ public class VisitorPlay {
 //            totalPerimeter += shape.perimeter(); -> stream.sum()
 //            list.add(e); -> stream.toList()
 //        }
-        double totalPerimeter = shapes.stream().mapToDouble(Shape::perimeter).sum();
-      // sa vezi clasele doar ca Date si sa pui pe altcineva sa aplice formula corecta
+//        double totalPerimeter = shapes.stream().mapToDouble(Shape::perimeter).sum();
 
+
+        // #2 DOP: sa vezi clasele doar ca Date si sa pui pe altcineva sa aplice formula corecta
+        double totalPerimeter = 0;
+        for (Shape shape : shapes) {
+            if (shape instanceof Square square) {
+                totalPerimeter += square.edge() * 4;
+            }
+            if (shape instanceof Circle circle) {
+                totalPerimeter += 2 * Math.PI * circle.radius();
+            }
+        }
 
 
         // TASK : compute the total perimeter
