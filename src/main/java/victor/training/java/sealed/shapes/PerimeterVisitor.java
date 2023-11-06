@@ -12,6 +12,11 @@ public class PerimeterVisitor implements ShapeVisitor {
     totalPerimeter += circle.radius() * 2 * Math.PI;
   }
 
+  @Override
+  public void visit(Rectangle rectangle) {
+//totalPerimeter += rectangle
+  }
+
   public double getTotalPerimeter() {
     return totalPerimeter;
   }
