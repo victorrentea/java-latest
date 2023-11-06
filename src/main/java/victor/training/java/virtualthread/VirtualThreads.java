@@ -17,7 +17,7 @@ import static java.lang.System.currentTimeMillis;
 @RestController
 @Slf4j
 @RequiredArgsConstructor
-public class StructuredConcurrency {
+public class VirtualThreads {
   private final RestTemplate rest;
   private static final AtomicInteger indexCounter = new AtomicInteger(1);
 

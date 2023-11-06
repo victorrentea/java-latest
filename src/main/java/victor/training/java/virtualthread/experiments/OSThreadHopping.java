@@ -12,7 +12,6 @@ import static java.lang.Thread.currentThread;
 
 @Slf4j
 public class OSThreadHopping {
-  private static final ThreadLocal<String> threadLocal = new ThreadLocal<>();
 
   public static void main(String[] args) throws InterruptedException, ExecutionException {
     try (ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor()) { // +1 thread pt fiecare task
@@ -24,12 +23,11 @@ public class OSThreadHopping {
   private static void blockingWork(int taskId) {
     String startThread = currentThread().toString();
     log.info("Task #{} START", taskId);
-    threadLocal.set("Task-" + taskId);
 
     Util.sleepMillis(100); // causes JVM to unpin the virtual thread from OS carrier thread
 
     String endThread = currentThread().toString();
-    log.info("Task #{} END, threadLocal={}", taskId, threadLocal.get()); // thread locals are preserved
+    log.info("Task #{} END", taskId);
 
     if (!startThread.equals(endThread)) {
       log.warn("OS THREAD HOP DETECTED: Task #" + taskId + " started in \n" + startThread + "\nbut ended in\n" + endThread + "\n");
