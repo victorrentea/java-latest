@@ -1,46 +1,39 @@
 package victor.training.java.records.intro;
 
+import com.google.common.collect.ImmutableList;
+import lombok.Value;
+
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class Immutable {
-  private final String name;
-  private final Other other;
-  private final List<Integer> list;
+ //@Data // hash/eq/tostr, getter, setter
+//@Value // hash/eq/tostr, getter, toate campurile 'private final' + construct pt ele
+//public class Immutable {
+//  String name; // ✅ immutable
+//  Other other; // ✅ immutable
+//  List<Integer> list; // ❌ mutable
+//}
+// sau..
+public record Immutable(
+     String name, // ✅ immutable
+     Other other,  // ✅ immutable
+     List<Integer> list // ❌ mutable
 
-  public Immutable(String name, Other other, List<Integer> list) {
-    this.name = name;
-    this.other = other;
-    this.list = list;
+     // sau inca din java8 puteai renunta la Java Collection Framework,
+     // si sa folosesti Guava (Google Java Commons) in schimb:
+     // ImmutableList<Integer> list // ✅ immutable
+) {
+
+  public Immutable {
+    list = List.copyOf(list); // copie imutabila❤️ a listei originale, java11
   }
 
-  public String getName() {
-    return name;
-  }
+//   public List<Integer> list() { // -malloc -misleading
+//     return new ArrayList<>(list);
+//   }
+ }
+// starea unui obiect imutabil NU poate fi modificata dupa instantiere.
 
-  public Other getOther() {
-    return other;
-  }
-
-  public List<Integer> getList() {
-    return list;
-  }
-
-  @Override
-  public String toString() {
-    return "Immutable{" +"name='" + name + '\'' +", other=" + other +", list=" + list +'}';
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Immutable immutable = (Immutable) o;
-    return Objects.equals(name, immutable.name) && Objects.equals(other, immutable.other) && Objects.equals(list, immutable.list);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, other, list);
-  }
-}
+// @Value sau record definesc 'shallow immutable' objects
+// shallow = "superficial", putin adanc
+// 🏆 deep immutable object = eu si toate obiectele pe care le refer sunt immutable
