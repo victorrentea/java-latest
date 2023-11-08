@@ -29,7 +29,7 @@ public class SpringApp {
     // tell Tomcat to create a new virtual thread for every incoming request
     // this has no LIMIT of the number of threads, because virtual threads are extremely LIGHT
     // ThreadPools will die. It makes NO SENSE recycling virtual threads.
-    return protocolHandler -> protocolHandler.setExecutor(
+    return tomcat -> tomcat.setExecutor(
             Executors.newVirtualThreadPerTaskExecutor());
   }
 
