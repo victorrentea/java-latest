@@ -25,6 +25,7 @@ public class OneMillion {
       System.out.println("Now running threads: " + counter.get());
       long heap1 = getUsedMemory();
       System.out.println("Using Delta Memory:  " + (heap1 - heap0) / 1024 / 1024 + " MB");
+      System.out.println("Using / thread:  " + (heap1 - heap0) / 1_000_000 + " bytes");
 
     }
     System.out.println("All threads finished: " + counter.get());
