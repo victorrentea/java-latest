@@ -83,6 +83,8 @@ public class VirtualThreads {
 
     DillyDilly dilly = beerCF.thenCombine(vodkaCF, DillyDilly::new)
         .get(); // no problem, since I'm blocking a virtual thread
+    // - cancellation does not propagate upstream
+    // - a failed subtask does NOT fail the other
     log.info("Request completed in {} ms", currentTimeMillis() - t0);
     return dilly;
   }
