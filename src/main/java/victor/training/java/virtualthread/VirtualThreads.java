@@ -88,8 +88,8 @@ public class VirtualThreads {
     return rest.getForObject("http://localhost:9999/vodka", Vodka.class);
   }
 
-  private Beer fetchBeer(String blond) {
-    return rest.getForObject("http://localhost:9999/api/beer/" + blond, Beer.class);
+  private Beer fetchBeer(String type) {
+    return rest.getForObject("http://localhost:9999/api/beer/" + type, Beer.class);
   }
 
 }
