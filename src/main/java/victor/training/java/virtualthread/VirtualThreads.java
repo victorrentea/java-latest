@@ -38,6 +38,7 @@ public class VirtualThreads {
     MDC.put("reqId", "#%04d".formatted(indexCounter.incrementAndGet())); // %X{reqId} in application.properties
     long t0 = currentTimeMillis();
 
+    // Structured concurrency will be stable in Java 25 LTS
     try (ShutdownOnFailure scope = new ShutdownOnFailure()) {
       Subtask<Beer> beerTask = scope.fork(() -> fetchBeer("blond")); // spawns +1 child virtual thread
       Subtask<Vodka> vodkaTask = scope.fork(() -> fetchVodka()); // spawns +1 child virtual thread
