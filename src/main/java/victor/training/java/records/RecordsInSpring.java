@@ -66,8 +66,9 @@ class Book {
 }
 
 interface BookRepo extends JpaRepository<Book, Long> {
-  @Query("select new victor.training.java.records.BookApi$GetBookResponse(b.id, b.title) " +
-         "from Book b where b.id = :id")
+  @Query("select new victor.training.java.records.BookApi$GetBookResponse(b.id, b.title)\n" +
+         "from Book b\n" +
+         "where b.id = :id")
   GetBookResponse getBookById(Long id);
 
   //region Legacy SQL

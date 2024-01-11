@@ -5,7 +5,7 @@ import victor.training.java.Switch.HRMessage.MessageType;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class SwitchTest {
+class SwitchVoidTest {
 
   @Test
   void coversAllPossibleTypesOfMessages() {
@@ -13,7 +13,7 @@ class SwitchTest {
 
 
       try {
-        new Switch().handleMessage(new HRMessage(type, "", false));
+        new SwitchVoid().handleMessage(new HRMessage(type, "", false));
       } catch (Exception e) {
         if (e instanceof IllegalArgumentException && !e.getMessage().equals("NU ASTA IN PROD")) {
           continue;

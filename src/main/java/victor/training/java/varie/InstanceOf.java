@@ -17,14 +17,16 @@ public class InstanceOf {
   }
 
   private static void method(Object obj) {
+//    if (obj instanceof Point(Position ...)) {
     if (obj instanceof Point point) {
       Position position = point.position();
       System.out.println("At position = " + position);
 
-      System.out.println("⍺=" + point.color().a());
-      System.out.println("R=" + point.color().r());
-      System.out.println("G=" + point.color().g());
-      System.out.println("B=" + point.color().b());
+      Color color = point.color();
+      System.out.println("⍺=" + color.a());
+      System.out.println("R=" + color.r());
+      System.out.println("G=" + color.g());
+      System.out.println("B=" + color.b());
     }
   }
 }
