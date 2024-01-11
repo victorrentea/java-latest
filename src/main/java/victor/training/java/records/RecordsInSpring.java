@@ -1,11 +1,15 @@
 package victor.training.java.records;
 
-import com.google.common.collect.ImmutableList;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.*;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,58 +18,58 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import victor.training.java.records.RecordsInSpring.CreateBookRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootApplication
-@RestController
-public class RecordsInSpring {
-  @Autowired
-  private BookService bookService;
+import static victor.training.java.records.BookController.*;
 
+@SpringBootApplication
+public class RecordsInSpring {
   public static void main(String[] args) {
     SpringApplication.run(RecordsInSpring.class, args);
   }
+}
+
+@RestController
+//record BookController(BookRepo bookRepo) { // 🛑DON'T! Proxies don't work on final classes => AOP @Secured won't work
+@RequiredArgsConstructor
+class BookController {
+  private final BookRepo bookRepo;
 
   public record GetBookResponse(long id, String name){}
 
-  @GetMapping
-  public GetBookResponse getBook() {
-    return new GetBookResponse(1, "DDD");
+  @GetMapping("{id}")
+  public GetBookResponse getBook(Long id) {
+    return bookRepo.getBookById(id);
   }
 
   public record CreateBookRequest(
       @NotBlank String title,
       @NotEmpty List<String> authors,
-      String teaserVideoUrl //
+      String teaserVideoUrl
   ) {
   }
 
   @PostMapping
-  public void createBook(@RequestBody @Validated CreateBookRequest request) {
-    bookService.create(request);
-  }
-}
-
-@Service
-//record MyService(MyRepo myRepo) { // 🛑DON'T! => CGLIB won't be able to generate a proxy (dynamic subclass) of a final class
-@RequiredArgsConstructor
-class BookService {
-  private final MyRepo myRepo;
-
   @Transactional
-  public void create(CreateBookRequest request) {
-    System.out.println("save title:" + request.title() + " and url:" + request.teaserVideoUrl());
-    foo(request);
-    System.out.println("save authors: " + request.authors());
-  }
-
-  private void foo(CreateBookRequest request) {
-    request.authors().clear();
+  public void createBook(@RequestBody @Validated CreateBookRequest request) {
+    System.out.println("pretend save title:" + request.title() + " and url:" + request.teaserVideoUrl());
+    System.out.println("pretend save authors: " + request.authors());
   }
 }
 
-@Repository
-class MyRepo {
+@Entity
+@Data // avoid using @Data on entities in real life
+class Book {
+  @Id
+  @GeneratedValue
+  private Long id;
+  private String title;
+}
+
+interface BookRepo extends JpaRepository<Book, Long> {
+  @Query("select new victor.training.java.records.BookController$GetBookResponse(b.id, b.title) " +
+         "from Book b where b.id = :id")
+  GetBookResponse getBookById(Long id);
 }
