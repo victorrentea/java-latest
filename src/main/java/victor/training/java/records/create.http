@@ -1,0 +1,10 @@
+POST http://localhost:8080
+Content-Type: application/json
+
+{
+  "title": "a",
+  "authors": ["a"],
+  "teaserVideoUrl": null
+}
+
+###

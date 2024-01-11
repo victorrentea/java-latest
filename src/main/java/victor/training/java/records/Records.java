@@ -2,6 +2,8 @@ package victor.training.java.records;
 
 import jakarta.persistence.Entity;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
@@ -59,6 +61,7 @@ class Point {
     return x == point.x && y == point.y;
   }
 }
+
 
 // TODO 1 make Dot a record
 // TODO 2 implement Dot.translate(int deltaX, int deltaY):Dot; Hint: you'll have to create a new instance

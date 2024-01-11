@@ -31,7 +31,7 @@ public class MicroTypes {
    @Test
    void lackOfAbstractions() {
       Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
-      // Joke: try "var" above :)
+      // Use "var" above = 😂
 
       for (Long cid : map.keySet()) {
          String pl = map.get(cid).stream()
@@ -41,7 +41,7 @@ public class MicroTypes {
       }
    }
 
-   public void method() {
+   public void useVar() {
       ResponseEntity<List<String>> response = new RestTemplate().exchange(new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url")), new ParameterizedTypeReference<List<String>>() {
       });
    }
