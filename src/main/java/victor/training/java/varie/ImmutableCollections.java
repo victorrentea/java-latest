@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CollectionOf {
+
+public class ImmutableCollections {
   public static void main(String[] args) {
     ListOf_vs_ArraysAsList();
 
@@ -21,22 +22,23 @@ public class CollectionOf {
     List<Integer> list11 = List.of(1, 2, 3, 4);
     System.out.println("Java11 style:" + list11);
     // TODO what's the difference ?
+
+
   }
 
 
-
-  public static Map<String,Integer> classicButALotOfBoilerplate() {
-    Map<String,Integer> map = new HashMap<>();
-    map.put("a",1);
-    map.put("b",2);
+  public static Map<String, Integer> classicButALotOfBoilerplate() {
+    Map<String, Integer> map = new HashMap<>();
+    map.put("a", 1);
+    map.put("b", 2);
     return map;
   }
 
-  public static Map<String,Integer> geekButPotentialMemLeak() {
+  public static Map<String, Integer> geekButPotentialMemLeak() {
     return new HashMap<>() {{
       // instance init block
-      put("a",1);
-      put("b",2);
+      put("a", 1);
+      put("b", 2);
     }};
   }
 
