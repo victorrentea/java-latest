@@ -37,8 +37,7 @@ public class TextBlocks {
 
    @Test
    void test() throws Exception {
-      // the next comment tells IntelliJ to suggest editing the string as a JSON fragment
-      // language=json
+      // language=json <- tells IntelliJ it's JSON
       String jsonTemplate = "{\n" +
                  "   \"name\": \"%s\",\n" +
                  "   \"teachingCourses\": true\n" +
