@@ -1,24 +1,25 @@
 package victor.training.java.sealed.some;
 
-import victor.training.java.sealed.some.Opt.Some;
+import victor.training.java.sealed.some.Maybe.Some;
 
-import static victor.training.java.sealed.some.Opt.*;
+import java.util.Random;
+
+import static victor.training.java.sealed.some.Maybe.*;
 
 public class SomePlay {
   public static void main(String[] args) {
-    switch (someRepoMethod()) {
+    switch (someRepoMethod(new Random().nextBoolean())) {
       case Some(var data) -> System.out.println("Got: " + data);
       case None() -> System.out.println("Got nada");
     }
   }
 
-  public static Opt<String> someRepoMethod() {
-    return new Some<>("data");
-//    return new None<>();
+  static Maybe<String> someRepoMethod(boolean b) {
+    return b ?  new Some<>("data") : new None<>();
   }
 }
 
-sealed interface Opt<T>{
-  record Some<T>(T t) implements Opt<T> {}
-  record None<T>() implements Opt<T> {}
+sealed interface Maybe<T>{
+  record Some<T>(T t) implements Maybe<T> {}
+  record None<T>() implements Maybe<T> {}
 }
