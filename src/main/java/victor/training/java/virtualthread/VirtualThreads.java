@@ -36,8 +36,7 @@ public class VirtualThreads {
     var vodkaCF = supplyAsync(() ->
         restTemplate.getForObject("http://localhost:9999/vodka", Vodka.class));
 
-    var dillyCF = beerCF.thenCombine(vodkaCF, DillyDilly::new)
-        .orTimeout(10, SECONDS);
+    var dillyCF = beerCF.thenCombine(vodkaCF, DillyDilly::new);
 
     dillyCF.thenAccept(dilly -> log.info("Returning: {}", dilly));
     return dillyCF;
