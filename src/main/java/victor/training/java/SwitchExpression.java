@@ -1,8 +1,7 @@
-package victor.training.java.Switch;
+package victor.training.java;
 
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static java.lang.Double.parseDouble;
