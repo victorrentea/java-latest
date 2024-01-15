@@ -1,24 +1,19 @@
 package victor.training.java.Switch;
 
 
-import lombok.Data;
-
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.lang.Double.parseDouble;
 
-
 class SwitchExpression {
   public static void main(String[] args) {
-    List<String> flatLines = List.of(
+    Stream.of(
         "RO|100|100|2021-01-01",
         "CN|100|100|2021-01-01",
         "UK|100|100|2021-01-01"
-//        ,"|100|100|2021-01-01" // calls for case null (java 21)
-    );
-
-    flatLines.forEach(SwitchExpression::process);
+    ).forEach(SwitchExpression::process);
   }
 
   private static void process(String flatParcelLine) {
@@ -29,29 +24,27 @@ class SwitchExpression {
 
   public static double calculateTax(Parcel parcel) {
     double result = 0;
-    switch (parcel.getOriginCountry()) {
+    switch (parcel.originCountry()) {
       case "UK":
-        result = parcel.getTobaccoValue() / 2 + parcel.getRegularValue();
+        result = parcel.tobaccoValue() / 2 + parcel.regularValue();
         break;
       case "CN":
-        result = parcel.getTobaccoValue() + parcel.getRegularValue();
+        result = parcel.tobaccoValue() + parcel.regularValue();
         break;
       case "RO":
-        result = parcel.getTobaccoValue() / 3;
+        result = parcel.tobaccoValue() / 3;
         break;
     }
     return result;
   }
 }
 
-@Data
-class Parcel {
-  private final String originCountry;
-  private final double tobaccoValue;
-  private final double regularValue;
-  private final LocalDate date;
+record Parcel(
+    String originCountry,
+    double tobaccoValue,
+    double regularValue,
+    LocalDate date) {
 }
-
 
 enum CountryEnum {
   RO,
@@ -60,4 +53,4 @@ enum CountryEnum {
 }
 
 // explore: non-enhaustive vs default?
-
+// case null: (java 21)

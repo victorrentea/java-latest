@@ -12,6 +12,7 @@ import victor.training.java.virtualthread.bar.Vodka;
 
 import java.time.Instant;
 import java.util.concurrent.*;
+import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
 
 import static java.lang.System.currentTimeMillis;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
@@ -23,40 +24,36 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class VirtualThreads {
   private final RestTemplate restTemplate;
 
+
   @GetMapping("/drink")
   public CompletableFuture<DillyDilly> drinkCF() throws Exception {
-    long t0 = currentTimeMillis();
-
-    // Mono<>, .flatMap, .zip
-    CompletableFuture<UserPreferences> preferencesCF = supplyAsync(() ->
+    var preferencesCF = supplyAsync(() ->
         restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class));
 
-    CompletableFuture<Beer> beerCF = preferencesCF.thenApply(pref ->
+    var beerCF = preferencesCF.thenApply(pref ->
         restTemplate.getForObject("http://localhost:9999/api/beer/" + pref.favoriteBeerType(), Beer.class));
 
-    CompletableFuture<Vodka> vodkaCF = supplyAsync(() ->
+    var vodkaCF = supplyAsync(() ->
         restTemplate.getForObject("http://localhost:9999/vodka", Vodka.class));
 
-    // Mono<> = .zip
-    CompletableFuture<DillyDilly> dillyCF = beerCF.thenCombine(vodkaCF, DillyDilly::new)
+    var dillyCF = beerCF.thenCombine(vodkaCF, DillyDilly::new)
         .orTimeout(10, SECONDS);
 
     dillyCF.thenAccept(dilly -> log.info("Returning: {}", dilly));
-    log.info("HTTP Thread released in {} ms", currentTimeMillis() - t0);
-    // ✅ Memory-efficient, because HTTP Thread released immediately, but:
-    // ❌ client cancellation does not propagate upstream
-    // ❌ if one subtask fails, the other is NOT interrupted
-    // ❌ JFR profiler does not show the subtasks
     return dillyCF;
   }
-
+  // ✅ Memory-efficient, because HTTP Thread released immediately
+  // ❌ hard to read
+  // ❌ client cancellation does not propagate upstream
+  // ❌ if one subtask fails, the other is NOT interrupted
+  // ❌ JFR profiler cannot link children threads with parent thread
 
   //region Structured Concurrency (NOT yet production-ready in Java 21 LTS)
   @GetMapping("/drink-scope")
   public DillyDilly drink() throws InterruptedException, ExecutionException, TimeoutException {
     UserPreferences pref = restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
 
-    try (StructuredTaskScope.ShutdownOnFailure scope = new StructuredTaskScope.ShutdownOnFailure()) {
+    try (ShutdownOnFailure scope = new ShutdownOnFailure()) {
       var beerTask = scope.fork(() -> restTemplate.getForObject("http://localhost:9999/api/beer/" + pref.favoriteBeerType(), Beer.class)); // +1 child virtual thread
       var vodkaTask = scope.fork(() -> restTemplate.getForObject("http://localhost:9999/vodka", Vodka.class)); // +1 child virtual thread
 
@@ -66,6 +63,11 @@ public class VirtualThreads {
       return new DillyDilly(beerTask.get(), vodkaTask.get());
     }
   }
+  // ✅ Memory-efficient, as virtual threads are very cheap
+  // ✅ easy to read
+  // ✅ client cancellation cancels subtasks
+  // ✅ if one subtask fails, the other is interrupted
+  // ✅ JFR profiler can link children threads with parent thread
   //endregion
 
 }
