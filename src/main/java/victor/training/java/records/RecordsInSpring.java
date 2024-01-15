@@ -28,7 +28,7 @@ public class RecordsInSpring {
 
 @RestController
 @RequestMapping("books")
-//record BookController(BookRepo bookRepo) { // 🛑DON'T! Proxies don't work on final classes => AOP @Secured won't work
+//record BookApi(BookRepo bookRepo) { // 🛑DON'T! Proxies don't work on final classes => AOP @Secured won't work
 @RequiredArgsConstructor
 class BookApi {
   private final BookRepo bookRepo;
