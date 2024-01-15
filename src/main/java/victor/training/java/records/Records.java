@@ -26,6 +26,7 @@ class Point {
   private int x;
   private int y;
 
+  // behold: traditional Java boilerplate 🤢🤢🤢🤢
   public int getX() {
     return x;
   }
