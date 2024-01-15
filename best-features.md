@@ -1,5 +1,3 @@
-
-
 - Records.java
     dtos
     domain value object

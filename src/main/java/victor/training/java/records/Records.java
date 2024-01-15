@@ -63,9 +63,9 @@ class Point {
 }
 
 
-// TODO 1 make Dot a record
-// TODO 2 implement Dot.translate(int deltaX, int deltaY):Dot; Hint: you'll have to create a new instance
-//   eg new Dot(1,2).translate(3,4).equals(new Dot(4,6))
+// TODO 1 make Point a record
+// TODO 2 implement Point.translate(int deltaX, int deltaY):Point; Hint: you'll have to create a new instance
+//   eg new Point(1,2).translate(3,4).equals(new Point(4,6))
 // TODO 3 validate x and y < 1000 in constructor !!!
 // TODO 4 create overloaded constructor accepting x and y as strings! you will have to call this(int,int) aka "canonical" constructor
 // TODO 5 change the default toString to print itself in the format (x,y)
