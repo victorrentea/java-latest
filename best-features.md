@@ -4,7 +4,6 @@
     Use for: domain value object
 - MicroTypes.java
     TupleN
-    Map<> used as List<Tuple2>
 - RecordsInSpring.java
     - dtos
     - @Document
