@@ -22,7 +22,6 @@ public class Records {
   }
 }
 
-@Data
 class Point {
   private int x;
   private int y;
