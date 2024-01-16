@@ -11,8 +11,8 @@ import victor.training.java.virtualthread.bar.DillyDilly;
 import victor.training.java.virtualthread.bar.UserPreferences;
 import victor.training.java.virtualthread.bar.Vodka;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import java.util.concurrent.TimeoutException;
 
@@ -26,13 +26,13 @@ public class VirtualThreads {
   private final WebClient webClient;
 
   @GetMapping("/drink")
-  public CompletableFuture<DillyDilly> drinkFuture() throws Exception {
-    var preferencesFuture = fetchPreferences();
-    var beerFuture = preferencesFuture.thenCompose(pref -> fetchBeer(pref));
-    var vodkaFuture = fetchVodka();
-    var dillyFuture = beerFuture.thenCombine(vodkaFuture, DillyDilly::new);
-    dillyFuture.thenAccept(dilly -> log.info("Returning: {}", dilly));
-    return dillyFuture;
+  public DillyDilly drinkFuture() throws Exception {
+    var pref = fetchPreferences();
+    var beerFuture = supplyAsync(()->fetchBeer(pref), Executors.newVirtualThreadPerTaskExecutor());
+    var vodkaFuture = supplyAsync(this::fetchVodka, Executors.newVirtualThreadPerTaskExecutor());
+    var dilly = new DillyDilly(beerFuture.get(), vodkaFuture.get());
+    log.info("Returning: {}", dilly);
+    return dilly;
   }
   // ✅ HTTP Threads are released immediately: save memory and avoid starvation
   // ❌ Hard to read
@@ -63,25 +63,25 @@ public class VirtualThreads {
   // ❌ no better for CPU Intensive flows
   //endregion
 
-  private CompletableFuture<UserPreferences> fetchPreferences() {
+  private UserPreferences fetchPreferences() {
     // return restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
     return webClient.get().uri("http://localhost:9999/api/user-preferences").retrieve()
         .bodyToMono(UserPreferences.class)
-        .toFuture();
+        .block();
   }
 
-  private CompletableFuture<Beer> fetchBeer(UserPreferences pref) {
+  private Beer fetchBeer(UserPreferences pref) {
     // return  restTemplate.getForObject("http://localhost:9999/api/beer/" + pref.favoriteBeerType(), Beer.class);
     return webClient.get().uri("http://localhost:9999/api/beer/" + pref.favoriteBeerType()).retrieve()
         .bodyToMono(Beer.class)
-        .toFuture();
+        .block();
   }
 
-  private CompletableFuture<Vodka> fetchVodka() {
+  private Vodka fetchVodka() {
     // return restTemplate.getForObject("http://localhost:9999/vodka", Vodka.class);
     return webClient.get().uri("http://localhost:9999/vodka").retrieve()
         .bodyToMono(Vodka.class)
-        .toFuture();
+        .block();
   }
 }
 

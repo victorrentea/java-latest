@@ -17,21 +17,21 @@ import static java.util.stream.Collectors.joining;
 
 public class MicroTypes {
 
-  public Map<Long, List<Tuple2<String, Integer>>> extremeFP() {
+  public Map<Long, List<ProductCount>> extremeFP() {
     return Map.of(1L, List.of(
-        Tuple.tuple("Table", 2),
-        Tuple.tuple("Chair", 4)
+        new ProductCount("Table", 2),
+        new ProductCount("Chair", 4)
     ));
   }
 
+  record ProductCount(String name, int count) {}
   @Test
   void lackOfAbstractions() {
-    var map = extremeFP();
-    // "var" obscures semantics here
+    Map<Long, List<ProductCount>> map = extremeFP();
 
     for (Long cid : map.keySet()) {
       String pl = map.get(cid).stream()
-          .map(t -> t.v2 + " of " + t.v1)
+          .map(t -> t.count() + " of " + t.name())
           .collect(joining(", "));
       System.out.println("cid=" + cid + " got " + pl);
     }

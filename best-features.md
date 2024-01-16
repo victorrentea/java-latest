@@ -4,7 +4,7 @@
   - .stream...toList() over .collect(toList());
 - Maps.java
 - Records.java
-    Point > @Data > @Value
+    Point > @Data > @Value > record
     Use for: domain value object
 - MicroTypes.java
     - Tuple<>
@@ -12,21 +12,21 @@
 - RecordsInSpring.java
     - ✅dtos 
     - Optional<> field
-    - authors.clear() -> unmodifiableList -> copyOf
+    - authors.clear() -> unmodifiableList -> ImmutableList(guava)
     - ❌not for @Entity but yes for @Embeddable
     - ❌not for @Service & friends 
-    - ✅@Document
+    - ✅@Document , ✅jooq
 
 ## Text Blocks
 - RecordsInSpring.java """ 
     - @Query x 2
 - IntegrationTest.java """   
     - .format ted
-    - STR."
+    - STR." -> Java25
     Ideal: multi-line texts in code
 
 ## Switch (enum) idiom
-- switch(enum)
+- switch(enum) expression
     - text -> enum
     - BUG! 0
     - polymorph
@@ -35,7 +35,7 @@
     - return switch
     Ideal: variable calculations per a type/code
 
-## Switch Pattern Matching
+## Switch Pattern Matching 21
 switch(sealed classes)
     - shapes
     - expr

@@ -2,6 +2,7 @@ package victor.training.java;
 
 
 import java.time.LocalDate;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static java.lang.Double.parseDouble;
@@ -17,29 +18,22 @@ class SwitchExpression {
 
   private static void process(String flatParcelLine) {
     String[] a = flatParcelLine.split("\\|");
-    Parcel parcel = new Parcel(a[0], parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
+    Parcel parcel = new Parcel(CountryEnum.valueOf(a[0]), parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
     System.out.println(calculateTax(parcel));
   }
 
   public static double calculateTax(Parcel parcel) {
-    double result = 0;
-    switch (parcel.originCountry()) {
-      case "UK":
-        result = parcel.tobaccoValue() / 2 + parcel.regularValue();
-        break;
-      case "CN":
-        result = parcel.tobaccoValue() + parcel.regularValue();
-        break;
-      case "RO":
-        result = parcel.tobaccoValue() / 3;
-        break;
-    }
-    return result;
+    return switch (parcel.originCountry()) {
+      case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
+      case CN -> parcel.tobaccoValue() + parcel.regularValue();
+      case RO -> parcel.tobaccoValue() / 3;
+      case FR -> parcel.tobaccoValue() / 4;
+    };
   }
 }
 
 record Parcel(
-    String originCountry,
+    CountryEnum originCountry,
     double tobaccoValue,
     double regularValue,
     LocalDate date) {
@@ -49,4 +43,5 @@ enum CountryEnum {
   RO,
   UK,
   CN,
+  FR
 }
