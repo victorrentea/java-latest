@@ -11,7 +11,3 @@ void main() { // java 21 ftw
 
   System.out.println(numbers);
 }
-
-
-// List.of
-// List.stream().toList()

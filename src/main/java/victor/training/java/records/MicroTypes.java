@@ -26,8 +26,8 @@ public class MicroTypes {
 
   @Test
   void lackOfAbstractions() {
-    Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
-    // Use "var" above = OMG
+    var map = extremeFP();
+    // "var" obscures semantics here
 
     for (Long cid : map.keySet()) {
       String pl = map.get(cid).stream()

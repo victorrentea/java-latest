@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static victor.training.java.records.BookApi.GetBookResponse;
@@ -32,12 +33,14 @@ public class RecordsInSpring {
 @RequiredArgsConstructor
 class BookApi {
   private final BookRepo bookRepo;
+  public static final List<Integer> BANNED_IDS = Arrays.asList(1,4);
 
   public record GetBookResponse(long id, String name) {
   }
 
   @GetMapping("{id}")
-  public GetBookResponse getBook(Long id) {
+  public GetBookResponse getBook(Integer id) {
+    if (BANNED_IDS.contains(id)) throw new IllegalArgumentException("Banned");
     return bookRepo.getBookById(id);
   }
 
@@ -61,15 +64,15 @@ class BookApi {
 class Book {
   @Id
   @GeneratedValue
-  private Long id;
+  private Integer id;
   private String title;
 }
 
-interface BookRepo extends JpaRepository<Book, Long> {
+interface BookRepo extends JpaRepository<Book, Integer> {
   @Query("select new victor.training.java.records.BookApi$GetBookResponse(b.id, b.title)\n" +
          "from Book b\n" +
          "where b.id = :id")
-  GetBookResponse getBookById(Long id);
+  GetBookResponse getBookById(Integer id);
 
   //region Legacy SQL
   @Query(nativeQuery = true, value = "    select t.id\n" +
@@ -84,6 +87,6 @@ interface BookRepo extends JpaRepository<Book, Long> {
                                      "         where ta.discr='COURSE'\n" +
                                      "         and tt.id=t.id))\n")
   // easy to copy-paste in your SQL editor 👆
-  List<Long> complexQuery(String namePart, Integer grade, boolean teachingCourses);
+  List<Integer> complexQuery(String namePart, Integer grade, boolean teachingCourses);
   //endregion
 }

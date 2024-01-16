@@ -1,20 +1,20 @@
 ## Immutability
+- Lists.java: 
+  - List.of over asList
+  - .stream...toList() over .collect(toList());
+- Maps.java
 - Records.java
     Point > @Data > @Value
     Use for: domain value object
 - MicroTypes.java
     TupleN
 - RecordsInSpring.java
-    - dtos
-    - @Document
-    - not for @Entity but yes for @Embeddable
-    - not for @Service & friends 
+    - ✅dtos 
     - Optional<> field
-    - authors.clear() -> unmodifiable -> copyOf
-- Lists.java: 
-  - .add, .set -> List.of
-  - ->.stream...toList()
-- Maps.java
+    - ❌not for @Entity but yes for @Embeddable
+    - ❌not for @Service & friends 
+    - ✅@Document
+    - authors.clear() -> unmodifiableList -> copyOf
 
 ## Text Blocks
 - RecordsInSpring.java """ 

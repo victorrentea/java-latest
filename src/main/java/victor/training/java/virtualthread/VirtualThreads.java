@@ -26,18 +26,18 @@ public class VirtualThreads {
   private final RestTemplate restTemplate;
 
   @GetMapping("/drink")
-  public CompletableFuture<DillyDilly> drinkCF() throws Exception {
-    var preferencesCF = supplyAsync(() -> fetchPreferences());
+  public CompletableFuture<DillyDilly> drinkFuture() throws Exception {
+    var preferencesFuture = supplyAsync(() -> fetchPreferences());
 
-    var beerCF = preferencesCF.thenApply(pref -> fetchBeer(pref));
+    var beerFuture = preferencesFuture.thenApply(pref -> fetchBeer(pref));
 
-    var vodkaCF = supplyAsync(() -> fetchVodka());
+    var vodkaFuture = supplyAsync(() -> fetchVodka());
 
-    var dillyCF = beerCF.thenCombine(vodkaCF, DillyDilly::new);
+    var dillyFuture = beerFuture.thenCombine(vodkaFuture, DillyDilly::new);
 
-    dillyCF.thenAccept(dilly -> log.info("Returning: {}", dilly));
+    dillyFuture.thenAccept(dilly -> log.info("Returning: {}", dilly));
 
-    return dillyCF;
+    return dillyFuture;
   }
   // ✅ HTTP Threads are released immediately, saving memory
   // ❌ hard to read
@@ -50,12 +50,11 @@ public class VirtualThreads {
   public DillyDilly drink() throws InterruptedException, ExecutionException, TimeoutException {
     UserPreferences pref = fetchPreferences();
 
-    try (ShutdownOnFailure scope = new ShutdownOnFailure()) {
+    try (var scope = new ShutdownOnFailure()) {
       var beerTask = scope.fork(() -> fetchBeer(pref)); // +1 child virtual thread
       var vodkaTask = scope.fork(() -> fetchVodka()); // +1 child virtual thread
 
-      scope.joinUntil(Instant.now().plusSeconds(10)) // block the parent virtual thread until all child subtasks complete
-          .throwIfFailed(); // throw exception if any subtasks failed
+      scope.join().throwIfFailed(); // throw exception if any subtasks failed
 
       return new DillyDilly(beerTask.get(), vodkaTask.get());
     }

@@ -50,6 +50,3 @@ enum CountryEnum {
   UK,
   CN,
 }
-
-// explore: non-enhaustive vs default?
-// case null: (java 21)
