@@ -14,36 +14,32 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.stream.Collectors.joining;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class MicroTypes {
 
-   public Map<Long, List<Tuple2<String, Integer>>> extremeFP() {
-      Long customerId = 1L;
-      Integer product1Count = 2;
-      Integer product2Count = 4;
-      return Map.of(customerId, List.of(
-          Tuple.tuple("Table", product1Count),
-          Tuple.tuple("Chair", product2Count)
-      ));
-   }
-   
-   @Test
-   void lackOfAbstractions() {
-      Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
-      // Use "var" above = 😂
+  public Map<Long, List<Tuple2<String, Integer>>> extremeFP() {
+    return Map.of(1L, List.of(
+        Tuple.tuple("Table", 2),
+        Tuple.tuple("Chair", 4)
+    ));
+  }
 
-      for (Long cid : map.keySet()) {
-         String pl = map.get(cid).stream()
-             .map(t -> t.v2 + " of " + t.v1)
-             .collect(joining(", "));
-         System.out.println("cid=" + cid + " got " + pl);
-      }
-   }
+  @Test
+  void lackOfAbstractions() {
+    Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
+    // Use "var" above = OMG
 
-   public void useVar() {
-      ResponseEntity<List<String>> response = new RestTemplate().exchange(new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url")), new ParameterizedTypeReference<List<String>>() {
-      });
-   }
+    for (Long cid : map.keySet()) {
+      String pl = map.get(cid).stream()
+          .map(t -> t.v2 + " of " + t.v1)
+          .collect(joining(", "));
+      System.out.println("cid=" + cid + " got " + pl);
+    }
+  }
+
+  public void useVar() {
+    ResponseEntity<List<String>> response = new RestTemplate().exchange(new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url")), new ParameterizedTypeReference<List<String>>() {
+    });
+  }
 
 }
