@@ -11,6 +11,7 @@ import victor.training.java.virtualthread.bar.DillyDilly;
 import victor.training.java.virtualthread.bar.UserPreferences;
 import victor.training.java.virtualthread.bar.Vodka;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;

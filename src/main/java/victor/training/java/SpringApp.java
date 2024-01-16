@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.boot.autoconfigure.web.reactive.function.client.WebClientAutoConfiguration;
 import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -28,6 +29,11 @@ public class SpringApp {
   public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
     // tell Tomcat to process each HTTP request in a new virtual thread
     return tomcat -> tomcat.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+  }
+
+  @Bean
+  public RestClient restClient() {
+    return RestClient.create();
   }
 
   @Bean
