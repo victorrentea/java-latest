@@ -7,20 +7,21 @@
     Point > @Data > @Value
     Use for: domain value object
 - MicroTypes.java
-    TupleN
+    - Tuple<>
+    - @ParameterizedTest
 - RecordsInSpring.java
     - ✅dtos 
     - Optional<> field
+    - authors.clear() -> unmodifiableList -> copyOf
     - ❌not for @Entity but yes for @Embeddable
     - ❌not for @Service & friends 
     - ✅@Document
-    - authors.clear() -> unmodifiableList -> copyOf
 
 ## Text Blocks
 - RecordsInSpring.java """ 
     - @Query x 2
 - IntegrationTest.java """   
-    - .formatted
+    - .format ted
     - STR."
     Ideal: multi-line texts in code
 

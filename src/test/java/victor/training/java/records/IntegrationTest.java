@@ -27,9 +27,9 @@ public class IntegrationTest {
                      "  \"title\":\"name\",\n" +
                      "  \"authors\":[\"author1\"],\n" +
                      "  \"teaserVideoUrl\": null\n" +
-                     "}")
+                     "}\n")
         )
-        .andExpect(status().isOk()); // 200 OK
+        .andExpect(status().is(200));
   }
 
 

@@ -37,7 +37,7 @@ public class MicroTypes {
     }
   }
 
-  public void useVar() {
+  public void goodVar() {
     ResponseEntity<List<String>> response = new RestTemplate().exchange(new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url")), new ParameterizedTypeReference<List<String>>() {
     });
   }

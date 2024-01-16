@@ -39,11 +39,8 @@ public class VirtualThreads {
 
     return dillyFuture;
   }
-  // ✅ HTTP Threads are released immediately, saving memory
-  // ❌ hard to read
-  // ❌ client cancellation does not propagate upstream
-  // ❌ if one subtask fails, the other is NOT interrupted
-  // ❌ JFR profiler cannot link children threads with parent thread
+  // ✅ HTTP Threads are released immediately: save memory and avoid starvation
+  // ❌ Hard to read
 
   //region Structured Concurrency (NOT yet production-ready in Java 21 LTS)
   @GetMapping("/drink-scope")
@@ -62,7 +59,7 @@ public class VirtualThreads {
   // Virtual Threads + Structured Concurrency
   // ✅ Memory-efficient, as virtual threads are very cheap
   // ✅ easy to read
-  // ✅ if client cancels => subtasks cancelled
+  // ✅ if client cancels => subtasks are cancelled
   // ✅ if one subtask fails => the other task is interrupted
   // ✅ JFR profiler can link children threads with parent thread
   // ❌ 'synchronized' blocks a 'full thread' (not a virtual thread)
