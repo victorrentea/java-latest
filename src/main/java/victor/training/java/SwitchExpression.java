@@ -22,16 +22,13 @@ class SwitchExpression {
   }
 
   public static double calculateTax(Parcel parcel) {
-    switch (parcel.originCountry()) {
-      case UK:
-        return parcel.tobaccoValue() / 2 + parcel.regularValue();
-      case CN:
-        return parcel.tobaccoValue() + parcel.regularValue();
-      case RO:
-        return parcel.tobaccoValue() / 3;
-      default:
-        throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
-    }
+    return switch (parcel.originCountry()) {
+      case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
+      case CN -> parcel.tobaccoValue() + parcel.regularValue();
+      case RO -> parcel.tobaccoValue() / 3;
+//      useless (anti-pattern) because the compiler cross-checks all the enum values
+//      default -> throw new IllegalStateException("past 45 years Unexpected value: " + parcel.originCountry());
+    };
   }
 }
 
@@ -46,4 +43,5 @@ enum CountryEnum {
   RO,
   UK,
   CN,
+//  TU
 }
