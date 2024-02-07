@@ -40,8 +40,17 @@ record Parcel(
 }
 
 enum CountryEnum {
-  RO,
+  RO /*{
+    @Override
+    public double calculateTax(Parcel parcel) {
+      return 0;
+    }
+  }*/
+  ,
   UK,
-  CN,
+  CN;
 //  TU
+
+  // return switch(enum) made abstract methods in enums a bad idea
+//  public abstract double calculateTax(Parcel parcel);
 }
