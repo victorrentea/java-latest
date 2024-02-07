@@ -30,14 +30,20 @@ public class VisitorPlay {
 //    }
 
     // ## VISITOR 😱
-    PerimeterCalculatorVisitor visitor = new PerimeterCalculatorVisitor();
-    for (Shape shape : shapes) {
-      shape.accept(visitor);
-    }
-    totalPerimeter = visitor.getPerimeter();
+//    PerimeterCalculatorVisitor visitor = new PerimeterCalculatorVisitor();
+//    for (Shape shape : shapes) {
+//      shape.accept(visitor);
+//    }
+//    totalPerimeter = visitor.getPerimeter();
 
 
     // ## switch+sealed
+    for (Shape shape : shapes) {
+      totalPerimeter += switch(shape) {
+        case Square square -> 4 * square.edge();
+        case Circle circle -> 2 * Math.PI * circle.radius();
+      };
+    }
 
     System.out.println(totalPerimeter);
   }
