@@ -19,17 +19,24 @@ public class VisitorPlay {
 //    }
 
     // ## instanceOf
-    for (Shape shape : shapes) {
-      if (shape instanceof Square square) {
-        totalPerimeter += 4 * square.edge();
-      } else if (shape instanceof Circle circle) {
-        totalPerimeter += 2 * Math.PI * circle.radius();
-      } else {
-        throw new IllegalStateException("Unknown shape: " + shape);
-      }
-    }
+//    for (Shape shape : shapes) {
+//      if (shape instanceof Square square) {
+//        totalPerimeter += 4 * square.edge();
+//      } else if (shape instanceof Circle circle) {
+//        totalPerimeter += 2 * Math.PI * circle.radius();
+//      } else {
+//        throw new IllegalStateException("Unknown shape: " + shape);
+//      }
+//    }
 
     // ## VISITOR 😱
+    PerimeterCalculatorVisitor visitor = new PerimeterCalculatorVisitor();
+    for (Shape shape : shapes) {
+      shape.accept(visitor);
+    }
+    totalPerimeter = visitor.getPerimeter();
+
+
     // ## switch+sealed
 
     System.out.println(totalPerimeter);
