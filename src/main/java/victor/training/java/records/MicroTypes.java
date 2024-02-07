@@ -12,26 +12,35 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 import static java.util.stream.Collectors.joining;
 
 public class MicroTypes {
 
-  public Map<Long, List<Tuple2<String, Integer>>> extremeFP() {
-    return Map.of(1L, List.of(
-        Tuple.tuple("Table", 2),
-        Tuple.tuple("Chair", 4)
+  public Map<CustomerId, List<ProductQuantity>> extremeFP() {
+    return Map.of(new CustomerId(1L), List.of(
+        new ProductQuantity("Table", 2),
+        new ProductQuantity("Chair", 4)
     ));
   }
 
+  record CustomerId(long id){}
+    // canonicalization
+//    WeakHashMap<CustomerId, String> cache = new WeakHashMap<>();
+
+//  } // huh?! what's this?! = microtype
+  private record ProductQuantity(String name, int quantity){}
   @Test
   void lackOfAbstractions() {
-    var map = extremeFP();
+//    Map.Entry<String, Integer>
+//    Map<CustomerId, List<ProductQuantity>> map = extremeFP();
+    Map<CustomerId, List<ProductQuantity>> customerToProductQuantities = extremeFP();
     // "var" obscures semantics here
 
-    for (Long cid : map.keySet()) {
-      String pl = map.get(cid).stream()
-          .map(t -> t.v2 + " of " + t.v1)
+    for (CustomerId cid : customerToProductQuantities.keySet()) {
+      String pl = customerToProductQuantities.get(cid).stream()
+          .map(t -> t.quantity() + " of " + t.name())
           .collect(joining(", "));
       System.out.println("cid=" + cid + " got " + pl);
     }

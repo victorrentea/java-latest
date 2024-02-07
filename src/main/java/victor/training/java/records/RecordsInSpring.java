@@ -5,8 +5,10 @@ import com.google.common.collect.ImmutableList;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
@@ -18,6 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 
 import static victor.training.java.records.BookApi.GetBookResponse;
 
@@ -25,12 +28,45 @@ import static victor.training.java.records.BookApi.GetBookResponse;
 @RequestMapping("books")
 //record BookApi(BookRepo bookRepo) { // 🛑DON'T! Proxies don't work on final classes => AOP @Secured won't work
 @RequiredArgsConstructor
+@Slf4j
 class BookApi {
   private final BookRepo bookRepo;
 
-  public record GetBookResponse(long id, String name) {
+
+  public record GetBookResponse(long id,
+                                String name) {
+  }
+  @Builder
+  public record BigResponseToFillManually(long id,
+                                String a,
+                                String b,
+                                String c,
+                                String d,
+                                String e,
+                                String f,
+                                String g,
+                                String name) {
   }
 
+  public BigResponseToFillManually method() {
+//    return new BigResponseToFillManually(1,
+//        a="a",
+//        b="b",
+//        "c", "d", "e", "f", "g", "name");
+    return BigResponseToFillManually.builder()
+        .id(1)
+        .a("a")
+        .b("b")
+        .c("c")
+        .d("d")
+        .e("e")
+        .f("f")
+        .g("g")
+        .name("name")
+        .build();
+  }
+
+//  @Secured("ROLE_ADMIN")
   @GetMapping("{id}")
   public GetBookResponse getBook(Integer id) {
     return bookRepo.getBookById(id);
