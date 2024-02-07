@@ -34,13 +34,13 @@ public class IntegrationTest {
   private WebTestClient.RequestHeadersSpec<?> sendCreate(String name) {
     return webClient.post().uri("/books")
         .contentType(MediaType.APPLICATION_JSON)
-        .bodyValue("""
+        .bodyValue(STR."""
             {
-              "title":"%s",
+              "title":"\{name}",
               "authors":["author1"],
               "teaserVideoUrl": null
             }
-            """.formatted(name));
+            """);
   }
 
   @Autowired
