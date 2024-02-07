@@ -11,7 +11,11 @@ public class VisitorPlay {
         new Square(5),
         new Square(1));
 
-    double totalPerimeter = 0; // TASK : compute
+    // TASK : compute
+    double totalPerimeter = 0.0;
+    for (Shape shape : shapes) {
+      totalPerimeter += getPerimeter(shape);
+    }
 
     // ## OOP (behavior next to state) : polymorphism
 //    for (Shape shape : shapes) {
@@ -38,14 +42,18 @@ public class VisitorPlay {
 
 
     // ## switch+sealed
-    for (Shape shape : shapes) {
-      totalPerimeter += switch(shape) {
-        case Square square -> 4 * square.edge();
-        case Circle circle -> 2 * Math.PI * circle.radius();
-      };
-    }
+    //    const {a,b} = f();
+    // function() { return {a: 1, b: 2}; }
 
     System.out.println(totalPerimeter);
+  }
+
+  private static double getPerimeter(Shape shape) {
+    return switch (shape) {
+      case Square(int edge) -> 4 * edge;
+      case Circle(int radius) -> 2 * Math.PI * radius;
+      case Rectangle(int w, int h) -> 2 * (w + h);
+    };
   }
 }
 
