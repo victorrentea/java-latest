@@ -13,8 +13,12 @@ public class VisitorPlay {
 
     double totalPerimeter = 0; // TASK : compute
 
+    // ## OOP (behavior next to state) : polymorphism
+    for (Shape shape : shapes) {
+      totalPerimeter += shape.perimeter();
+    }
+
     // ## instanceOf
-    // ## OOP (behavior next to state)
     // ## VISITOR 😱
     // ## switch+sealed
 
