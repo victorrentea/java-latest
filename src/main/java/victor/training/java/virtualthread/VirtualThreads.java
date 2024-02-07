@@ -1,5 +1,8 @@
 package victor.training.java.virtualthread;
 
+import jakarta.servlet.AsyncContext;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,11 +14,15 @@ import victor.training.java.virtualthread.bar.DillyDilly;
 import victor.training.java.virtualthread.bar.UserPreferences;
 import victor.training.java.virtualthread.bar.Vodka;
 
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import java.util.concurrent.TimeoutException;
 
+import static java.util.concurrent.CompletableFuture.completedFuture;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @RestController
@@ -24,6 +31,36 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 public class VirtualThreads {
   private final RestTemplate restTemplate;
   private final WebClient webClient;
+
+  @GetMapping("/async")
+  public void autumn(HttpServletRequest request, HttpServletResponse response) throws InterruptedException {
+    AsyncContext asyncContext = request.startAsync();
+    externalApiCall().thenAccept(userPreferences -> {
+
+
+      try {
+        asyncContext.getResponse().getWriter().write("Async work done: " +userPreferences);
+      } catch (Exception e) {
+        log.error("Async failed", e);
+      }
+      asyncContext.complete();
+    });
+    log.info("JETTY thread left here prints after 0ms");
+  }
+
+  private CompletableFuture<UserPreferences> externalApiCall() throws InterruptedException {
+    // talking to anythign but a API requires a reactive driver
+    // there are reactive drivers for JDBC(Mysql), JPA, MongoDB, Cassandra, Redis, Kafka, RabbitMQ, etc
+//    Executors.newVirtualThreadPerTaskExecutor()
+    CompletableFuture<HttpResponse<Object>> httpResponseCompletableFuture = HttpClient.newHttpClient()
+        .sendAsync(null, null);
+    // non blocking HTTP call to other API. Spring:
+    return WebClient.create().get()
+        .uri("http://localhost:9999/api/user-preferences")
+        .retrieve()
+        .bodyToMono(UserPreferences.class)
+        .toFuture();
+  }
 
   @GetMapping("/drink")
   public CompletableFuture<DillyDilly> drinkFuture() throws Exception {

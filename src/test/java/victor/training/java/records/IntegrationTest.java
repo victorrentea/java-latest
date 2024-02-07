@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer;
 import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureWireMock(port = 0) // random
 public class IntegrationTest {
+
+  // without spring:
+//  @RegisterExtension
+//  WireMockExtension wireMockExtension = new WireMockExtension(9999);
+
   @Autowired
 	private WebTestClient webClient;
 
