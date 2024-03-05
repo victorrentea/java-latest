@@ -1,12 +1,14 @@
 package victor.training.java.records;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.google.common.collect.ImmutableList;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static victor.training.java.records.BookApi.GetBookResponse;
 
@@ -26,10 +29,11 @@ public class RecordsInSpring {
   }
 }
 
+@Slf4j
 @RestController
 @RequestMapping("books")
 //record BookApi(BookRepo bookRepo) { // 🛑DON'T! Proxies don't work on final classes => AOP @Secured won't work
-@RequiredArgsConstructor
+@RequiredArgsConstructor //
 class BookApi {
   private final BookRepo bookRepo;
 
@@ -43,27 +47,47 @@ class BookApi {
 
   public record CreateBookRequest(
       @NotBlank String title,
-      @NotEmpty List<String> authors,
-      String teaserVideoUrl
+      @NotEmpty ImmutableList<String> authors, // guava
+      Optional<String> teaserVideoUrl
   ) {
+//    @Override
+//    public String teaserVideoUrl() {
+//      return teaserVideoUrl;
+//    }
   }
 
   @PostMapping
   @Transactional
   public void createBook(@RequestBody @Validated CreateBookRequest request) {
-    System.out.println("pretend save title:" + request.title() + " and url:" + request.teaserVideoUrl());
+    System.out.println("pretend save title:" + request.title() + " and url:" +
+                       request.teaserVideoUrl().orElse("N/A"));
+    dark(request);
     System.out.println("pretend save authors: " + request.authors());
+  }
+
+  private void dark(CreateBookRequest request) {
+    request.authors().clear();
   }
 }
 
 @Entity
-@Data // avoid using @Data on entities in real life
+//@Data //BAD because: no encapsulation, no immutability, equals/hashCode wrongly implemented taking ID into account
+@Getter
+@Setter
 class Book {
   @Id
   @GeneratedValue
   private Long id;
   private String title;
+//  private String authorFirstName;
+//  private String authorLastName;
+  @Embedded private FullName author; // DB schema is not affected by this
 }
+
+@Embeddable
+record FullName(String firstName, String lastName) {
+}
+
 
 interface BookRepo extends JpaRepository<Book, Long> {
   @Query("select new victor.training.java.records.BookApi$GetBookResponse(b.id, b.title)\n" +

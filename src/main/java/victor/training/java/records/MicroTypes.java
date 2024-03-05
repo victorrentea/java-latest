@@ -18,28 +18,31 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MicroTypes {
 
-   public Map<Long, List<Tuple2<String, Integer>>> extremeFP() {
-      Long customerId = 1L;
+   public Map<CustomerId, List<ProductCount>> extremeFP() {
+      CustomerId customerId = new CustomerId(1L);
       Integer product1Count = 2;
       Integer product2Count = 4;
       return Map.of(customerId, List.of(
-          Tuple.tuple("Table", product1Count),
-          Tuple.tuple("Chair", product2Count)
+          new ProductCount("Table", product1Count),
+          new ProductCount("Chair", product2Count)
       ));
    }
-   
+
+   record CustomerId(long id) {} // microtype
+   record ProductCount(String productName, int count) {}  // burn Tuples!!!
+
    @Test
    void lackOfAbstractions() {
-      Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
-      // Use "var" above = 😂
+      var map = extremeFP();
 
-      for (Long cid : map.keySet()) {
+      for (CustomerId cid : map.keySet()) {
          String pl = map.get(cid).stream()
-             .map(t -> t.v2 + " of " + t.v1)
+             .map(t -> t.productName() + " of " + t.count())
              .collect(joining(", "));
          System.out.println("cid=" + cid + " got " + pl);
       }
    }
+
 
    public void useVar() {
       ResponseEntity<List<String>> response = new RestTemplate().exchange(new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url")), new ParameterizedTypeReference<List<String>>() {

@@ -3,14 +3,12 @@ package victor.training.java.records;
 import lombok.Value;
 import lombok.With;
 
-import java.util.Objects;
-
 public class Records {
   public static void main(String[] args) {
     Point point = new Point(1,2);
 
     Point point2 = execute(point);
-    System.out.println(point2 + " has x=" + point2.getX());
+    System.out.println(point2 + " has x=" + point2.x());
   }
 
   private static Point execute(Point point) {
@@ -18,11 +16,10 @@ public class Records {
   }
 }
 
-@Value
-class Point {
-  @With
-  int x;
-  int y;
+record Point(int x, int y) {
+  public Point withX(int x) {
+    return new Point(x, y);
+  }
 }
 
 
