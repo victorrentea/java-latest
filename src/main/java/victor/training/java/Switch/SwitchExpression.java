@@ -28,7 +28,8 @@ class SwitchExpression {
       case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
       case CN -> parcel.tobaccoValue() + parcel.regularValue();
       case RO -> parcel.tobaccoValue() / 3;
-      default -> throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
+      //default -> 0;// BAD PRACTICE
+      case US -> parcel.tobaccoValue() / 4; // compiler errors if your're missing an enum
     };
   }
 }
@@ -44,6 +45,7 @@ enum CountryEnum {
   RO,
   UK,
   CN,
+  US
 }
 
 // explore: non-enhaustive vs default?
