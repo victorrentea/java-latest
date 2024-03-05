@@ -39,8 +39,14 @@ public class IntegrationTest {
   @Test
   void wireMockStubbing() {
     wireMock.stubFor(get(urlMatching("/emails"))
-        .willReturn(okJson("{\n" +
-                           "  \"emails\":[\"a@b.com\"]\n" +
-                           "}\n")));
+        .willReturn(okJson(getBody("a@b.com"))));
+  }
+
+  private String getBody(String email) {
+    return """
+               {
+                 "emails":["%s"]
+               }
+               """.formatted(email);
   }
 }
