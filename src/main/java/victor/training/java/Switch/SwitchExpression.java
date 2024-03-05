@@ -23,17 +23,13 @@ class SwitchExpression {
   }
 
   public static double calculateTax(Parcel parcel) {
-    switch (parcel.originCountry()) {
-      case "UK":
-        return parcel.tobaccoValue() / 2 + parcel.regularValue();
-      case "CN":
-        return parcel.tobaccoValue() + parcel.regularValue();
-      case "RO":
-        return parcel.tobaccoValue() / 3;
-      default: // just to be safe a new country does result is 0 tax
-        throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
-    }
-//    return 0; //
+    // just to be safe a new country does result is 0 tax
+    return switch (parcel.originCountry()) {
+      case "UK" -> parcel.tobaccoValue() / 2 + parcel.regularValue();
+      case "CN" -> parcel.tobaccoValue() + parcel.regularValue();
+      case "RO" -> parcel.tobaccoValue() / 3;
+      default -> throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
+    };
   }
 }
 
