@@ -43,10 +43,10 @@ public class IntegrationTest {
   }
 
   private String getBody(String email) {
-    return """
+    return STR."""
                {
-                 "emails":["%s"]
+                 "emails":["\{email}"]
                }
-               """.formatted(email);
+               """;
   }
 }
