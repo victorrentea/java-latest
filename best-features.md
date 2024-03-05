@@ -35,7 +35,7 @@
     - return switch
     Ideal: variable calculations per a type/code
 
-## Switch Pattern Matching
+## Switch on Sealed Classes
 switch(sealed classes)
     - shapes
     - expr
