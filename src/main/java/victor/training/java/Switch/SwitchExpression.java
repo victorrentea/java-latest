@@ -18,23 +18,23 @@ class SwitchExpression {
 
   private static void process(String flatParcelLine) {
     String[] a = flatParcelLine.split("\\|");
-    Parcel parcel = new Parcel(a[0], parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
+    Parcel parcel = new Parcel(CountryEnum.valueOf(a[0]), parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
     System.out.println(calculateTax(parcel));
   }
 
   public static double calculateTax(Parcel parcel) {
     // just to be safe a new country does result is 0 tax
     return switch (parcel.originCountry()) {
-      case "UK" -> parcel.tobaccoValue() / 2 + parcel.regularValue();
-      case "CN" -> parcel.tobaccoValue() + parcel.regularValue();
-      case "RO" -> parcel.tobaccoValue() / 3;
+      case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
+      case CN -> parcel.tobaccoValue() + parcel.regularValue();
+      case RO -> parcel.tobaccoValue() / 3;
       default -> throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
     };
   }
 }
 
 record Parcel(
-    String originCountry,
+    CountryEnum originCountry,
     double tobaccoValue,
     double regularValue,
     LocalDate date) {
