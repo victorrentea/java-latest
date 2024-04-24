@@ -19,6 +19,7 @@ public class SomePlay {
   }
 }
 
+// alternative to Optional<>
 sealed interface Maybe<T>{
   record Some<T>(T t) implements Maybe<T> {}
   record None<T>() implements Maybe<T> {}
