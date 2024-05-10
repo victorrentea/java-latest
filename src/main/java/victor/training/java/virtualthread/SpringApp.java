@@ -24,12 +24,12 @@ public class SpringApp {
     return new RestTemplate();
   }
 
-  @Bean
-  public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
-    // tell Tomcat to create a new virtual thread for every incoming request
-    // this has no LIMIT of the number of threads, because virtual threads are extremely LIGHT
-    // RIP ThreadPools: It makes NO SENSE recycling virtual threads.
-    return tomcat -> tomcat.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
-  }
+//  @Bean // superseded by config spring.threads.virtual.enabled=true
+//  public TomcatProtocolHandlerCustomizer<?> protocolHandlerVirtualThreadExecutorCustomizer() {
+//    // tell Tomcat to create a new virtual thread for every incoming request
+//    // this has no LIMIT of the number of threads, because virtual threads are extremely LIGHT
+//    // RIP ThreadPools: It makes NO SENSE recycling virtual threads.
+//    return tomcat -> tomcat.setExecutor(Executors.newVirtualThreadPerTaskExecutor());
+//  }
 
 }

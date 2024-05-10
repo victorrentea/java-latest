@@ -11,10 +11,11 @@ import victor.training.java.virtualthread.bar.UserPreferences;
 import victor.training.java.virtualthread.bar.Vodka;
 
 import java.time.Instant;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
+import java.util.concurrent.TimeoutException;
 
-import static java.lang.System.currentTimeMillis;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
@@ -24,8 +25,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 public class VirtualThreads {
   private final RestTemplate restTemplate;
 
-
-  @GetMapping("/drink")
+  @GetMapping("/dilly-cf")
   public CompletableFuture<DillyDilly> drinkCF() throws Exception {
     var preferencesCF = supplyAsync(() ->
         restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class));
@@ -34,7 +34,7 @@ public class VirtualThreads {
         restTemplate.getForObject("http://localhost:9999/api/beer/" + pref.favoriteBeerType(), Beer.class));
 
     var vodkaCF = supplyAsync(() ->
-        restTemplate.getForObject("http://localhost:9999/vodka", Vodka.class));
+        restTemplate.getForObject("http://localhost:9999/api/vodka", Vodka.class));
 
     var dillyCF = beerCF.thenCombine(vodkaCF, DillyDilly::new)
         .orTimeout(10, SECONDS);
@@ -48,8 +48,40 @@ public class VirtualThreads {
   // ❌ if one subtask fails, the other is NOT interrupted
   // ❌ JFR profiler cannot link children threads with parent thread
 
+  @GetMapping("/dilly")
+  public DillyDilly drinkVirtual() {
+    log.info("Start  in {}", Thread.currentThread());
+
+    var pref = pref();
+
+    var beer = beer(pref);
+
+    var vodka = vodka();
+
+    return new DillyDilly(beer, vodka);
+  }
+
+  private Vodka vodka() {
+    var vodka = restTemplate.getForObject("http://localhost:9999/api/vodka", Vodka.class);
+    log.info("Three in {}", Thread.currentThread());
+    return vodka;
+  }
+
+  private Beer beer(UserPreferences pref) {
+    var beer = restTemplate.getForObject("http://localhost:9999/api/beer/" + pref.favoriteBeerType(), Beer.class);
+    log.info("Two in {}", Thread.currentThread());
+    return beer;
+  }
+
+  private UserPreferences pref() {
+    var pref = restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
+    log.info("One in {}", Thread.currentThread());
+    return pref;
+  }
+
+
   //region Structured Concurrency (NOT yet production-ready in Java 21 LTS)
-  @GetMapping("/drink-scope")
+  @GetMapping("/dilly-scope")
   public DillyDilly drink() throws InterruptedException, ExecutionException, TimeoutException {
     UserPreferences pref = restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
 

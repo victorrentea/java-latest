@@ -23,7 +23,7 @@ import static java.lang.System.currentTimeMillis;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.concurrent.TimeUnit.SECONDS;
 
-@RestController
+//@RestController
 @Slf4j
 @RequiredArgsConstructor
 public class VirtualThreadsDetailed {

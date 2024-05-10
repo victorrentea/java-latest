@@ -9,7 +9,7 @@
       {
         "type": "deadly"
       },
-    "fixedDelayMilliseconds": 500,
+    "fixedDelayMilliseconds": 1500,
     "headers": {
       "Content-Type": "application/json"
     }
