@@ -20,14 +20,16 @@ public class IntegrationTest {
   MockMvc mockMvc;
 
   @Test
-  void createBook() throws Exception {
+  void apiTest() throws Exception {
     mockMvc.perform(post("/books")
             .contentType("application/json")
-            .content("{\n" +
-                     "  \"title\":\"name\",\n" +
-                     "  \"authors\":[\"author1\"],\n" +
-                     "  \"teaserVideoUrl\": null\n" +
-                     "}")
+            .content("""
+        {
+          "title":"name",
+          "authors":["author1"],
+          "teaserVideoUrl": null
+        }
+        """)
         )
         .andExpect(status().isOk()); // 200 OK
   }
@@ -39,8 +41,9 @@ public class IntegrationTest {
   @Test
   void wireMockStubbing() {
     wireMock.stubFor(get(urlMatching("/emails"))
-        .willReturn(okJson("{\n" +
-                           "  \"emails\":[\"a@b.com\"]\n" +
-                           "}\n")));
+        .willReturn(okJson("""
+            {
+              "emails":["a@b.com"]
+            }""")));
   }
 }

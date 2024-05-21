@@ -1,22 +1,22 @@
-## Immutability 17
+## Records 17
 - Records.java 
-    - ❌ @Service & co (Spring)
     - ✅ DTOs
     - ✅ over @Value (Lombok)
     - Optional<> field
     - ❌ @Entity, but ✅ @Embeddable (JPA)
     - ✅ @Document (Mongo)
+    - ❌ @Service & co (Spring)
 - MicroTypes.java
     - ✅ vs Tuple (RX)
+  
+## Immutable Collections 11,17
+- ImmutableCollections.java 
 
 ## Text Blocks 17,25
-- RecordsInSpring.java: @Query
-- IntegrationTest.java: JSON 
-    + .formatted
-    + STR."
-
-## Immutable Collections 11,17
-- Lists.java 
+- BookRepo.java: ✅ @Query
+- IntegrationTest.java: ✅ JSON 
+    + "%s".formatted(a)
+    + STR."\{a}" 💖
 
 ## Switch (enum) idiom 17
 - switch(enum)

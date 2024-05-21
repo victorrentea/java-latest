@@ -2,6 +2,7 @@ package victor.training.java.records;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import victor.training.java.records.BookApi.GetBookResponse;
 
 import java.util.List;
 
@@ -9,7 +10,7 @@ public interface BookRepo extends JpaRepository<Book, Long> {
   @Query("select new BookApi$GetBookResponse(b.id, b.title)\n" +
          "from Book b\n" +
          "where b.id = :id")
-  BookApi.GetBookResponse getBookById(Long id);
+  GetBookResponse getBookById(Long id);
 
   //region complex native SQL
   @Query(nativeQuery = true, value =

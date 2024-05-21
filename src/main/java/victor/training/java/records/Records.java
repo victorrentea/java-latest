@@ -11,10 +11,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -47,17 +44,19 @@ class BookApi {
   }
 
   @GetMapping("books/{id}")
-  public GetBookResponse getBook(Long id) {
+  public GetBookResponse getBook(@PathVariable Long id) {
     return bookRepo.getBookById(id);
   }
 
-  public record GetBookResponse(long id, String name) {
+  public record GetBookResponse(
+      long id,
+      String name
+  ) {
   }
-
 }
 
 @Entity
-@Data // avoid @Data on @Entity in real life
+@Data // avoid @Data + @Entity
 class Book {
   @Id
   @GeneratedValue
