@@ -1,83 +1,71 @@
 package victor.training.java.records;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Objects;
+import java.util.List;
 
+@SpringBootApplication
 public class Records {
   public static void main(String[] args) {
-    Point point = new Point();
-    point.setX(1);
-    point.setY(2);
-
-    dark(point);
-    System.out.println(point + " has x=" + point.getX());
-  }
-
-  private static void dark(Point point) {
-    point.setX(-1);
+    SpringApplication.run(Records.class, args);
   }
 }
 
-class Point {
-  private int x;
-  private int y;
+@RestController
+@RequiredArgsConstructor
+//record BookApi(BookRepo bookRepo) { // 🛑DON'T! Proxies don't work on final classes => eg @Secured won't work
+class BookApi {
+  private final BookRepo bookRepo;
 
-  // behold: traditional Java boilerplate 🤢🤢🤢🤢
-  public int getX() {
-    return x;
+  @PostMapping("books")
+  @Transactional
+  public void createBook(@RequestBody @Validated CreateBookRequest request) {
+    System.out.println("pretend save title:" + request.title() + " and url:" + request.teaserVideoUrl());
+    System.out.println("pretend save authors: " + request.authors());
   }
 
-  public void setX(int x) {
-    this.x = x;
+
+  public record CreateBookRequest(
+      @NotBlank String title,
+      @NotEmpty List<String> authors,
+      String teaserVideoUrl // can be absent🤔
+  ) { // DTO
   }
 
-  public int getY() {
-    return y;
+  @GetMapping("books/{id}")
+  public GetBookResponse getBook(Long id) {
+    return bookRepo.getBookById(id);
   }
 
-  public void setY(int y) {
-    this.y = y;
+  public record GetBookResponse(long id, String name) {
   }
 
-  @Override
-  public String toString() {
-    return "Dot{x=" + x + ", y=" + y + '}';
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(x, y);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Point point = (Point) o;
-    return x == point.x && y == point.y;
-  }
 }
 
+@Entity
+@Data // avoid @Data on @Entity in real life
+class Book {
+  @Id
+  @GeneratedValue
+  private Long id;
+  private String title;
 
-// TODO 1 make Point a record
-// TODO 2 implement Point.translate(int deltaX, int deltaY):Point; Hint: you'll have to create a new instance
-//   eg new Point(1,2).translate(3,4).equals(new Point(4,6))
-// TODO 3 validate x and y < 1000 in constructor !!!
-// TODO 4 create overloaded constructor accepting x and y as strings! you will have to call this(int,int) aka "canonical" constructor
-// TODO 5 change the default toString to print itself in the format (x,y)
+  private String authorFirstName;
+  private String authorLastName;
+}
 
-// === Lessons: records is:
-// immutable
-// getters without "get" 🎉
-// hashcode/equals + toString
-// no extra fields besides signature
-// can have extra methods or statics
-// constructors: validation in default one + more overloaded ones
-// override generated methods
-// polymorphism: can implement, cannot extend
-// withers
 
