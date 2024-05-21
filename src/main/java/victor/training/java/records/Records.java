@@ -24,9 +24,17 @@ public class Records {
 
 @RestController
 @RequiredArgsConstructor
-//record BookApi(BookRepo bookRepo) { // 🛑DON'T! Proxies don't work on final classes => eg @Secured won't work
+//record BookApi(BookRepo bookRepo) { // 🛑DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
 class BookApi {
   private final BookRepo bookRepo;
+
+  // DTO
+  public record CreateBookRequest(
+      @NotBlank String title,
+      @NotEmpty List<String> authors,
+      String teaserVideoUrl // may be absent
+  ) {
+  }
 
   @PostMapping("books")
   @Transactional
@@ -35,28 +43,23 @@ class BookApi {
     System.out.println("pretend save authors: " + request.authors());
   }
 
+  // ----
 
-  public record CreateBookRequest(
-      @NotBlank String title,
-      @NotEmpty List<String> authors,
-      String teaserVideoUrl // can be absent🤔
-  ) { // DTO
-  }
-
-  @GetMapping("books/{id}")
-  public GetBookResponse getBook(@PathVariable Long id) {
-    return bookRepo.getBookById(id);
-  }
-
-  public record GetBookResponse(
+  public record SearchBookResult(
       long id,
       String name
   ) {
   }
+
+  @GetMapping("books")
+  public List<SearchBookResult> search(@RequestParam String name) {
+    return bookRepo.search(name);
+  }
+
 }
 
 @Entity
-@Data // avoid @Data + @Entity
+@Data // avoid @Data on @Entity
 class Book {
   @Id
   @GeneratedValue

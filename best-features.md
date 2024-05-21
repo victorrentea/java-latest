@@ -1,8 +1,9 @@
 ## Records 17
+- RecordsIntro.java 
+    - ✅ Value Objects, 🪦 @Value (Lombok)
 - Records.java 
     - ✅ DTOs
-    - ✅ over @Value (Lombok)
-    - Optional<> field
+    - Optional<> field!
     - ❌ @Entity, but ✅ @Embeddable (JPA)
     - ✅ @Document (Mongo)
     - ❌ @Service & co (Spring)

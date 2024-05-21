@@ -16,12 +16,14 @@ class SwitchExpression {
     ).forEach(SwitchExpression::process);
   }
 
+  // parsing (infrastructure)
   private static void process(String flatParcelLine) {
     String[] a = flatParcelLine.split("\\|");
     Parcel parcel = new Parcel(a[0], parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
     System.out.println(calculateTax(parcel));
   }
 
+  //  core domain logic
   public static double calculateTax(Parcel parcel) {
     double result = 0;
     switch (parcel.originCountry()) {

@@ -12,25 +12,25 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MicroTypes {
 
-   public Map<Long, List<Tuple2<String, Integer>>> extremeFP() {
+   public Map<Long, Set<Tuple2<String, Integer>>> extremeFP() {
       Long customerId = 1L;
       Integer product1Count = 2;
       Integer product2Count = 4;
-      return Map.of(customerId, List.of(
+      return Map.of(customerId, Set.of(
           Tuple.tuple("Table", product1Count),
           Tuple.tuple("Chair", product2Count)
       ));
    }
    
-   @Test
    void lackOfAbstractions() {
-      Map<Long, List<Tuple2<String, Integer>>> map = extremeFP();
+      Map<Long, Set<Tuple2<String, Integer>>> map = extremeFP();
       // 🚫Don't use 'var' above
 
       for (Long cid : map.keySet()) {
@@ -41,7 +41,7 @@ public class MicroTypes {
       }
    }
 
-   public void useVar() {
+   public void varUsecase() {
       ResponseEntity<List<String>> response = new RestTemplate().exchange(new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url")), new ParameterizedTypeReference<List<String>>() {
       });
    }
