@@ -48,7 +48,7 @@ public class RecordsIntro {
     Point point = new Point();
     point.setX(1);
     point.setY(2);
-    System.out.println(point);
+    System.out.println(point + " has x: " + point.getX());
   }
 }
 
