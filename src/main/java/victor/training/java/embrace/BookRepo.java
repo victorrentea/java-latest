@@ -1,8 +1,8 @@
-package victor.training.java.records;
+package victor.training.java.embrace;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import victor.training.java.records.BookApi.SearchBookResult;
+import victor.training.java.embrace.BookApi.SearchBookResult;
 
 import java.util.List;
 

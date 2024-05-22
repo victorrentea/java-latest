@@ -1,4 +1,4 @@
-package victor.training.java.records;
+package victor.training.java.embrace;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

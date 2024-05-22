@@ -1,8 +1,7 @@
-package victor.training.java.records;
+package victor.training.java.embrace;
 
 import org.jooq.lambda.tuple.Tuple;
 import org.jooq.lambda.tuple.Tuple2;
-import org.junit.jupiter.api.Test;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
@@ -17,7 +16,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class MicroTypes {
+public class Records4MicroTypes {
 
    public Map<Long, Set<Tuple2<String, Integer>>> extremeFP() {
       Long customerId = 1L;

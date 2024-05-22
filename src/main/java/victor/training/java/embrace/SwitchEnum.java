@@ -1,19 +1,18 @@
-package victor.training.java.Switch;
+package victor.training.java.embrace;
 
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static java.lang.Double.parseDouble;
 
-class SwitchExpression {
+class SwitchEnum {
   public static void main(String[] args) {
     Stream.of(
         "RO|100|100|2021-01-01",
         "CN|100|100|2021-01-01",
         "UK|100|100|2021-01-01"
-    ).forEach(SwitchExpression::process);
+    ).forEach(SwitchEnum::process);
   }
 
   // parsing (infrastructure)

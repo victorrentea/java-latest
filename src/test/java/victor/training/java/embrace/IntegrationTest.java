@@ -1,4 +1,4 @@
-package victor.training.java.records;
+package victor.training.java.embrace;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.Test;
