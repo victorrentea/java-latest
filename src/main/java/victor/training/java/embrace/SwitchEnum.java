@@ -18,7 +18,8 @@ class SwitchEnum {
   // parsing (infrastructure)
   private static void process(String flatParcelLine) {
     String[] a = flatParcelLine.split("\\|");
-    Parcel parcel = new Parcel(a[0], parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
+    String countryStr = a[0];
+    Parcel parcel = new Parcel(countryStr, parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
     System.out.println(calculateTax(parcel));
   }
 

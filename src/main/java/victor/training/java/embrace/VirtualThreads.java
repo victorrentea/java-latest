@@ -36,20 +36,14 @@ public class VirtualThreads {
   //region Imperative-Style 💖
   @GetMapping("/dilly")
   public DillyDilly drinkVirtual() throws Exception {
-    var beerPromise = supplyAsync(()-> client.fetchBeer(client.fetchUserPreferences()), virtualExecutor);
-    var vodkaPromise = supplyAsync(() -> client.fetchVodka(),virtualExecutor);
-    Beer beer = beerPromise.get();
+    var beer = client.fetchBeer(client.fetchUserPreferences());
+    var vodka = client.fetchVodka();
     return new DillyDilly(beer, vodka);
   }
   //endregion
 
   //region Structured Concurrency (still in preview, ready in 25🤞)
   @GetMapping("/dilly-scope")
-  public DillyDilly drink() throws InterruptedException, ExecutionException, TimeoutException {
-    try (var scope = new ShutdownOnFailure()) {
-      // spawn 2 child virtual threads:
-      var beerTask = scope.fork(() -> client.fetchBeer(client.fetchUserPreferences()));
-      var vodkaTask = scope.fork(() -> client.fetchVodka());
   public DillyDilly drink() throws Exception {
     try (var scope = new ShutdownOnFailure()) { // ✅ if one subtask fails, the other(s) are interrupted
       var beerSubtask = scope.fork(() -> client.fetchBeer(client.fetchUserPreferences()));

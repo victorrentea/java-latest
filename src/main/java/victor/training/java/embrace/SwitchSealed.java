@@ -15,8 +15,8 @@ public class SwitchSealed {
 
   void main(String[] args) {
     List<Shape> shapes = List.of(
-        new Square(10), // 4 e
-        new Circle(5), // 2 π r
+        new Square(10), // 4 edge
+        new Circle(5), // 2 π radius
         new Square(5));
 
 
