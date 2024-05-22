@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//record BookApi(BookRepo bookRepo) { // ❌DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
+
 @RequiredArgsConstructor
 public class BookApi {
   private final BookRepo bookRepo;
+
+//record BookApi(BookRepo bookRepo) { // ❌DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
 
   // ✅ DTO
   public record CreateBookRequest(
