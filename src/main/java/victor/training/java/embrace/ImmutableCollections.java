@@ -4,7 +4,6 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 void main() { // stand-alone 'main' v21
-  List<Integer> list = Arrays.asList(1, 2);
   list.set(0, 3);
   System.out.println(list);
 
