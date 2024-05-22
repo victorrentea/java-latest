@@ -7,21 +7,24 @@ import java.util.stream.Stream;
 import static java.lang.Double.parseDouble;
 
 class SwitchEnum {
+
+  //region infrastructure
   public static void main(String[] args) {
     Stream.of(
-        "RO|100|100|2021-01-01",
-        "CN|100|100|2021-01-01",
-        "UK|100|100|2021-01-01"
-    ).forEach(SwitchEnum::process);
+            "RO|100|100|2021-01-01",
+            "CN|100|100|2021-01-01",
+            "UK|100|100|2021-01-01"
+        ).map(SwitchEnum::parse)
+        .map(SwitchEnum::calculateTax)
+        .forEach(System.out::println);
   }
 
-  // parsing (infrastructure)
-  private static void process(String flatParcelLine) {
+  private static Parcel parse(String flatParcelLine) {
     String[] a = flatParcelLine.split("\\|");
     String countryStr = a[0];
-    Parcel parcel = new Parcel(countryStr, parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
-    System.out.println(calculateTax(parcel));
+    return new Parcel(countryStr, parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
   }
+  //endregion
 
   //  core domain logic
   public static double calculateTax(Parcel parcel) {
