@@ -26,7 +26,7 @@ class SwitchEnum {
   }
   //endregion
 
-  //  core domain logic
+  //  domain logic
   public static double calculateTax(Parcel parcel) {
     double result = 0;
     switch (parcel.originCountry()) {
