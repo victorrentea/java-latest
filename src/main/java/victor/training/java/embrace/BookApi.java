@@ -32,7 +32,7 @@ public class BookApi {
     System.out.println("teaser:" + request.teaserVideoUrl().toLowerCase()); // NPE
   }
 
-  // ----
+  // region irrelevant
 
   public record SearchBookResult(
       long id,
@@ -44,6 +44,7 @@ public class BookApi {
   public List<SearchBookResult> search(@RequestParam String title) {
     return bookRepo.search(title);
   }
+  // endregion
 
 }
 

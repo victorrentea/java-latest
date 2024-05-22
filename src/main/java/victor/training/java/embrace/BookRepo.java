@@ -18,7 +18,7 @@ public interface BookRepo extends JpaRepository<Book, Long> {
       "from TEACHER t\n" +
       "where (?1 is null or upper(t.name) like upper(('%'||?1||'%')))\n" +
       "and (?2 is null or t.grade=?2)\n" +
-      "and (cast(?3 as integer)=0 or exists\n" +
+      "and (cast(?3 as integer)=0 or exists(\n" +
       "     select 1\n" +
       "     from TEACHING_ACTIVITY ta\n" +
       "     inner join TEACHING_ACTIVITY_TEACHER tat on ta.id=tat.activities_id\n" +
