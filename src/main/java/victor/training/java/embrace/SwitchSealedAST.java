@@ -1,6 +1,6 @@
 package victor.training.java.embrace;
 
-public class SwitchSealedAST {
+public class SwitchSealedAST { // Abstract Syntax Tree
   public static void main() {
     // TODO 2 * 3 + 4
     Expr e = null;
