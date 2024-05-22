@@ -7,14 +7,18 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.RestClient;
+
+import java.net.http.HttpClient;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@AutoConfigureWireMock(port = 0) // random
+@AutoConfigureWireMock(port = 9999)
 public class IntegrationTest {
   @Autowired
   MockMvc mockMvc;
@@ -38,12 +42,16 @@ public class IntegrationTest {
   @Autowired
   WireMockServer wireMock;
 
+  @Autowired
+  VirtualThreadsClient client;
+
   @Test
   void wireMockStubbing() {
-    wireMock.stubFor(get(urlMatching("/emails"))
+    wireMock.stubFor(get(urlMatching("/user/preferences"))
         .willReturn(okJson("""
             {
-              "emails":["a@b.com"]
+              "favoriteBeerType": "blond"
             }""")));
+    assertThat(client.fetchUserPreferences().favoriteBeerType()).isEqualTo("blond");
   }
 }

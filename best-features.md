@@ -1,3 +1,5 @@
+# Best new Language Features since Java 8
+
 ### Records (17)
 - ✅ Value Objects, RIP @Value (Lombok)
 - ✅ DTOs
@@ -5,7 +7,7 @@
 - ❌ @Entity, but ✅ @Embeddable (JPA)
 - ✅ @Document (Mongo)
 - ❌ @Service & co (Spring)
-- ✅ More semantics than Tuple (RX)
+- ✅ More semantics than Tuple
   
 ### Immutable Collections (11, 17)
 - Towards more Functional Programming style 

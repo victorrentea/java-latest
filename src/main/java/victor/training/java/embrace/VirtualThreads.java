@@ -1,6 +1,5 @@
 package victor.training.java.embrace;
 
-import io.netty.util.concurrent.ThreadPerTaskExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
