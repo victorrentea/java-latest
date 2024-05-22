@@ -18,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RecordsMicroTypes {
 
+   //region source of data
    public Map<Long, Set<Tuple2<String, Integer>>> extremeFP() {
       Long customerId = 1L;
       Integer product1Count = 2;
@@ -27,6 +28,7 @@ public class RecordsMicroTypes {
           Tuple.tuple("Chair", product2Count)
       ));
    }
+   //endregion
    
    void lackOfAbstractions() {
       Map<Long, Set<Tuple2<String, Integer>>> map = extremeFP();
