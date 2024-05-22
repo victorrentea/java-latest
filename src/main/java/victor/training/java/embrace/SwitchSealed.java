@@ -25,12 +25,12 @@ public class SwitchSealed {
     double totalPerimeter = 0; // TODO
 
     for (Shape shape : shapes) {
+      // a. polymorphism / OOP
+      // b. instanceOf
+      // c. Visitor (anti)Pattern - 🤯 OMG
+      // d. switch on sealed
 
     }
-    // a. polymorphism with behavior next to state (OOP)
-    // b. instanceOf
-    // c. Visitor (anti)Pattern - 🤯 OMG
-    // d. switch on sealed
 
     System.out.println(totalPerimeter);
   }
