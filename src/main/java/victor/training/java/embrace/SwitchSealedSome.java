@@ -8,13 +8,13 @@ import static victor.training.java.embrace.Maybe.*;
 
 public class SwitchSealedSome {
   public static void main(String[] args) {
-    switch (someRepoMethod()) {
+    switch (findStuff()) {
       case Some(var data) -> System.out.println("Got: " + data);
       case None() -> System.out.println("Got nada");
     }
   }
 
-  static Maybe<String> someRepoMethod() {
+  static Maybe<String> findStuff() {
     boolean found = new Random().nextBoolean();
     return found ? new Some<>("data") : new None<>();
   }
