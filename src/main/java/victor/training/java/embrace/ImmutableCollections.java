@@ -4,13 +4,13 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 void main() { // stand-alone 'main' v21
-  List<Integer> numbers = Arrays.asList(1, 2);
-  numbers.set(0, -1);
-  System.out.println(numbers);
+  List<Integer> list = Arrays.asList(1, 2);
+  list.set(0, 3);
+  System.out.println(list);
 
-  var odds = numbers.stream()
+  var odds = list.stream()
       .filter(i -> i % 2 == 1)
       .collect(toList());
-  odds.removeFirst(); // v21
+  odds.removeFirst();
   System.out.println(odds);
 }
