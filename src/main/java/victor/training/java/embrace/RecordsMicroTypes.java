@@ -39,4 +39,8 @@ public class RecordsMicroTypes {
       }
    }
 
+   void printCart(long cid, String c) {
+      // etc
+   }
+
 }
