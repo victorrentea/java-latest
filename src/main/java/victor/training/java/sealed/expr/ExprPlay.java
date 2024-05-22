@@ -2,8 +2,7 @@ package victor.training.java.sealed.expr;
 
 public class ExprPlay {
   public static void main(String[] args) {
-    // 2 * 3 + 4 - 5
-    Expr expr1 = null; // TODO
+    Expr expr1 = null; // TODO 2 * 3 + 4 - 5
     System.out.println(print(expr1));
     System.out.println(eval(expr1));
   }
