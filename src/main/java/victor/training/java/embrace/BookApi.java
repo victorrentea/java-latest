@@ -1,31 +1,18 @@
 package victor.training.java.embrace;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@SpringBootApplication
-public class Records {
-  public static void main(String[] args) {
-    SpringApplication.run(Records.class, args);
-  }
-}
-
 @RestController
 @RequiredArgsConstructor
 //record BookApi(BookRepo bookRepo) { // 🛑DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
-class BookApi {
+public class BookApi {
   private final BookRepo bookRepo;
 
   // DTO
@@ -52,22 +39,10 @@ class BookApi {
   }
 
   @GetMapping("books")
-  public List<SearchBookResult> search(@RequestParam String name) {
-    return bookRepo.search(name);
+  public List<SearchBookResult> search(@RequestParam String title) {
+    return bookRepo.search(title);
   }
 
-}
-
-@Entity
-@Data // avoid @Data on @Entity
-class Book {
-  @Id
-  @GeneratedValue
-  private Long id;
-  private String title;
-
-  private String authorFirstName;
-  private String authorLastName;
 }
 
 

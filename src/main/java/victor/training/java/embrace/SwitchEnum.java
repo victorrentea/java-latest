@@ -44,7 +44,8 @@ record Parcel(
     String originCountry,
     double tobaccoValue,
     double regularValue,
-    LocalDate date) {
+    LocalDate date
+) {
 }
 
 enum CountryEnum {
@@ -52,6 +53,3 @@ enum CountryEnum {
   UK,
   CN,
 }
-
-// explore: non-enhaustive vs default?
-// case null: (java 21)

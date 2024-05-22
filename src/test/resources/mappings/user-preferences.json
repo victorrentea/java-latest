@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "urlPathPattern": "/api/user-preferences"
+    "urlPathPattern": "/user/preferences"
   },
   "response": {
     "status": 200,

@@ -1,7 +1,7 @@
 {
   "request": {
     "method": "GET",
-    "urlPathPattern": "/api/beer/blond"
+    "urlPathPattern": "/beer/blond"
   },
   "response": {
     "status": 200,
