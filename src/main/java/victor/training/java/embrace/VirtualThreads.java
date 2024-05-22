@@ -18,7 +18,6 @@ import static java.time.Instant.now;
 @RequiredArgsConstructor
 public class VirtualThreads {
   private final Apis api;
-  private final ThreadPoolTaskExecutor virtualExecutor;
 
   //region Reactive-Style ☣️☠️ using Reactor/Spring, Observable/Android, Mutiny/Quarkus...
   //  @GetMapping("/dilly")
@@ -43,6 +42,7 @@ public class VirtualThreads {
   //endregion
 
   //region Structured Concurrency😎 (still in preview, ready in 25🤞)
+  private final ThreadPoolTaskExecutor virtualExecutor;
   @GetMapping("/dilly-scope")
   public DillyDilly drink() throws Exception {
     try (var scope = new ShutdownOnFailure()) { // ✅ if one subtask fails, the other(s) are interrupted

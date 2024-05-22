@@ -6,7 +6,7 @@ class Point {
   private int x;
   private int y;
 
-  // traditional Java boilerplate 🤢🤢🤢🤢
+  // region traditional Java boilerplate 🤢🤢🤢🤢
   public int getX() {
     return x;
   }
@@ -40,6 +40,7 @@ class Point {
     Point point = (Point) o;
     return x == point.x && y == point.y;
   }
+  // endregion
 }
 
 
