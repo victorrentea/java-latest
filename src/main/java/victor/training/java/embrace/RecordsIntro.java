@@ -2,15 +2,6 @@ package victor.training.java.embrace;
 
 import java.util.Objects;
 
-public class RecordsIntro {
-  public static void main(String[] args) {
-    Point point = new Point();
-    point.setX(1);
-    point.setY(2);
-    System.out.println(point);
-  }
-}
-
 class Point {
   private int x;
   private int y;
@@ -48,6 +39,16 @@ class Point {
     if (o == null || getClass() != o.getClass()) return false;
     Point point = (Point) o;
     return x == point.x && y == point.y;
+  }
+}
+
+
+public class RecordsIntro {
+  public static void main(String[] args) {
+    Point point = new Point();
+    point.setX(1);
+    point.setY(2);
+    System.out.println(point);
   }
 }
 
