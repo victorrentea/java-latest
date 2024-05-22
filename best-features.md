@@ -16,7 +16,8 @@
 - ⏭️ STR."\{a}" (25)
 
 ### Switch (enum) expression (17)
-- 💖 Compiler fails on missing branch: no need to default: throw
+- 💖 No break, no fallthrough
+- 💖 Compiler fails on missing enum case => no need to default: throw
 
 ### Switch on Sealed (21)
 - ✅ Behavior on a hierarchy of objects that can't go INSIDE the classes
