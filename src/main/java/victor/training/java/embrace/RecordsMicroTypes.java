@@ -39,9 +39,4 @@ public class RecordsMicroTypes {
       }
    }
 
-   public void varUsecase() {
-      ResponseEntity<List<String>> response = new RestTemplate().exchange(new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url")), new ParameterizedTypeReference<List<String>>() {
-      });
-   }
-
 }
