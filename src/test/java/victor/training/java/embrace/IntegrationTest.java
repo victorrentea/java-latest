@@ -7,9 +7,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.cloud.contract.wiremock.AutoConfigureWireMock;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.client.RestClient;
-
-import java.net.http.HttpClient;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,6 +49,6 @@ public class IntegrationTest {
             {
               "favoriteBeerType": "blond"
             }""")));
-    assertThat(client.fetchUserPreferences().favoriteBeerType()).isEqualTo("blond");
+    assertThat(client.fetchPreferences().favoriteBeerType()).isEqualTo("blond");
   }
 }

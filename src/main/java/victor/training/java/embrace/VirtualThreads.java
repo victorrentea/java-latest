@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import victor.training.java.embrace.VirtualThreadsClient.DillyDilly;
 import victor.training.java.embrace.VirtualThreadsClient.UserPreferences;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
-import java.util.concurrent.TimeoutException;
 
 import static java.time.Instant.now;
 
@@ -36,7 +34,7 @@ public class VirtualThreads {
   //region Imperative-Style 💖
   @GetMapping("/dilly")
   public DillyDilly drinkVirtual() throws Exception {
-    UserPreferences pref = client.fetchUserPreferences();
+    UserPreferences pref = client.fetchPreferences();
     var beer = client.fetchBeer(pref);
     var vodka = client.fetchVodka();
     return new DillyDilly(beer, vodka);
@@ -47,7 +45,7 @@ public class VirtualThreads {
   @GetMapping("/dilly-scope")
   public DillyDilly drink() throws Exception {
     try (var scope = new ShutdownOnFailure()) { // ✅ if one subtask fails, the other(s) are interrupted
-      var beerSubtask = scope.fork(() -> client.fetchBeer(client.fetchUserPreferences()));
+      var beerSubtask = scope.fork(() -> client.fetchBeer(client.fetchPreferences()));
       var vodkaSubtask = scope.fork(() -> client.fetchVodka());
 
       scope.joinUntil(now().plusSeconds(10)) // // block until all subtasks complete (with timeout)

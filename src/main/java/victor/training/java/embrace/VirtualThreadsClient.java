@@ -15,7 +15,7 @@ public class VirtualThreadsClient {
   public record UserPreferences(String favoriteBeerType) {
   }
 
-  public UserPreferences fetchUserPreferences() {
+  public UserPreferences fetchPreferences() {
     return restClient.get()
         .uri("http://localhost:9999/user/preferences")
         .retrieve()
