@@ -1,12 +1,12 @@
 import java.util.List;
 
-interface Shape {
+sealed interface Shape permits Circle, Square{
 }
-
 record Circle(int radius) implements Shape {
-}
 
+}
 record Square(int edge) implements Shape {
+
 }
 
 void main(String[] args) {
