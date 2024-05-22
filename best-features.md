@@ -4,9 +4,9 @@
 - ✅ Value Objects, RIP @Value (Lombok)
 - ✅ DTOs
 - 👍 Optional<> field!
+- ❌ @Service & co (Spring)
 - ❌ @Entity, but ✅ @Embeddable (JPA)
 - ✅ @Document (Mongo)
-- ❌ @Service & co (Spring)
 - ✅ More semantics than Tuple
   
 ### Immutable Collections (11, 17)
