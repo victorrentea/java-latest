@@ -32,6 +32,19 @@ public class BookApi {
     System.out.println("teaser:" + request.teaserVideoUrl().toLowerCase()); // NPE
   }
 
+  // ----
+
+  public record SearchBookResult(
+      long id,
+      String name
+  ) {
+  }
+
+  @GetMapping("books")
+  public List<SearchBookResult> search(@RequestParam String title) {
+    return bookRepo.search(title);
+  }
+
 }
 
 
