@@ -4,9 +4,11 @@ import java.util.List;
 
 sealed interface Shape permits Circle, Square {
 }
+
 record Circle(int radius) implements Shape {
 
 }
+
 record Square(int edge) implements Shape {
 
 }
@@ -20,14 +22,17 @@ public class SwitchSealed {
         new Square(5));
 
 
-  double totalPerimeter = 0; // TODO
+    double totalPerimeter = 0; // TODO
 
-  // a. polymorphism with behavior next to state (OOP)
-  // b. instanceOf
-  // c. Visitor (anti)Pattern - 🤯 OMG
-  // d. switch on sealed
+    for (Shape shape : shapes) {
 
-  System.out.println(totalPerimeter);
+    }
+    // a. polymorphism with behavior next to state (OOP)
+    // b. instanceOf
+    // c. Visitor (anti)Pattern - 🤯 OMG
+    // d. switch on sealed
+
+    System.out.println(totalPerimeter);
   }
 }
 
