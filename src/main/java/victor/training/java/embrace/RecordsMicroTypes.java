@@ -20,12 +20,9 @@ public class RecordsMicroTypes {
 
    //region source of data
    public Map<Long, Set<Tuple2<String, Integer>>> extremeFP() {
-      Long customerId = 1L;
-      Integer product1Count = 2;
-      Integer product2Count = 4;
-      return Map.of(customerId, Set.of(
-          Tuple.tuple("Table", product1Count),
-          Tuple.tuple("Chair", product2Count)
+     return Map.of(1L, Set.of(
+          Tuple.tuple("Table", 2),
+          Tuple.tuple("Chair", 4)
       ));
    }
    //endregion
