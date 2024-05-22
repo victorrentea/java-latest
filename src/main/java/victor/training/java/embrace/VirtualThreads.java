@@ -50,17 +50,16 @@ public class VirtualThreads {
       // spawn 2 child virtual threads:
       var beerTask = scope.fork(() -> client.fetchBeer(client.fetchUserPreferences()));
       var vodkaTask = scope.fork(() -> client.fetchVodka());
+  public DillyDilly drink() throws Exception {
+    try (var scope = new ShutdownOnFailure()) { // ✅ if one subtask fails, the other(s) are interrupted
+      var beerSubtask = scope.fork(() -> client.fetchBeer(client.fetchUserPreferences()));
+      var vodkaSubtask = scope.fork(() -> client.fetchVodka());
 
-      // block until all subtasks complete
-      scope.joinUntil(now().plusSeconds(10)) // ... until timeout
-          .throwIfFailed(); // ... or until any child throws
-
-      return new DillyDilly(beerTask.get(), vodkaTask.get());
-    }
+      scope.joinUntil(now().plusSeconds(10)) // // block until all subtasks complete (with timeout)
+          .throwIfFailed();
+      return new DillyDilly(beerSubtask.get(), vodkaSubtask.get());
+    }// ✅ interrupting parent threads interrupts its subtasks
   }
-  // ✅ readable
-  // ✅ interrupted parent interrupts child subtasks
-  // ✅ if one subtask fails, the other is interrupted
   //endregion
 
 
