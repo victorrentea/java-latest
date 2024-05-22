@@ -26,8 +26,8 @@ public class BookApi {
   @PostMapping("books")
   @Transactional
   public void createBook(@RequestBody @Validated CreateBookRequest request) {
-    System.out.println("pretend save title:" + request.title() + " and url:" + request.teaserVideoUrl().toLowerCase());
-    System.out.println("pretend save authors: " + request.authors());
+    System.out.println("title:" + request.title());
+    System.out.println("teaser:" + request.teaserVideoUrl().toLowerCase()); // NPE
   }
 
   // ----

@@ -40,7 +40,7 @@ public class IntegrationTest {
   WireMockServer wireMock;
 
   @Autowired
-  VirtualThreadsClient client;
+  Apis client;
 
   @Test
   void wireMockStubbing() {
