@@ -34,8 +34,8 @@ public class VirtualThreads {
   //region Imperative-Style 💖
   @GetMapping("/dilly")
   public DillyDilly drinkVirtual() throws Exception {
-    UserPreferences pref = client.fetchPreferences();
-    var beer = client.fetchBeer(pref);
+    UserPreferences preferences = client.fetchPreferences();
+    var beer = client.fetchBeer(preferences);
     var vodka = client.fetchVodka();
     return new DillyDilly(beer, vodka);
   }
