@@ -35,10 +35,10 @@ public class VirtualThreads {
 
   //region Imperative-Style 💖
   @GetMapping("/dilly")
-  public DillyDilly drinkVirtual() {
-    var pref = client.fetchUserPreferences();
-    var beer = client.fetchBeer(pref);
-    var vodka = client.fetchVodka();
+  public DillyDilly drinkVirtual() throws Exception {
+    var beerPromise = supplyAsync(()-> client.fetchBeer(client.fetchUserPreferences()), virtualExecutor);
+    var vodkaPromise = supplyAsync(() -> client.fetchVodka(),virtualExecutor);
+    Beer beer = beerPromise.get();
     return new DillyDilly(beer, vodka);
   }
   //endregion
