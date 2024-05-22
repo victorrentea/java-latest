@@ -11,11 +11,11 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-//record BookApi(BookRepo bookRepo) { // 🛑DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
+//record BookApi(BookRepo bookRepo) { // ❌DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
 public class BookApi {
   private final BookRepo bookRepo;
 
-  // DTO
+  // ✅ DTO
   public record CreateBookRequest(
       @NotBlank String title,
       @NotEmpty List<String> authors,
