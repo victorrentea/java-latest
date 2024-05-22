@@ -16,10 +16,11 @@ void main(String[] args) {
       new Square(5));
 
   double totalPerimeter = 0; // TODO
-  // a. instanceOf
-  // b. OOP (behavior next to state)
+  // a. OOP (behavior next to state)
+  // b. instanceOf
   // c. Visitor (anti)Pattern - 🤯 OMG
   // d. switch on sealed
+
   System.out.println(totalPerimeter);
 }
 
