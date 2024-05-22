@@ -15,8 +15,10 @@ void main(String[] args) {
       new Circle(5), // 2 π r
       new Square(5));
 
+
   double totalPerimeter = 0; // TODO
-  // a. OOP (behavior next to state)
+
+  // a. polymorphism with behavior next to state (OOP)
   // b. instanceOf
   // c. Visitor (anti)Pattern - 🤯 OMG
   // d. switch on sealed
