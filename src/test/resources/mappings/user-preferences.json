@@ -7,8 +7,7 @@
     "status": 200,
     "jsonBody":
       {
-        "favoriteBeerType": "blond",
-        "iceInVodka": "false"
+        "favoriteBeerType": "blond"
       },
       "fixedDelayMilliseconds": 1500,
     "headers": {
