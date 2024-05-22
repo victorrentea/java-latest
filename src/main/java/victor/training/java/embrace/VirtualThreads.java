@@ -6,6 +6,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import victor.training.java.embrace.VirtualThreadsClient.DillyDilly;
+import victor.training.java.embrace.VirtualThreadsClient.UserPreferences;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
@@ -35,7 +36,8 @@ public class VirtualThreads {
   //region Imperative-Style 💖
   @GetMapping("/dilly")
   public DillyDilly drinkVirtual() throws Exception {
-    var beer = client.fetchBeer(client.fetchUserPreferences());
+    UserPreferences pref = client.fetchUserPreferences();
+    var beer = client.fetchBeer(pref);
     var vodka = client.fetchVodka();
     return new DillyDilly(beer, vodka);
   }
