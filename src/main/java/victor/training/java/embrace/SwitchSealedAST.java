@@ -1,5 +1,7 @@
 package victor.training.java.embrace;
 
+import victor.training.java.embrace.Expr.*;
+
 public class SwitchSealedAST {
   public static void main() {
     // TODO 2 * 3 + 4 - 5
