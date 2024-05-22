@@ -1,34 +1,31 @@
-## Records (17)
-- RecordsIntro.java 
-    - ✅ Value Objects, RIP @Value (Lombok)
-- Records.java 
-    - ✅ DTOs
-    - Optional<> field!
-    - ❌ @Entity, but ✅ @Embeddable (JPA)
-    - ✅ @Document (Mongo)
-    - ❌ @Service & co (Spring)
-- Records4MicroTypes.java
-    - ✅ vs Tuple (RX)
+### Records (17)
+- ✅ Value Objects, RIP @Value (Lombok)
+- ✅ DTOs
+- 👍 Optional<> field!
+- ❌ @Entity, but ✅ @Embeddable (JPA)
+- ✅ @Document (Mongo)
+- ❌ @Service & co (Spring)
+- ✅ More semantics than Tuple (RX)
   
-## Immutable Collections (11, 17)
+### Immutable Collections (11, 17)
+- Towards more Functional Programming style 
 
-## Text Blocks (17, 25)
+### Text Blocks (17, 25)
 - ✅ @Query (BookRepo.java)
 - ✅ JSON (IntegrationTest.java) 
-- "%s".formatted(a)
-- STR."\{a}" 💖 (25)
+- ⏭️ STR."\{a}" (25)
 
-## Switch (enum) expression (17)
-- no need for 'default': compiler fails on missing branch💖
+### Switch (enum) expression (17)
+- 💖 Compiler fails on missing branch: no need to default: throw
 
-## Switch on Sealed (21)
+### Switch on Sealed (21)
 - ✅ Behavior on a hierarchy of objects that can't go INSIDE the classes
 
-## Virtual Threads (21)
-- WebFlux .fetchUser.map(getprefs).ifEmptyDefault(...).flatMap(getBeer()).doOnNext
-- CompletableFuture1+2.combine => scope => cf + newVirtualThreads
-Ideal: systems serving many requests/second and/or talking to slow systems.
-! synchronized
-! CPU-bound flows
+### Virtual Threads (21)
+- ✅ Cheap to block 
+- ✅ Handle large number of requests with a single machine, without Reactive☠️
+- ❌ synchronized in your code or old libraries 😱
+- 😐 Useless for CPU-bound tasks
 
-## Structured Concurrency (25)
+### Structured Concurrency (25)
+- ⏭️ Fork-join visible for compiler: auto-cancellation, metadata propagation, profiling

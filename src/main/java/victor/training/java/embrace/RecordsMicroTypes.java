@@ -16,7 +16,7 @@ import java.util.Set;
 import static java.util.stream.Collectors.joining;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Records4MicroTypes {
+public class RecordsMicroTypes {
 
    public Map<Long, Set<Tuple2<String, Integer>>> extremeFP() {
       Long customerId = 1L;
