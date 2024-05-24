@@ -16,9 +16,16 @@ public class SwitchSealed {
     double totalPerimeter = 0; // TODO
     for (Shape shape : shapes) {
       // a. polymorphism / OOP
+//      totalPerimeter += shape.perimeter();
       // b. instanceOf
-      // c. Visitor (anti)Pattern - 🤯 OMG
+//      if (shape instanceof Square square) {
+//        totalPerimeter += square.edge() * 4;
+//      }
       // d. switch on sealed
+      totalPerimeter += switch (shape) {
+        case Circle(int radius) -> 2* Math.PI * radius;
+        case Square(int edge) -> 4*edge;
+      };
     }
     System.out.println(totalPerimeter);
   }

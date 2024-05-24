@@ -1,8 +1,7 @@
 package victor.training.java.embrace;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import com.github.tomakehurst.wiremock.recording.SnapshotRecordResult.Full;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
@@ -13,6 +12,10 @@ public class Book {
   private Long id;
   private String title;
 
-  private String authorFirstName;
-  private String authorLastName;
+//  private String authorFirstName;
+//  private String authorLastName;
+  @Embedded // DB does not chage
+  private FullName author;
 }
+@Embeddable
+record FullName(String firstName, String lastName) {}

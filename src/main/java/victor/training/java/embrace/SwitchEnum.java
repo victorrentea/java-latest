@@ -4,7 +4,7 @@ package victor.training.java.embrace;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
-import static java.lang.Double.parseDouble;
+import static java.lang.Double.*;
 
 class SwitchEnum {
 
@@ -22,30 +22,23 @@ class SwitchEnum {
   private static Parcel parse(String flatParcelLine) {
     String[] a = flatParcelLine.split("\\|");
     String countryStr = a[0];
-    return new Parcel(countryStr, parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
+    return new Parcel(CountryEnum.valueOf(countryStr), parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
   }
   //endregion
 
   //  domain logic
   public static double calculateTax(Parcel parcel) {
-    double result = 0;
-    switch (parcel.originCountry()) {
-      case "UK":
-        result = parcel.tobaccoValue() / 2 + parcel.regularValue();
-        break;
-      case "CN":
-        result = parcel.tobaccoValue() + parcel.regularValue();
-        break;
-      case "RO":
-        result = parcel.tobaccoValue() / 3;
-        break;
-    }
-    return result;
+    return switch (parcel.originCountry()) {
+      case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
+      case CN -> parcel.tobaccoValue() + parcel.regularValue();
+      case RO -> parcel.tobaccoValue() / 3;
+      case PL -> MAX_VALUE;
+    };
   }
 }
 
 record Parcel(
-    String originCountry,
+    CountryEnum originCountry,
     double tobaccoValue,
     double regularValue,
     LocalDate date
@@ -55,5 +48,6 @@ record Parcel(
 enum CountryEnum {
   RO,
   UK,
+  PL,
   CN,
 }

@@ -44,11 +44,15 @@ public class IntegrationTest {
 
   @Test
   void wireMockStubbing() {
-    wireMock.stubFor(get(urlMatching("/user/preferences"))
-        .willReturn(okJson("""
-            {
-              "favoriteBeerType": "blond"
-            }""")));
+    stubPreferences("blond");
     assertThat(client.fetchPreferences().favoriteBeerType()).isEqualTo("blond");
+  }
+
+  private void stubPreferences(String beerType) {
+    wireMock.stubFor(get(urlMatching("/user/preferences"))
+        .willReturn(okJson(STR."""
+            {
+              "favoriteBeerType": "\{beerType.toUpperCase()}"
+            }"""/*.formatted(beerType)*/)));
   }
 }

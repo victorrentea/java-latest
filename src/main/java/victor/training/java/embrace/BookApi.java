@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 
@@ -21,7 +22,7 @@ public class BookApi {
   public record CreateBookRequest(
       @NotBlank String title,
       @NotEmpty List<String> authors,
-      String teaserVideoUrl // may be absent
+      Optional<String> teaserVideoUrl // may be absent
   ) {
   }
 
@@ -29,7 +30,8 @@ public class BookApi {
   @Transactional
   public void createBook(@RequestBody @Validated CreateBookRequest request) {
     System.out.println("title:" + request.title());
-    System.out.println("teaser:" + request.teaserVideoUrl().toLowerCase()); // NPE
+    System.out.println("teaser:" + request.teaserVideoUrl()
+        .map(String::toLowerCase).orElse("N/A")); // NPE
   }
 
   // region irrelevant
