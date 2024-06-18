@@ -11,10 +11,8 @@ import victor.training.java.virtualthread.bar.UserPreferences;
 import victor.training.java.virtualthread.bar.Vodka;
 
 import java.time.Instant;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.*;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -52,24 +50,33 @@ public class VirtualThreads {
 
   private static final AtomicInteger counter = new AtomicInteger();
 
-//  private static final ReentrantLock lock = new ReentrantLock();
+  private static final ReentrantLock lock = new ReentrantLock();
+
   @GetMapping("/dilly")
   public DillyDilly drinkVirtual() {
     synchronized (new Object()) {
+      lock.lock();
       int id = counter.incrementAndGet();
       log.info("Start {} in {}", id, Thread.currentThread());
-
       var pref = pref();
-
       var beer = beer(pref);
-
       var vodka = vodka();
-//      if (true) throw new IllegalArgumentException("Intentionat");
-
       log.info("End {} in {}", id, Thread.currentThread());
+      lock.unlock();
       return new DillyDilly(beer, vodka);
     }
   }
+//  {
+//    // use a virtual thread factory
+////    ForkJoinPool fjp = new ForkJoinPool(20,
+//    ExecutorService pool = Executors.newVirtualThreadPerTaskExecutor();
+//    List<Future<Data>> futures;
+//    for (int i = 0; i < 1000; i++) {
+//      Future<Data> f = pool.submit(() -> rest.apiCall(ip[id]));
+//      futures.add(f);
+//    }
+//    futures.for
+//  }
 
   private Vodka vodka() {
     var vodka = restTemplate.getForObject("http://localhost:9999/api/vodka", Vodka.class);
