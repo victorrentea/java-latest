@@ -9,7 +9,7 @@
       {
         "type": "blond"
       },
-    "fixedDelayMilliseconds": 1500,
+    "fixedDelayMilliseconds": 1000,
     "headers": {
       "Content-Type": "application/json"
     }
