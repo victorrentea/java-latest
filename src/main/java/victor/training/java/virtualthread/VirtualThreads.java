@@ -16,6 +16,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -50,18 +51,24 @@ public class VirtualThreads {
   // ❌ JFR profiler cannot link children threads with parent thread
 
   private static final AtomicInteger counter = new AtomicInteger();
+
+//  private static final ReentrantLock lock = new ReentrantLock();
   @GetMapping("/dilly")
   public DillyDilly drinkVirtual() {
-    log.info("Start {} in {}", counter.incrementAndGet(), Thread.currentThread());
+    synchronized (new Object()) {
+      int id = counter.incrementAndGet();
+      log.info("Start {} in {}", id, Thread.currentThread());
 
-    var pref = pref();
+      var pref = pref();
 
-    var beer = beer(pref);
+      var beer = beer(pref);
 
-    var vodka = vodka();
+      var vodka = vodka();
+//      if (true) throw new IllegalArgumentException("Intentionat");
 
-    log.info("End {} in {}", counter.get(), Thread.currentThread());
-    return new DillyDilly(beer, vodka);
+      log.info("End {} in {}", id, Thread.currentThread());
+      return new DillyDilly(beer, vodka);
+    }
   }
 
   private Vodka vodka() {
