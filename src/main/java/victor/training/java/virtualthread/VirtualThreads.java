@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -48,9 +49,10 @@ public class VirtualThreads {
   // ❌ if one subtask fails, the other is NOT interrupted
   // ❌ JFR profiler cannot link children threads with parent thread
 
+  private static final AtomicInteger counter = new AtomicInteger();
   @GetMapping("/dilly")
   public DillyDilly drinkVirtual() {
-    log.info("Start  in {}", Thread.currentThread());
+    log.info("Start {} in {}", counter.incrementAndGet(), Thread.currentThread());
 
     var pref = pref();
 
@@ -58,6 +60,7 @@ public class VirtualThreads {
 
     var vodka = vodka();
 
+    log.info("End {} in {}", counter.get(), Thread.currentThread());
     return new DillyDilly(beer, vodka);
   }
 
