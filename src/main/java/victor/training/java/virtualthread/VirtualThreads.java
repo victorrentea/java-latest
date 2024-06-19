@@ -15,6 +15,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -26,61 +27,52 @@ public class VirtualThreads {
   private final RestTemplate restTemplate;
 
   @GetMapping("/dilly-cf")
-  public CompletableFuture<DillyDilly> drinkCF() throws Exception {
-    var preferencesCF = supplyAsync(() ->
-        restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class));
+  public CompletableFuture<DillyDilly> drinkPromise() {
+    CompletableFuture<UserPreferences> preferencesCF = supplyAsync(() -> fetchPrefs());
 
-    var beerCF = preferencesCF.thenApply(pref ->
-        restTemplate.getForObject("http://localhost:9999/api/beer/" + pref.favoriteBeerType(), Beer.class));
+    CompletableFuture<Beer> beerCF = preferencesCF.thenApply(pref -> fetchBeer(pref));
 
-    var vodkaCF = supplyAsync(() ->
-        restTemplate.getForObject("http://localhost:9999/api/vodka", Vodka.class));
+    CompletableFuture<Vodka> vodkaCF = supplyAsync(() -> fetchVodka());
 
-    var dillyCF = beerCF.thenCombine(vodkaCF, DillyDilly::new)
+    CompletableFuture<DillyDilly> dillyCF = beerCF.thenCombine(vodkaCF, DillyDilly::new)
         .orTimeout(10, SECONDS);
 
     dillyCF.thenAccept(dilly -> log.info("Returning: {}", dilly));
     return dillyCF;
   }
-  // ✅ Memory-efficient, because HTTP Thread released immediately
-  // ❌ hard to read
-  // ❌ client cancellation does not propagate upstream
-  // ❌ if one subtask fails, the other is NOT interrupted
-  // ❌ JFR profiler cannot link children threads with parent thread
 
+  private static final AtomicInteger counter = new AtomicInteger();
   @GetMapping("/dilly")
   public DillyDilly drinkVirtual() {
-    log.info("Start  in {}", Thread.currentThread());
+    int id = counter.incrementAndGet();
+    log.info("Start task{} in {}", id, Thread.currentThread());
 
-    var pref = pref();
+    UserPreferences pref = fetchPrefs();
+    log.info("Got prefs task{} in {}", id, Thread.currentThread());
 
-    var beer = beer(pref);
+    Beer beer = fetchBeer(pref);
+    log.info("Got beer task{} in {}", id, Thread.currentThread());
 
-    var vodka = vodka();
+    Vodka vodka = fetchVodka();
+    log.info("Got vodka task{} in {}", id, Thread.currentThread());
 
     return new DillyDilly(beer, vodka);
   }
 
-  private Vodka vodka() {
-    var vodka = restTemplate.getForObject("http://localhost:9999/api/vodka", Vodka.class);
-    log.info("Three in {}", Thread.currentThread());
-    return vodka;
+  private UserPreferences fetchPrefs() {
+    return restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
   }
 
-  private Beer beer(UserPreferences pref) {
-    var beer = restTemplate.getForObject("http://localhost:9999/api/beer/" + pref.favoriteBeerType(), Beer.class);
-    log.info("Two in {}", Thread.currentThread());
-    return beer;
+  private Beer fetchBeer(UserPreferences pref) {
+    return restTemplate.getForObject("http://localhost:9999/api/beer/{0}", Beer.class, pref.favoriteBeerType());
   }
 
-  private UserPreferences pref() {
-    var pref = restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
-    log.info("One in {}", Thread.currentThread());
-    return pref;
+  private Vodka fetchVodka() {
+    return restTemplate.getForObject("http://localhost:9999/api/vodka", Vodka.class);
   }
 
 
-  //region Structured Concurrency (NOT yet production-ready in Java 21 LTS)
+  //region Structured Concurrency (NOT yet LTS)
   @GetMapping("/dilly-scope")
   public DillyDilly drink() throws InterruptedException, ExecutionException, TimeoutException {
     UserPreferences pref = restTemplate.getForObject("http://localhost:9999/api/user-preferences", UserPreferences.class);
