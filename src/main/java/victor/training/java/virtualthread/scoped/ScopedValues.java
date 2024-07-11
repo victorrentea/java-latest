@@ -34,5 +34,7 @@ public class ScopedValues {
 
   public static void subtask() {
     log.info("subtask={}", scopedUser.get());
+    log.info("in " + Thread.currentThread().toString());
+
   }
 }

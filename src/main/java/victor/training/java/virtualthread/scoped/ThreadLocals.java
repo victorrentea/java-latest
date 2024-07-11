@@ -20,6 +20,5 @@ public class ThreadLocals {
 
   public static void subtask() {
     log.info("subtask={}", threadLocalUser.get());
-
   }
 }
