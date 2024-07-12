@@ -77,9 +77,11 @@ public class First {
   private static ReentrantLock lock = new ReentrantLock();
   public static  void synchronizedIsCppCode() {
     lock.lock();
-    ceva();
-    lock.unlock();
-//      c++;
+    try { // imediat dupa lock(), cu .unlock in finally {}
+      ceva();
+    } finally {
+      lock.unlock();
+    }
   }
 
   private static void ceva() {
