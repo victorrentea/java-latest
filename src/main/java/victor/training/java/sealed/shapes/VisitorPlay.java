@@ -13,7 +13,6 @@ public class VisitorPlay {
         new Square(1));
 
     double totalPerimeter = 0;
-
     //shapes.stream().mapToDouble(Shape::perimeter).sum(); // TASK : compute
 
 //    for (Shape shape : shapes) {
@@ -32,7 +31,8 @@ public class VisitorPlay {
     // ## switch+sealed
     for (Shape shape :shapes) {
       totalPerimeter += switch (shape) {
-        case Square s -> s.edge() * 4;
+        case Square(int edge) -> edge * 4;
+        case Rectangle(int width, int height) -> width * 2 + height * 2; // destructurare de recorduri
         case Circle c -> c.radius() * 2 * Math.PI;
 //        case Elipsa e when e.razaMare() < e.razaMare() -> 2 * Math.PI * Math.sqrt((e.razaMica() + e.razaMare()) / 2);
 //        case Elipsa e when e.razaMare() >= e.razaMare() ->42;
@@ -41,6 +41,9 @@ public class VisitorPlay {
 //        default -> throw new IllegalStateException("Unknown shape: " + shape);
       };
     }
+    // function f() { return {a: 1, b: 2}; }
+//     const {a,b} = f(); // destructuring
+//    var Rectangle(int width, int height) = f(); // nu e inca
 
 
     System.out.println(totalPerimeter);

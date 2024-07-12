@@ -6,7 +6,7 @@ import static victor.training.java.sealed.expr.Expr.*;
 public class ExprPlay {
   public static void main(String[] args) {
     // = "1 + 2"
-    Expr expr1 = null; // TODO new Sum(new Const(1), new Const(2));
+    Expr expr1 = new Sum(new Const(1), new Const(2));
     System.out.println(print(expr1) + " => " + eval(expr1));
 
     // = "-5 + 2"
@@ -17,9 +17,11 @@ public class ExprPlay {
     Expr expr3 = null; // TODO
     System.out.println(print(expr3) + " => " + eval(expr3));
   }
-
   static int eval(Expr expr) {
-    throw new RuntimeException("Not implemented"); // TODO implement
+    return switch (expr) {
+      case Const(int c) -> c;
+      case Sum(Expr left, Expr right) -> eval(left) + eval(right);
+    };
   }
   static String print(Expr expr) {
     return "TODO"; // TODO
@@ -27,5 +29,8 @@ public class ExprPlay {
 }
 // TODO Model expressions using sealed classes, for example:
 //  sealed interface Expr {record Const(int c) implements Expr {} ...}
-interface Expr {}
+sealed interface Expr {
+  record Const(int value) implements Expr {}
+  record Sum(Expr left, Expr right) implements Expr {}
+}
 
