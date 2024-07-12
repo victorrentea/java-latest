@@ -1,4 +1,4 @@
-package victor.training.java.virtualthread;
+package victor.training.java.virtualthread.experiments;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import static java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor;
 
 @Slf4j
-public class Synchronized {
+public class SynchronizedPinning {
 
   private static long t0;
 
@@ -34,7 +34,7 @@ public class Synchronized {
   @SneakyThrows
   public static void entry() {
     log.info("entry ");
-    synchronized (Synchronized.class) {
+    synchronized (SynchronizedPinning.class) {
       counter += call();
     }
     log.info("exit ");

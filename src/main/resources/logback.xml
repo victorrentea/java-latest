@@ -1,5 +1,5 @@
 <configuration>
-    <conversionRule conversionWord="threadId" converterClass="victor.training.java.virtualthread.ThreadIdConverter"/>
+    <conversionRule conversionWord="threadId" converterClass="victor.training.java.virtualthread.ThreadNameLogger"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <!-- encoders are assigned the type

@@ -42,17 +42,6 @@ public class Pinned {
     printExecutionTimes(taskCompletionTimes);
   }
 
-  private static void printExecutionTimes(Map<Integer, ExecutionTimeframe> taskCompletionTimes) {
-    long max = taskCompletionTimes.values().stream().mapToLong(ExecutionTimeframe::end).max().orElseThrow();
-    double r = 50d / max;
-    for (Integer taskId : taskCompletionTimes.keySet()) {
-      ExecutionTimeframe t = taskCompletionTimes.get(taskId);
-      String spaces = " ".repeat((int) (t.start() * r));
-      String action = "#".repeat((int) ((t.end() - t.start()) * r));
-      System.out.printf("Task %02d: %s%s%n", taskId, spaces, action);
-    }
-  }
-
   public static long blackHole;
   public static void intenseCpu() {
     BigInteger res = BigInteger.ZERO;
@@ -65,6 +54,17 @@ public class Pinned {
   public static void synchronizedIsCppCode() {
     synchronized (Pinned.class) {
       Util.sleepMillis(100);
+    }
+  }
+
+  private static void printExecutionTimes(Map<Integer, ExecutionTimeframe> taskCompletionTimes) {
+    long max = taskCompletionTimes.values().stream().mapToLong(ExecutionTimeframe::end).max().orElseThrow();
+    double r = 50d / max;
+    for (Integer taskId : taskCompletionTimes.keySet()) {
+      ExecutionTimeframe t = taskCompletionTimes.get(taskId);
+      String spaces = " ".repeat((int) (t.start() * r));
+      String action = "#".repeat((int) ((t.end() - t.start()) * r));
+      System.out.printf("Task %02d: %s%s%n", taskId, spaces, action);
     }
   }
 }
