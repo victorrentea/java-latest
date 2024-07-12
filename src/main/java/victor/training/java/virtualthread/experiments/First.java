@@ -76,17 +76,14 @@ public class First {
   // veste buna: se vede in JFR output daca incarci.jfr in JDK Mission Control
   private static ReentrantLock lock = new ReentrantLock();
   public static  void synchronizedIsCppCode() {
-//    synchronized (First.class) {
     lock.lock();
-    lock.lock(); // reentrant poate asa
     ceva();
     lock.unlock();
-    lock.unlock();
 //      c++;
-//    }
   }
 
   private static void ceva() {
+    if (true) throw new RuntimeException("Intentional");
     Util.sleepMillis(100); // mai scurt sa ia timp
   }
 
