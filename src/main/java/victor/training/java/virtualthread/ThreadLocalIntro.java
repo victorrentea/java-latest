@@ -3,6 +3,7 @@ package victor.training.java.virtualthread;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class ThreadLocalIntro {
     public void httpRequest(String currentUser, String data) {
         log.info("Current user is " + currentUser);
         staticCurrentUser.set(currentUser);
+        MDC.put("sessionId", currentUser);
         controller.create(data);
     }
     public static ThreadLocal<String> staticCurrentUser = new ThreadLocal<>();
@@ -53,7 +55,11 @@ class AService {
 @Slf4j
 class ARepo {
     public void save(String data) {
+        //
         String currentUser =ThreadLocalIntro.staticCurrentUser.get(); // TODO
+//        String currentUser =SecurityContextHolder.getContext().getAuthentication().getName(); // TODO
+        // @Transactional creeaza tranzactie pe JDBC connection care sta pe thread
+        // TraceID
         log.info("INSERT INTO A (data={}, created_by={}) ", data, currentUser);
     }
 }
