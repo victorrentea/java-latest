@@ -78,7 +78,7 @@ public class First {
   public static  void synchronizedIsCppCode() {
 //    synchronized (First.class) {
     lock.lock();
-    lock.lock();
+    lock.lock(); // reentrant poate asa
     ceva();
     lock.unlock();
     lock.unlock();
