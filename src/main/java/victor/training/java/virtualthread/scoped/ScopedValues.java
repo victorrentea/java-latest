@@ -14,17 +14,17 @@ public class ScopedValues {
       ScopedValue.newInstance();
 
   public static void main() {
-    ScopedValue.where(scopedUser, "Victor").run(() -> {
+    ScopedValue.where(scopedUser, "Victor").run(() -> { // java 25 LTS, nu e prod read in 21
       method();
       log.info("after={}", scopedUser.get());
     });
+//    System.out.println(scopedUser.get()); // eroare, ca s-a sters.
   }
 
   @SneakyThrows
   public static void method() {
     log.info("in task={}", scopedUser.get());
 //    new Thread(ScopedValues::subtask).start();
-
     try (var scope = new ShutdownOnSuccess()) {
       scope.fork(callable(ScopedValues::subtask));
       scope.fork(callable(ScopedValues::subtask));
