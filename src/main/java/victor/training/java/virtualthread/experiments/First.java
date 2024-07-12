@@ -16,7 +16,7 @@ import static java.lang.System.currentTimeMillis;
 
 @Slf4j
 public class First {
-  record ExecutionTimeframe(long start, long end) {
+  record ExecutionTimeframe(long start, long end, char symbol) {
   }
 
   public static void main(String[] args) throws Exception {
@@ -25,12 +25,18 @@ public class First {
       long tSubmit = currentTimeMillis();
       IntStream.range(0, 30).forEach(id ->
           executor.submit(() -> {
-//            io(); // am vazut thread hoping
-//            intenseCpu(); // can delay the start of other faster tasks
             long tStart = currentTimeMillis();
             synchronizedIsCppCode(); // can starve the shared OS Carrier Thread Pool
             long tEnd = currentTimeMillis();
-            taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit));
+            taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit, '#'));
+          }));
+      IntStream.range(30, 40).forEach(id ->
+          executor.submit(() -> {
+            long tStart = currentTimeMillis();
+            io();// acest IO inocentn care ar trebui sa profite de VTs
+            // sta ca prostu ca toate PT sunt lipite de un VT blocate in syncronized
+            long tEnd = currentTimeMillis();
+            taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit, '*'));
           }));
     }
 
@@ -62,9 +68,11 @@ public class First {
   // daca un VT asteapta sa intre in aceasta metoda (sa ia monitorul)
   // JVM nu poate unmount VT de pe PT => "thread pinning"
   // veste buna: se vede in JFR output daca incarci.jfr in JDK Mission Control
-  public static synchronized void synchronizedIsCppCode() {
+  public static void synchronizedIsCppCode() {
+    synchronized (First.class) {
       Util.sleepMillis(100); // mai scurt sa ia timp
       c++;
+    }
   }
 
   private static void printExecutionTimes(Map<Integer, ExecutionTimeframe> taskCompletionTimes) {
@@ -73,7 +81,7 @@ public class First {
     for (Integer taskId : taskCompletionTimes.keySet()) {
       ExecutionTimeframe t = taskCompletionTimes.get(taskId);
       String spaces = " ".repeat((int) (t.start() * r));
-      String action = "#".repeat((int) ((t.end() - t.start()) * r));
+      String action = (""+t.symbol).repeat((int) ((t.end() - t.start()) * r));
       System.out.printf("Task %02d: %s%s%n", taskId, spaces, action);
     }
   }
