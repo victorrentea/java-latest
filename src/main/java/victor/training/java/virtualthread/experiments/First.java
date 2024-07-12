@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
 import static java.lang.System.currentTimeMillis;
@@ -26,8 +27,13 @@ public class First {
       IntStream.range(0, 30).forEach(id ->
           executor.submit(() -> {
             long tStart = currentTimeMillis();
+            String startThread = Thread.currentThread().toString();
             synchronizedIsCppCode(); // can starve the shared OS Carrier Thread Pool
+            String endThread = Thread.currentThread().toString();
             long tEnd = currentTimeMillis();
+            if (!startThread.equals(endThread)) {
+              log.warn("OS THREAD HOP DETECTED: Task #" + id + " started in \n" + startThread + "\nbut ended in\n" + endThread + "\n");
+            }
             taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit, '#'));
           }));
       IntStream.range(30, 40).forEach(id ->
@@ -68,11 +74,20 @@ public class First {
   // daca un VT asteapta sa intre in aceasta metoda (sa ia monitorul)
   // JVM nu poate unmount VT de pe PT => "thread pinning"
   // veste buna: se vede in JFR output daca incarci.jfr in JDK Mission Control
-  public static void synchronizedIsCppCode() {
-    synchronized (First.class) {
-      Util.sleepMillis(100); // mai scurt sa ia timp
-      c++;
-    }
+  private static ReentrantLock lock = new ReentrantLock();
+  public static  void synchronizedIsCppCode() {
+//    synchronized (First.class) {
+    lock.lock();
+    lock.lock();
+    ceva();
+    lock.unlock();
+    lock.unlock();
+//      c++;
+//    }
+  }
+
+  private static void ceva() {
+    Util.sleepMillis(100); // mai scurt sa ia timp
   }
 
   private static void printExecutionTimes(Map<Integer, ExecutionTimeframe> taskCompletionTimes) {
