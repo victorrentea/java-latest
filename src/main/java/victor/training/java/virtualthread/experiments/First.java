@@ -26,10 +26,10 @@ public class First {
       IntStream.range(0, 30).forEach(id ->
           executor.submit(() -> {
 //            io(); // am vazut thread hoping
+//            intenseCpu(); // can delay the start of other faster tasks
             long tStart = currentTimeMillis();
-            intenseCpu(); // can delay the start of other faster tasks
+            synchronizedIsCppCode(); // can starve the shared OS Carrier Thread Pool
             long tEnd = currentTimeMillis();
-//          synchronizedIsCppCode(); // can starve the shared OS Carrier Thread Pool
             taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit));
           }));
     }
@@ -58,10 +58,12 @@ public class First {
     blackHole = res.longValue();
   }
 
-  public static void synchronizedIsCppCode() {
-    synchronized (First.class) {
-      Util.sleepMillis(100);
-    }
+  static int c;
+  public static synchronized void synchronizedIsCppCode() {
+//    synchronized (First.class) { // inseamna...
+      Util.sleepMillis(100); // mai scurt sa ia timp
+      c++;
+//    }
   }
 
   private static void printExecutionTimes(Map<Integer, ExecutionTimeframe> taskCompletionTimes) {
