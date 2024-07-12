@@ -1,6 +1,7 @@
 package victor.training.java.virtualthread.experiments;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import victor.training.java.Util;
 
 import java.math.BigInteger;
@@ -13,22 +14,20 @@ import java.util.stream.IntStream;
 
 import static java.lang.System.currentTimeMillis;
 
+@Slf4j
 public class First {
   record ExecutionTimeframe(long start, long end) {
   }
 
   public static void main(String[] args) throws Exception {
     Map<Integer, ExecutionTimeframe> taskCompletionTimes = Collections.synchronizedMap(new TreeMap<>());
-
     try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
-
       long tSubmit = currentTimeMillis();
-      IntStream.range(0, 50).forEach(id ->
+      IntStream.range(0, 12).forEach(id ->
           executor.submit(() -> {
             long tStart = currentTimeMillis();
-            io();
-//          intenseCpu(); // can delay the start of other faster tasks
-//          synchronizedIsCppCode(); // can starve the shared OS Carrier Thread Pool
+            log.info("Start");
+            log.info("End");
             long tEnd = currentTimeMillis();
             taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit));
           }));
@@ -42,6 +41,9 @@ public class First {
   @SneakyThrows
   private static void io() {
     Thread.sleep(100);
+    // RestTemplate.get..
+    // WebClient...block()
+    // CompletableFuture...get()
   }
 
   public static long blackHole;
