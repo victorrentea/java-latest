@@ -59,11 +59,12 @@ public class First {
   }
 
   static int c;
+  // daca un VT asteapta sa intre in aceasta metoda (sa ia monitorul)
+  // JVM nu poate unmount VT de pe PT => "thread pinning"
+  // veste buna: se vede in JFR output daca incarci.jfr in JDK Mission Control
   public static synchronized void synchronizedIsCppCode() {
-//    synchronized (First.class) { // inseamna...
       Util.sleepMillis(100); // mai scurt sa ia timp
       c++;
-//    }
   }
 
   private static void printExecutionTimes(Map<Integer, ExecutionTimeframe> taskCompletionTimes) {
