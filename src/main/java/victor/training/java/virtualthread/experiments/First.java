@@ -1,6 +1,6 @@
 package victor.training.java.virtualthread.experiments;
 
-import com.zaxxer.hikari.util.UtilityElf;
+import lombok.SneakyThrows;
 import victor.training.java.Util;
 
 import java.math.BigInteger;
@@ -9,37 +9,39 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 import static java.lang.System.currentTimeMillis;
 
-public class Pinned {
+public class First {
   record ExecutionTimeframe(long start, long end) {
   }
 
   public static void main(String[] args) throws Exception {
     Map<Integer, ExecutionTimeframe> taskCompletionTimes = Collections.synchronizedMap(new TreeMap<>());
 
-//    ExecutorService executor = Executors.newCachedThreadPool(); // OS threads
-    ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor(); // virtual threads
+    try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
 
-    long tSubmit = currentTimeMillis();
-    IntStream.range(0, 50).forEach(id ->
-        executor.submit(() -> {
-          long tStart = currentTimeMillis();
-          intenseCpu(); // can delay the start of other faster tasks
+      long tSubmit = currentTimeMillis();
+      IntStream.range(0, 50).forEach(id ->
+          executor.submit(() -> {
+            long tStart = currentTimeMillis();
+            io();
+//          intenseCpu(); // can delay the start of other faster tasks
 //          synchronizedIsCppCode(); // can starve the shared OS Carrier Thread Pool
-          long tEnd = currentTimeMillis();
-          taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit));
-        }));
+            long tEnd = currentTimeMillis();
+            taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit));
+          }));
+    }
 
     System.out.println("Tasks started, please wait a while...");
-    executor.shutdown();
-    executor.awaitTermination(1, TimeUnit.MINUTES);
 
     printExecutionTimes(taskCompletionTimes);
+  }
+
+  @SneakyThrows
+  private static void io() {
+    Thread.sleep(100);
   }
 
   public static long blackHole;
@@ -52,7 +54,7 @@ public class Pinned {
   }
 
   public static void synchronizedIsCppCode() {
-    synchronized (Pinned.class) {
+    synchronized (First.class) {
       Util.sleepMillis(100);
     }
   }
