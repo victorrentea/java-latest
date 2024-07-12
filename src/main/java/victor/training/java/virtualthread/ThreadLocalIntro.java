@@ -19,8 +19,8 @@ public class ThreadLocalIntro {
 
     public void httpRequest(String currentUser, String data) {
         log.info("Current user is " + currentUser);
-        controller.create(data,currentUser);
         staticCurrentUser = currentUser;
+        controller.create(data);
     }
     public static String staticCurrentUser;
 }
@@ -31,8 +31,8 @@ public class ThreadLocalIntro {
 @RequiredArgsConstructor
 class AController {
     private final AService service;
-    public void create(String data, String user) {
-        service.create(data, user);
+    public void create(String data) {
+        service.create(data);
     }
 }
 @Service
@@ -40,16 +40,16 @@ class AController {
 class AService {
     private final ARepo repo;
     @SneakyThrows
-    public void create(String data, String user) {
+    public void create(String data) {
         Thread.sleep(10); // some delay, to reproduce the race bug
-        repo.save(data, user); // +1 param la toate metodele din app
+        repo.save(data); // +1 param la toate metodele din app
     }
 }
 @Repository
 @Slf4j
 class ARepo {
-    public void save(String data, String user) {
-        String currentUser =user; // TODO
+    public void save(String data) {
+        String currentUser =ThreadLocalIntro.staticCurrentUser; // TODO
         log.info("INSERT INTO A (data={}, created_by={}) ", data, currentUser);
     }
 }
