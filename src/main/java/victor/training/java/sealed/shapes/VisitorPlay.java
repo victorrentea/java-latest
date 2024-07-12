@@ -50,7 +50,7 @@ public class VisitorPlay {
   }
 
   private static int fff(Elipsa e) {
-    if (e.razaMare() < e.razaMica()) return 2 * Math.PI * Math.sqrt((e.razaMica() + e.razaMare()) / 2);
+//    if (e.razaMare() < e.razaMica()) return 2 * Math.PI * Math.sqrt((e.razaMica() + e.razaMare()) / 2);
     return 42;
   }
 }
