@@ -21,6 +21,9 @@ public class VisitorPlay {
         totalPerimeter += 4 * square.edge();
       } else if (shape instanceof Circle circle) {
         totalPerimeter += 2 * Math.PI * circle.radius();
+      } else {
+        // mai bine o eroare sa-mi arat ca am uitat ceva
+        throw new IllegalStateException("Unknown shape: " + shape);
       }
     }
     // ## instanceOf
