@@ -23,10 +23,10 @@ public class ThreadLocalIntro {
 
     public void httpRequest(String currentUser, String data) {
         log.info("Current user is " + currentUser);
-        staticCurrentUser = currentUser;
+        staticCurrentUser.set(currentUser);
         controller.create(data);
     }
-    public static String staticCurrentUser;
+    public static ThreadLocal<String> staticCurrentUser = new ThreadLocal<>();
 }
 // ---------- end of framework -----------
 
@@ -53,7 +53,7 @@ class AService {
 @Slf4j
 class ARepo {
     public void save(String data) {
-        String currentUser =ThreadLocalIntro.staticCurrentUser; // TODO
+        String currentUser =ThreadLocalIntro.staticCurrentUser.get(); // TODO
         log.info("INSERT INTO A (data={}, created_by={}) ", data, currentUser);
     }
 }
