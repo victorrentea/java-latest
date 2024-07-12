@@ -34,8 +34,9 @@ public class VisitorPlay {
       totalPerimeter += switch (shape) {
         case Square s -> s.edge() * 4;
         case Circle c -> c.radius() * 2 * Math.PI;
+        case Elipsa e -> 2 * Math.PI * Math.sqrt((e.razaMica() + e.razaMare()) / 2);
         // in mod normal faceam asa:
-        default -> throw new IllegalStateException("Unknown shape: " + shape);
+//        default -> throw new IllegalStateException("Unknown shape: " + shape);
       };
     }
 
