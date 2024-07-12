@@ -23,12 +23,13 @@ public class First {
     Map<Integer, ExecutionTimeframe> taskCompletionTimes = Collections.synchronizedMap(new TreeMap<>());
     try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
       long tSubmit = currentTimeMillis();
-      IntStream.range(0, 12).forEach(id ->
+      IntStream.range(0, 16).forEach(id ->
           executor.submit(() -> {
+//            io(); // am vazut thread hoping
             long tStart = currentTimeMillis();
-            log.info("Start");
-            log.info("End");
+            intenseCpu(); // can delay the start of other faster tasks
             long tEnd = currentTimeMillis();
+//          synchronizedIsCppCode(); // can starve the shared OS Carrier Thread Pool
             taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit));
           }));
     }
@@ -47,10 +48,12 @@ public class First {
   }
 
   public static long blackHole;
+
   public static void intenseCpu() {
     BigInteger res = BigInteger.ZERO;
     for (int j = 0; j < 100_000_000; j++) { // decrease this number for slower machines
       res = res.add(BigInteger.valueOf(1L));
+      if (j%100000==0)Thread.yield(); // "fura-mi PT"
     }
     blackHole = res.longValue();
   }
