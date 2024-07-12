@@ -6,12 +6,10 @@ import victor.training.java.Util;
 
 import java.math.BigInteger;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
@@ -56,9 +54,12 @@ public class First {
 
   // dar daca tu accepti load fff mare de la clientii tai,
   static Semaphore cateApeluriInParalelMaxPeAla = new Semaphore(20);
+  static Map<String, String> map = Collections.synchronizedMap(new HashMap<>());
   @SneakyThrows
   private static void io() {
-  // se strange aici hoarda de huni => OOME
+//    ConcurrentHashMap
+
+    // se strange aici hoarda de huni => OOME
     // == ai nevoie aici sa le zici alora sa dea mai bland in tine = backpressure
     cateApeluriInParalelMaxPeAla.acquire();
 //    cateApeluriInParalelMaxPeAla.tryAcquire(2, TimeUnit.SECONDS);//  de explorat sa-i arunci eroare inapoi clientului tradusa pe 503 de @RestControllerAdvice

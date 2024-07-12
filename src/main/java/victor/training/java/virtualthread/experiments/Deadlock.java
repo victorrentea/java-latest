@@ -22,7 +22,7 @@ public class Deadlock {
 
   @SneakyThrows
   public static void entry() {
-    log.info("acquiring...");
+    log.info("acquiring Connection from JDBC Connection Pool...");
     synchronized (lock) {
       while (connections == 0) {
         try {
