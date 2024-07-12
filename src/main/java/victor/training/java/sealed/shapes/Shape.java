@@ -6,7 +6,7 @@ public sealed interface Shape
     permits Circle, Square {
 //  double perimeter();
 }
-class Elipsa implements Shape {
-
-}
+//class Elipsa implements Shape {
+//
+//}
 

@@ -30,6 +30,15 @@ public class VisitorPlay {
     // ## OOP (behavior next to state)
     // ## VISITOR 😱
     // ## switch+sealed
+    for (Shape shape :shapes) {
+      totalPerimeter += switch (shape) {
+        case Square s -> s.edge() * 4;
+        case Circle c -> c.radius() * 2 * Math.PI;
+        // in mod normal faceam asa:
+        default -> throw new IllegalStateException("Unknown shape: " + shape);
+      };
+    }
+
 
     System.out.println(totalPerimeter);
   }
