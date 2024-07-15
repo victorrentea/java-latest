@@ -9,7 +9,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.IntStream;
 
@@ -17,99 +18,77 @@ import static java.lang.System.currentTimeMillis;
 
 @Slf4j
 public class First {
-  record ExecutionTimeframe(long start, long end, char symbol) {
+  record ExecutionTimeframe(long start, long end, char symbol, String hop) {
   }
 
-  public static void main(String[] args) throws Exception {
-    Map<Integer, ExecutionTimeframe> taskCompletionTimes = Collections.synchronizedMap(new TreeMap<>());
-    try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
-      long tSubmit = currentTimeMillis();
-      IntStream.range(0, 30).forEach(id ->
-          executor.submit(() -> {
-            long tStart = currentTimeMillis();
-            String startThread = Thread.currentThread().toString();
-            synchronizedIsCppCode(); // can starve the shared OS Carrier Thread Pool
-            String endThread = Thread.currentThread().toString();
-            long tEnd = currentTimeMillis();
-            if (!startThread.equals(endThread)) {
-              log.warn("OS THREAD HOP DETECTED: Task #" + id + " started in \n" + startThread + "\nbut ended in\n" + endThread + "\n");
-            }
-            taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit, '#'));
-          }));
-      IntStream.range(30, 40).forEach(id ->
-          executor.submit(() -> {
-            long tStart = currentTimeMillis();
-            io();// acest IO inocentn care ar trebui sa profite de VTs
-            // sta ca prostu ca toate PT sunt lipite de un VT blocate in syncronized
-            long tEnd = currentTimeMillis();
-            taskCompletionTimes.put(id, new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit, '*'));
-          }));
+  static Map<Integer, ExecutionTimeframe> taskCompletionTimes = Collections.synchronizedMap(new TreeMap<>());
+  static long tSubmit = currentTimeMillis();
+
+  public static void main() throws Exception {
+    try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+      IntStream.range(0, 30).forEach(taskId ->
+          executor.submit(monitor(taskId, () -> {
+            io();
+//            cpu();
+//            locks();
+          })));
+
+      // other parallel tasks:
+//      IntStream.range(30, 40).forEach(taskId -> executor.submit(monitor(taskId, First::io)));
+      System.out.println("Waiting for tasks to finish...");
     }
-
-    System.out.println("Tasks started, please wait a while...");
-
-    printExecutionTimes(taskCompletionTimes);
+    printExecutionTimes();
   }
 
-
-  // dar daca tu accepti load fff mare de la clientii tai,
-  static Semaphore cateApeluriInParalelMaxPeAla = new Semaphore(20);
-  static Map<String, String> map = Collections.synchronizedMap(new HashMap<>());
   @SneakyThrows
   private static void io() {
-//    ConcurrentHashMap
-
-    // se strange aici hoarda de huni => OOME
-    // == ai nevoie aici sa le zici alora sa dea mai bland in tine = backpressure
-    cateApeluriInParalelMaxPeAla.acquire();
-//    cateApeluriInParalelMaxPeAla.tryAcquire(2, TimeUnit.SECONDS);//  de explorat sa-i arunci eroare inapoi clientului tradusa pe 503 de @RestControllerAdvice
-    try {
-      Thread.sleep(100);
-    } finally {
-      cateApeluriInParalelMaxPeAla.release();
-    }
+    Thread.sleep(100); // standin for:
     // RestTemplate.get..
     // WebClient...block()
     // CompletableFuture...get()
+    // TODO throttle load on external services
   }
 
   public static long blackHole;
 
-  public static void intenseCpu() {
+  public static void cpu() {
     BigInteger res = BigInteger.ZERO;
     for (int j = 0; j < 100_000_000; j++) { // decrease this number for slower machines
-      res = res.add(BigInteger.valueOf(1L));
-//      if (j%100000==0)Thread.yield(); // "fura-mi PT"
+      res = res.add(BigInteger.valueOf(j).sqrt());
     }
     blackHole = res.longValue();
   }
-
   static int c;
-  // daca un VT asteapta sa intre in aceasta metoda (sa ia monitorul)
-  // JVM nu poate unmount VT de pe PT => "thread pinning"
-  // veste buna: se vede in JFR output daca incarci.jfr in JDK Mission Control
-  private static ReentrantLock lock = new ReentrantLock();
-  public static  void synchronizedIsCppCode() {
-    lock.lock();
-    try { // imediat dupa lock(), cu .unlock in finally {}
-      ceva();
-    } finally {
-      lock.unlock();
-    }
+
+  public static synchronized void locks() {
+    Util.sleepMillis(100);
+    c++;
   }
 
-  private static void ceva() {
-    if (true) throw new RuntimeException("Intentional");
-    Util.sleepMillis(100); // mai scurt sa ia timp
+  // --------- supporting code ------------
+  static Runnable monitor(int taskId, Runnable runnable) {
+    return () -> {
+      long tStart = currentTimeMillis();
+      String startThreadName = Thread.currentThread().toString();
+      runnable.run();
+      String endThreadName = Thread.currentThread().toString();
+      long tEnd = currentTimeMillis();
+      String hop = startThreadName.equals(endThreadName) ? " >>" : " >> Hop detected from " + startThreadName + " to " + endThreadName;
+      var prev = taskCompletionTimes.put(taskId,
+          new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit, '*', hop));
+      if (prev != null) {
+        throw new IllegalArgumentException("Task ID already exists: " + taskId);
+      }
+    };
   }
 
-  private static void printExecutionTimes(Map<Integer, ExecutionTimeframe> taskCompletionTimes) {
+  private static void printExecutionTimes() {
     long max = taskCompletionTimes.values().stream().mapToLong(ExecutionTimeframe::end).max().orElseThrow();
     double r = 50d / max;
     for (Integer taskId : taskCompletionTimes.keySet()) {
       ExecutionTimeframe t = taskCompletionTimes.get(taskId);
       String spaces = " ".repeat((int) (t.start() * r));
-      String action = (""+t.symbol).repeat((int) ((t.end() - t.start()) * r));
+      String action = ("" + t.symbol).repeat((int) ((t.end() - t.start()) * r));
       System.out.printf("Task %02d: %s%s%n", taskId, spaces, action);
     }
   }
