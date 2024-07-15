@@ -22,18 +22,13 @@ public class ScopedValues {
   @SneakyThrows
   public static void method() {
     log.info("in task={}", scopedUser.get());
-//    new Thread(ScopedValues::subtask).start();
-
     try (var scope = new ShutdownOnSuccess()) {
       scope.fork(callable(ScopedValues::subtask));
       scope.fork(callable(ScopedValues::subtask));
       scope.join();
     }
   }
-
   public static void subtask() {
-    log.info("subtask={}", scopedUser.get());
-    log.info("in " + Thread.currentThread().toString());
-
+    log.info("subtask={}", scopedUser.get() + " in " + Thread.currentThread());
   }
 }
