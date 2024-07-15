@@ -25,10 +25,7 @@ public class Deadlock {
     log.info("acquiring...");
     synchronized (lock) {
       while (availableDBConnections == 0) {
-        try {
-          lock.wait();
-        } catch (InterruptedException e) {
-        }
+        lock.wait();
       }
       availableDBConnections--;
       log.info("acquired connection. left = " + availableDBConnections);
