@@ -4,8 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ThreadLocals {
-  public final static ThreadLocal<String> threadLocalUser
-      = new ThreadLocal<>();
+  public final static ThreadLocal<String> threadLocalUser = new ThreadLocal<>();
 
   public static void main() {
     threadLocalUser.set("Victor");

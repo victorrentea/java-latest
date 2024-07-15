@@ -10,8 +10,7 @@ import static java.util.concurrent.Executors.callable;
 
 @Slf4j
 public class ScopedValues {
-  public final static ScopedValue<String> scopedUser =
-      ScopedValue.newInstance();
+  public final static ScopedValue<String> scopedUser = ScopedValue.newInstance();
 
   public static void main() {
     ScopedValue.where(scopedUser, "Victor").run(() -> {
