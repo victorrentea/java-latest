@@ -42,27 +42,29 @@ public class First {
 
   @SneakyThrows
   private static void io() {
-    Thread.sleep(100); // standin for:
-    // RestTemplate.get..
-    // WebClient...block()
+    Thread.sleep(100); // standin for a network call:
+    // RestTemplate.get, WebClient...block(), HttpClient, FeignClient ...
     // CompletableFuture...get()
-    // TODO throttle load on external services
+    // TODO throttle load on external services using a Semaphore
   }
 
   public static long blackHole;
-
   public static void cpu() {
     BigInteger res = BigInteger.ZERO;
-    for (int j = 0; j < 100_000_000; j++) { // decrease this number for slower machines
+    for (int j = 0; j < 10_000_000; j++) { // decrease this number for slower machines
       res = res.add(BigInteger.valueOf(j).sqrt());
     }
     blackHole = res.longValue();
+    // TODO Fix#1: -Djdk.virtualThreadScheduler.parallelism=20
+    // TODO Fix#2: Thread.yield every now and then
   }
   static int c;
 
   public static synchronized void locks() {
     Util.sleepMillis(100);
     c++;
+    // TODO observe Thread Pinning in the JFR recording studied using JMC
+    // TODO Move to ReentrantLock
   }
 
   // --------- supporting code ------------
@@ -73,7 +75,7 @@ public class First {
       runnable.run();
       String endThreadName = Thread.currentThread().toString();
       long tEnd = currentTimeMillis();
-      String hop = startThreadName.equals(endThreadName) ? " >>" : " >> Hop detected from " + startThreadName + " to " + endThreadName;
+      String hop = startThreadName.equals(endThreadName) ? "❌No hop" : "✅Hopped from " + startThreadName + " to " + endThreadName;
       var prev = taskCompletionTimes.put(taskId,
           new ExecutionTimeframe(tStart - tSubmit, tEnd - tSubmit, '*', hop));
       if (prev != null) {
@@ -89,7 +91,8 @@ public class First {
       ExecutionTimeframe t = taskCompletionTimes.get(taskId);
       String spaces = " ".repeat((int) (t.start() * r));
       String action = ("" + t.symbol).repeat((int) ((t.end() - t.start()) * r));
-      System.out.printf("Task %02d: %s%s%n", taskId, spaces, action);
+      String trail = " ".repeat(50 - spaces.length() - action.length() - 1);
+      System.out.printf("Task %02d: %s%s%s >> %s%n", taskId, spaces, action,trail, t.hop);
     }
   }
 }
