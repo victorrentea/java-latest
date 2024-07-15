@@ -18,20 +18,20 @@ public class Deadlock {
   }
 
   private static final Object lock = new Object();
-  static int connections = 4;
+  static int availableDBConnections = 4;
 
   @SneakyThrows
   public static void entry() {
     log.info("acquiring...");
     synchronized (lock) {
-      while (connections == 0) {
+      while (availableDBConnections == 0) {
         try {
           lock.wait();
         } catch (InterruptedException e) {
         }
       }
-      connections--;
-      log.info("acquired. left = "+ connections);
+      availableDBConnections--;
+      log.info("acquired connection. left = " + availableDBConnections);
     }
 
     log.info("using the resource");
@@ -39,7 +39,7 @@ public class Deadlock {
 
     log.info("releasing...");
     synchronized (lock) {
-      connections++;
+      availableDBConnections++;
       lock.notifyAll();
     }
     log.info("done");
