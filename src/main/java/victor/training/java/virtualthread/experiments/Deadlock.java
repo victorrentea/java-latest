@@ -7,8 +7,8 @@ import static java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor;
 
 @Slf4j
 public class Deadlock {
-
-    // inspired by https://blog.ydb.tech/how-we-switched-to-java-21-virtual-threads-and-got-deadlock-in-tpc-c-for-postgresql-cca2fe08d70b
+  // inspired by https://blog.ydb.tech/how-we-switched-to-java-21-virtual-threads-and-got-deadlock-in-tpc-c-for-postgresql-cca2fe08d70b
+  // see deadlock-vthread-dump.txt
   public static void main() throws InterruptedException {
     try (var virtual = newVirtualThreadPerTaskExecutor()) {
       for (int i = 0; i < 1000; i++) {

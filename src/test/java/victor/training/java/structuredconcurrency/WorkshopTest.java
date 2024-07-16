@@ -1,6 +1,5 @@
 package victor.training.java.structuredconcurrency;
 
-import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -11,8 +10,9 @@ import org.mockito.Mock;
 import org.mockito.internal.stubbing.answers.AnswersWithDelay;
 import org.mockito.internal.stubbing.answers.Returns;
 import org.mockito.junit.jupiter.MockitoExtension;
-import victor.training.java.structuredconcurrency.Workshop.ApiClient;
-import victor.training.java.structuredconcurrency.Workshop.BookingOffersDto;
+import victor.training.java.virtualthread.structuredconcurrency.Workshop;
+import victor.training.java.virtualthread.structuredconcurrency.Workshop.ApiClient;
+import victor.training.java.virtualthread.structuredconcurrency.Workshop.BookingOffersDto;
 
 import java.util.List;
 import java.util.concurrent.TimeoutException;

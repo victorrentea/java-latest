@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 @Slf4j
@@ -22,6 +23,11 @@ public class SpringApp {
   @Bean
   public RestTemplate rest() {
     return new RestTemplate();
+  }
+
+  @Bean
+  public Executor virtualExecutor() {
+    return Executors.newVirtualThreadPerTaskExecutor();
   }
 
 }

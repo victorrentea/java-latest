@@ -1,4 +1,4 @@
-package victor.training.java.structuredconcurrency;
+package victor.training.java.virtualthread.structuredconcurrency;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

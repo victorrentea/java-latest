@@ -1,9 +1,8 @@
-package victor.training.java.virtualthread.scoped;
+package victor.training.java.virtualthread.scopedvalues;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.Executors;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnSuccess;
 
 import static java.util.concurrent.Executors.callable;

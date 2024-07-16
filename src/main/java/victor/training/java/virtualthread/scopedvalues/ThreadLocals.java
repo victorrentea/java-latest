@@ -1,4 +1,4 @@
-package victor.training.java.virtualthread.scoped;
+package victor.training.java.virtualthread.scopedvalues;
 
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,11 +1,9 @@
-package victor.training.java.structuredconcurrency;
+package victor.training.java.virtualthread.structuredconcurrency;
 
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Future;
-import java.util.concurrent.StructuredTaskScope;
 import java.util.concurrent.StructuredTaskScope.ShutdownOnFailure;
 import java.util.concurrent.StructuredTaskScope.Subtask;
 import java.util.concurrent.TimeoutException;
