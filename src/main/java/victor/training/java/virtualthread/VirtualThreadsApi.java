@@ -21,8 +21,14 @@ public class VirtualThreadsApi {
   private final RestTemplate restTemplate;
   private final Executor virtualExecutor;
 
+  @GetMapping("/warmup")
+  public Beer warmup() throws InterruptedException {
+    Thread.sleep(500);
+    return new Beer("warm"); // initial performance comparison between PT and VT
+  }
+
   @GetMapping("/sequential")
-  public Beer seq() {
+  public Beer sequential() {
     log.info("Start");
     UserPreferences preferences = fetchPreferences();
     log.info("Preferences: {}", preferences);
