@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class Workshop {
   @Component
   @SuppressWarnings("unchecked")
-  static class ApiClient {
+  public static class ApiClient {
     public List<String> getBookingOffers(int providerId) {
       return new RestTemplate().getForObject("http://localhost:9999/booking-offers-" + providerId, List.class);
     }

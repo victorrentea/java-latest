@@ -1,4 +1,4 @@
-package victor.training.java.structuredconcurrency;
+package victor.training.java.virtualthread.structuredconcurrency;
 
 import org.junit.jupiter.api.MethodOrderer.MethodName;
 import org.junit.jupiter.api.Test;
