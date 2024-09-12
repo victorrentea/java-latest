@@ -27,6 +27,8 @@ public class SpringApp {
 
   @Bean
   public Executor virtualExecutor() {
+    // TODO vrentea 12.09.2024: un executor spring wrapuind VT executor + lift de thread locals
+    // TODO vrentea 12.09.2024: use java 22/23 + lombok upgrade
     return Executors.newVirtualThreadPerTaskExecutor();
   }
 

@@ -13,21 +13,22 @@ public class ScopedValues {
 
   public static void main() {
     ScopedValue.where(scopedUser, "Victor").run(() -> {
+      log.info("Before: {}", scopedUser.get());
       method();
-      log.info("after={}", scopedUser.get());
+      log.info("After: {}", scopedUser.get());
     });
   }
 
   @SneakyThrows
   public static void method() {
-    log.info("in task={}", scopedUser.get());
-    try (var scope = new ShutdownOnSuccess()) {
+    log.info("Same thread: {}", scopedUser.get());
+    try (var scope = new ShutdownOnSuccess<>()) {
       scope.fork(callable(ScopedValues::subtask));
       scope.fork(callable(ScopedValues::subtask));
       scope.join();
     }
   }
   public static void subtask() {
-    log.info("subtask={}", scopedUser.get() + " in " + Thread.currentThread());
+    log.info("Child thread ({}): {}",Thread.currentThread(), scopedUser.get());
   }
 }

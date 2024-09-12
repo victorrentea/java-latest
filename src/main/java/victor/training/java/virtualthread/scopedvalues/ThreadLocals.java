@@ -4,20 +4,22 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ThreadLocals {
-  public final static ThreadLocal<String> threadLocalUser = new ThreadLocal<>();
+  public final static ThreadLocal<String> threadLocalUser =
+      new ThreadLocal<>();
 
   public static void main() {
     threadLocalUser.set("Victor");
+    log.info("Before: {}", threadLocalUser.get());
     method();
-    log.info("after{}", threadLocalUser.get());
+    log.info("After: {}", threadLocalUser.get());
   }
 
   public static void method() {
-    log.info("in task={}", threadLocalUser.get());
+    log.info("Same thread: {}", threadLocalUser.get());
     new Thread(ThreadLocals::subtask).start();
   }
 
   public static void subtask() {
-    log.info("subtask={}", threadLocalUser.get());
+    log.info("Child thread: {}", threadLocalUser.get());
   }
 }

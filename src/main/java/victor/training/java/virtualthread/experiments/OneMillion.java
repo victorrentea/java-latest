@@ -17,7 +17,7 @@ public class OneMillion {
 
   public static void main(String[] args) throws IOException, InterruptedException {
     var counter = new AtomicInteger(0);
-//    long mem0 = getUsedMemory();
+    long mem0 = getUsedMemory();
     CountDownLatch pause = new CountDownLatch(1);
     CountDownLatch started = new CountDownLatch(TOTAL);
     try (var virtual = newVirtualThreadPerTaskExecutor()) {
@@ -38,9 +38,9 @@ public class OneMillion {
       started.await();
       System.out.println("All tasks submitted");
       System.out.println("Now running threads: " + counter.get());
-//      long mem1 = getUsedMemory();
-//      System.out.println("Using Delta Memory:  " + (mem1 - mem0) / 1024 + " KB (init=" + mem0 / 1024 + " KB");
-//      System.out.println("Using / thread:  " + (mem1 - mem0) / TOTAL + " bytes");
+      long mem1 = getUsedMemory();
+      System.out.println("Using Delta Memory:  " + (mem1 - mem0) / 1024 + " KB (init=" + mem0 / 1024 + " KB");
+      System.out.println("Using / thread:  " + (mem1 - mem0) / TOTAL + " bytes");
       System.out.println("Hit Enter to end");
       System.in.read();
       pause.countDown();

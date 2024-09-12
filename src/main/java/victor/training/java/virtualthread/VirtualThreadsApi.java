@@ -29,7 +29,7 @@ public class VirtualThreadsApi {
 
   @GetMapping("/sequential")
   public Beer sequential() {
-    log.info("Start");
+    log.info("Start"); // TODO vrentea 12.09.2024: have this printed
     UserPreferences preferences = fetchPreferences();
     log.info("Preferences: {}", preferences);
     Beer beer = fetchBeer(preferences.favoriteBeerType());
