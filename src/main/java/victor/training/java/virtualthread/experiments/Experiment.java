@@ -9,6 +9,8 @@ import victor.training.java.virtualthread.util.RunMonitor;
 import java.math.BigInteger;
 import java.util.concurrent.Executors;
 
+import static java.math.BigInteger.*;
+
 @Slf4j
 public class Experiment {
 
@@ -48,9 +50,9 @@ public class Experiment {
   public static long blackHole;
 
   public static void cpu() {
-    BigInteger res = BigInteger.ZERO;
+    BigInteger res = ZERO;
     for (int j = 0; j < 10_000_000; j++) { // decrease this number for slower machines
-      res = res.add(BigInteger.valueOf(j).sqrt());
+      res = res.add(valueOf(j).sqrt());
     }
     blackHole = res.longValue();
     // TODO Fix#1: -Djdk.virtualThreadScheduler.parallelism=20
