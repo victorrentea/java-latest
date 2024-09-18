@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
-import org.awaitility.Awaitility;
 import org.springframework.web.client.RestTemplate;
 import victor.training.java.Util;
 import victor.training.java.virtualthread.util.RunMonitor;
@@ -13,7 +12,9 @@ import victor.training.java.virtualthread.util.RunMonitor;
 import java.math.BigInteger;
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 import static java.math.BigInteger.ZERO;
 import static java.math.BigInteger.valueOf;
@@ -25,11 +26,11 @@ public class Experiment {
     Util.sleepMillis(1000); // allow the SpringApp to restart
     RunMonitor monitor = new RunMonitor();
     try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-      for (int taskId = 0; taskId < 3; taskId++) {
+      for (int taskId = 0; taskId < 30; taskId++) {
         Runnable work = () -> {
-//          io(); // add a prior warmup call
+          io(); // add a prior warmup call
 //          cpu();
-          locks();
+//          locks();
         };
         executor.submit(monitor.run(taskId, work));
       }
@@ -41,8 +42,9 @@ public class Experiment {
     monitor.printExecutionTimes();
   }
 
-  private static final HttpClient javaClient = HttpClient.newHttpClient();
-//  private static final HttpClient javaClient = HttpClient.newBuilder().executor(Executors.newVirtualThreadPerTaskExecutor()).build();
+  //  private static final HttpClient javaClient = HttpClient.newHttpClient();
+  private static final HttpClient javaClient = HttpClient.newBuilder()
+      .executor(Executors.newVirtualThreadPerTaskExecutor()).build();
 
   private static final RestTemplate restTemplate = new RestTemplate();
 
@@ -51,9 +53,17 @@ public class Experiment {
   @SneakyThrows
   private static void io() {
     URI uri = URI.create("http://localhost:8080/call");
-    Thread.sleep(100); // pretend a network call:
+//    CompletableFuture<String> c1 = CompletableFuture.supplyAsync(() ->
+//        restTemplate.getForObject(uri, String.class), Executors.newVirtualThreadPerTaskExecutor());
+//    CompletableFuture<String> c2 = CompletableFuture.supplyAsync(() ->
+//        restTemplate.getForObject(uri, String.class), Executors.newVirtualThreadPerTaskExecutor());
+//    c1.get();
+//    c2.get();
 
-//    var result = restTemplate.getForObject(uri, String.class);
+//    Thread.sleep(100); // pretend a network call:
+
+    var result = restTemplate.getForObject(uri, String.class);
+    var result2 = restTemplate.getForObject(uri, String.class);
 
 //    HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
 //    var result = javaClient.send(request, HttpResponse.BodyHandlers.ofString()).body();
@@ -72,6 +82,8 @@ public class Experiment {
     BigInteger res = ZERO;
     for (int j = 0; j < 10_000_000; j++) { // decrease this number for slower machines
       res = res.add(valueOf(j).sqrt());
+//      if (j % 1000 == 0) log.info("yey");
+//        Thread.yield();
     }
     blackHole = res.longValue();
     // TODO Fix#1: -Djdk.virtualThreadScheduler.parallelism=20
@@ -80,10 +92,22 @@ public class Experiment {
 
   /* ============ LOCKS ============= */
   static int sharedMutable;
+  static ReentrantLock lock = new ReentrantLock();
 
-  public static synchronized void locks() {
-    sharedMutable++;
-    Util.sleepMillis(100); // long operation (eg network) in sync block
+  public static void locks() {
+//    synchronized (Experiment.class) {
+
+    lock.lock();
+    try {
+      sharedMutable++;
+      Util.sleepMillis(100); // long operation (eg network) in sync block
+    } finally {
+
+      lock.unlock();
+    }
+//    }
+    log.info("Unpin me please");
+    Util.sleepMillis(100);
 
     // TODO add to VM options: -Djdk.tracePinnedThreads=full
     // TODO run with JFR profiler and observe "Virtual Thread Pinned" events in the .jfr recording

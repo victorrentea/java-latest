@@ -23,15 +23,16 @@ public class ThreadLocalCache {
   }
 
   // --- inside a legacy library ---
-  private static final ThreadLocal<String> threadCache = ThreadLocal.withInitial(ThreadLocalCache::expensiveInitOp);
+  private static final ThreadLocal<String> threadCache =
+      ThreadLocal.withInitial(ThreadLocalCache::expensiveInitOp);
 
   private static String expensiveInitOp() {
     return "library cached data " + "x".repeat(10000);
   }
 
-  public static void someLibCode() {
-    String data = expensiveInitOp();
-//    String data = threadCache.get(); // #1 cache on thread
+  public static void someLibCode() { // old
+//    String data = expensiveInitOp();
+    String data = threadCache.get(); // #1 cache on thread
     System.out.println(data.substring(0, 20));
   }
 }
