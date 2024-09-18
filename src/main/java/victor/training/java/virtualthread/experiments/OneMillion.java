@@ -8,6 +8,7 @@ import java.lang.management.ManagementFactory;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static java.lang.Thread.sleep;
 import static java.util.concurrent.Executors.newThreadPerTaskExecutor;
 import static java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor;
 
@@ -39,8 +40,9 @@ public class OneMillion {
       System.out.println("All tasks submitted");
       System.out.println("Now running threads: " + counter.get());
       long mem1 = getUsedMemory();
-      System.out.println("Using Delta Memory:  " + (mem1 - mem0) / 1024 + " KB (init=" + mem0 / 1024 + " KB");
-      System.out.println("Using / thread:  " + (mem1 - mem0) / TOTAL + " bytes");
+      System.out.println("Delta Memory:  " + (mem1 - mem0) / 1024 + " KB, init=" + mem0 / 1024 + " KB");
+      System.out.println("Delta / thread:  " + (mem1 - mem0) / TOTAL + " bytes");
+      System.out.println("processID (PID) =" + ManagementFactory.getRuntimeMXBean().getName());
       System.out.println("Hit Enter to end");
       System.in.read();
       pause.countDown();
@@ -48,14 +50,10 @@ public class OneMillion {
     System.out.println("All threads ended: " + counter.get());
   }
 
+  @SneakyThrows
   public static long getUsedMemory() {
 //    System.gc(); // to free the intermediary allocated [] when ArrayList grows
-
-//    var bean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-//    return bean.getTotalMemorySize();
-    return Runtime.getRuntime().totalMemory();
-
-//    return ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() +
-//           ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage().getUsed();
+    sleep(10);
+    return Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
   }
 }
