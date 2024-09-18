@@ -45,7 +45,10 @@ public class RunMonitor {
       String trail = " ".repeat(50 - spaces.length() - action.length() - 1);
       System.out.printf("Task %02d: %s%s%s ->> %s%n", taskId, spaces, action,trail, t.hop);
     }
-    System.out.printf("On a machine with %d CPUs%n", Runtime.getRuntime().availableProcessors());
+    System.out.printf("Total runtime = %d millis for %d tasks on a machine with %d CPUs%n",
+        currentTimeMillis()-tSubmit,
+        taskCompletionTimes.size(),
+        Runtime.getRuntime().availableProcessors());
   }
 
   record ExecutionTimeframe(long start, long end, char symbol, String hop) {

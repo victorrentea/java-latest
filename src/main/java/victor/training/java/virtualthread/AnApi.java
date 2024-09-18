@@ -21,7 +21,7 @@ public class AnApi {
     CompletableFuture<String> cf = new CompletableFuture<>();
     scheduler.schedule(
         () -> cf.complete("data"+ counter.incrementAndGet()),
-        300,
+        5000,
         MILLISECONDS);
     return cf;
   }

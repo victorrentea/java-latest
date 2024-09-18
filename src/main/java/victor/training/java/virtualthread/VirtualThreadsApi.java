@@ -44,6 +44,8 @@ public class VirtualThreadsApi {
     CompletableFuture<Beer> beerCF = supplyAsync(() -> fetchBeer("blond"));
     CompletableFuture<Vodka> vodkaCF = supplyAsync(() -> fetchVodka());
 
+
+
     CompletableFuture<DillyDilly> dillyCF = beerCF.thenCombine(vodkaCF, DillyDilly::new);
     log.info("HTTP Thread released in {} ms", currentTimeMillis() - t0);
     // ✅ HTTP Thread released immediately, but ❌ hard to maintain
