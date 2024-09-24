@@ -27,18 +27,21 @@ public class RecordsIntro {
     // public void f(@Validated Point point) { // or @Valid
     // via Method interception (AOP) throwing an error if the object is not valid
 
-    darkLogic(point);
+    Point movedPoint = darkLogic(point);
     // why immutability:
     // 1) unexpected side effect to the state of an argument
     // causing a Temporal Coupling with the next line
     // = you can grow afraid of passing your objects around
     // 2) avoid race conditions in multi-threaded code
-    System.out.println(point);
-    System.out.println(point.x()); // getter in record does not have "get" prefix
+    System.out.println(movedPoint);
+    System.out.println(movedPoint.x()); // getter in record does not have "get" prefix
   }
 
-  private static void darkLogic(Point point) {
-//    point.setX(point.getX() + 1); // quick fix TO DO remove on Monday
+  private static Point darkLogic(Point point) {
+//    point.setX(point.getX() + 1);
+    Point newPoint = new Point(point.x() + 1, point.y());
+    return newPoint;
+
   }
 }
 
