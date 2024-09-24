@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,14 @@ public class Records {
   }
 }
 
+@Slf4j
 @RestController
-@RequiredArgsConstructor
+@RequiredArgsConstructor // tells to create a constructor with all final fields
 //record BookApi(BookRepo bookRepo) { // 🛑DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
 class BookApi {
   private final BookRepo bookRepo;
+  private final BookRepo bookRepo2;
+  private final BookRepo bookRepo3;
 
   // DTO
   public record CreateBookRequest(
