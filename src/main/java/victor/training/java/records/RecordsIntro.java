@@ -13,13 +13,10 @@ public class RecordsIntro {
     // = you can grow afraid of passing your objects around
     // 2) avoid race conditions in multi-threaded code
     System.out.println(point);
+    System.out.println(point.getX());
   }
 
   private static void darkLogic(Point point) {
-    darkerPlace(point);
-  }
-
-  private static void darkerPlace(Point point) {
 //    point.setX(point.getX() + 1); // quick fix TO DO remove on Monday
   }
 }
