@@ -22,7 +22,12 @@ public class Optional_Intro {
 
     // FProgrammers love such tiny functions returing the result of an expression (here chaining Optional operators)
   public static String getDiscountLine(Customer customer) {
-    return computeDiscount(customer.getMemberCard())
+    Optional<MemberCard> cardOpt = customer.getMemberCard();
+    Optional<Optional<Discount>> omg = cardOpt.map(card -> computeDiscount(card));
+    // flatMap for -1 wrapping
+    Optional<Discount> discountOpt = cardOpt.flatMap(card -> computeDiscount(card));
+
+    return discountOpt
         .map(Discount::globalPercentage)
         .map(percentage -> "You got a discount of %" + percentage)
         .orElse("Earn more points to get a discount");
@@ -35,9 +40,9 @@ public class Optional_Intro {
   }
 
   private static Optional<Discount> computeDiscount(MemberCard card) {
-    if (card == null) { // aka Defensive Programming aja Paranoid Programming
-      return Optional.empty();
-    }
+//    if (card == null) { // aka Defensive Programming aja Paranoid Programming
+//      return Optional.empty();
+//    }
     if (card.getFidelityPoints() >= 100) {
       return Optional.of(new Discount(5, Map.of()));
     }
