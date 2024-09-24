@@ -9,15 +9,16 @@ import java.util.Map;
 
 @SuppressWarnings("ConstantConditions")
 public class Optional_Intro {
+  // clothes shop
   public static void main(String[] args) {
     // test with 10 points or no MemberCard
-    System.out.println(getDiscountLine(new Customer(
-        new MemberCard("bar", 60))));
+    System.out.println(getDiscountLine(new Customer(new MemberCard("bar", 60))));
+    System.out.println(getDiscountLine(new Customer(new MemberCard("bar", 10))));
   }
 
   public static String getDiscountLine(Customer customer) {
-    Discount discount = computeDiscount(customer.getMemberCard());
-    return "You got a discount of %" + discount.globalPercentage();
+    // enjoy the wonderful exception message of NPE in Java 17+
+    return "You got a discount of %" + computeDiscount(customer.getMemberCard()).globalPercentage();
   }
 
   private static Discount computeDiscount(MemberCard card) {
