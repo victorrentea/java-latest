@@ -22,12 +22,8 @@ public class Optional_Intro {
 
     // FProgrammers love such tiny functions returing the result of an expression (here chaining Optional operators)
   public static String getDiscountLine(Customer customer) {
-    Optional<MemberCard> cardOpt = customer.getMemberCard();
-    Optional<Optional<Discount>> omg = cardOpt.map(card -> computeDiscount(card));
-    // flatMap for -1 wrapping
-    Optional<Discount> discountOpt = cardOpt.flatMap(card -> computeDiscount(card));
-
-    return discountOpt
+    return customer.getMemberCard()
+        .flatMap(Optional_Intro::computeDiscount)
         .map(Discount::globalPercentage)
         .map(percentage -> "You got a discount of %" + percentage)
         .orElse("Earn more points to get a discount");
