@@ -1,8 +1,10 @@
 package victor.training.java.records;
 
+import jakarta.validation.constraints.Min;
+
 public class RecordsIntro {
   public static void main(String[] args) {
-    Point point = new Point(-1, 1);
+    Point point = new Point("-1", "1");
     darkLogic(point);
     // why immutability:
     // 1) unexpected side effect to the state of an argument
@@ -21,15 +23,28 @@ public class RecordsIntro {
 //@Data //🤬+@Entity = @Getter + @Setter + @ToString + @EqualsAndHashCode
 //@Value //💖 = @Data + all fields private final
 record Point(
+    @Min(0)
     int x,
     int y
-) {
+) implements Comparable<Point> {
   Point {
 //    if (x < 0 || y < 0) {
 //      throw new IllegalArgumentException("Negative coordinates are not allowed");
 //    }
-    if (x<0) {x=-x;}// we are not re-assigning a field but rather messing up with the parameters
+//    if (x<0) {x=-x;}// we are not re-assigning a field but rather messing up with the parameters
     // before they are assigned to final fields
+  }
+
+  //overloaded constructor MUST call the canonical constructor on the first line
+  // try to avoid overloaded constructors, and instead create static factory methods
+  Point(String x, String y) {
+    this(Integer.parseInt(x), Integer.parseInt(y));
+  }
+
+  public static Point of(String x, String y) { //⭐
+    int xx = Integer.parseInt(x);
+    int yy = Integer.parseInt(y);
+    return new Point(xx, yy);// call to the canonical constructor
   }
 
 //  @Override public int x() {return x * 2;} // not recommended
@@ -39,6 +54,11 @@ record Point(
   }
   public boolean isVisible() {
     return x > 0 && y > 0;
+  }
+
+  @Override
+  public int compareTo(Point o) {
+    return Integer.compare(x, o.x);
   }
 }
 // canonical examples of such small immutable Value Objects:
