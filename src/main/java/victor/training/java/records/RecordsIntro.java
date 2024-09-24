@@ -1,11 +1,8 @@
 package victor.training.java.records;
 
-import lombok.Data;
-import lombok.Value;
-
 public class RecordsIntro {
   public static void main(String[] args) {
-    Point point = new Point(1,1);
+    Point point = new Point(-1, 1);
     darkLogic(point);
     // why immutability:
     // 1) unexpected side effect to the state of an argument
@@ -13,7 +10,7 @@ public class RecordsIntro {
     // = you can grow afraid of passing your objects around
     // 2) avoid race conditions in multi-threaded code
     System.out.println(point);
-    System.out.println(point.getX());
+    System.out.println(point.x()); // getter in record does not have "get" prefix
   }
 
   private static void darkLogic(Point point) {
@@ -22,10 +19,25 @@ public class RecordsIntro {
 }
 
 //@Data //🤬+@Entity = @Getter + @Setter + @ToString + @EqualsAndHashCode
-@Value //💖 = @Data + all fields private final
-class Point {
-  int x;
-  int y;
+//@Value //💖 = @Data + all fields private final
+record Point(
+    int x,
+    int y
+) {
+  Point {
+    if (x < 0 || y < 0) {
+      throw new IllegalArgumentException("Negative coordinates are not allowed");
+    }
+  }
+
+//  @Override public int x() {return x * 2;} // not recommended
+
+  public Point mirrorOx() {
+    return new Point(x, -y); // changed copy
+  }
+  public boolean isVisible() {
+    return x > 0 && y > 0;
+  }
 }
 // canonical examples of such small immutable Value Objects:
 // - Money{Currency:currency, BigDecimal:amount}
