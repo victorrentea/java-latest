@@ -20,12 +20,35 @@ public class Optional_Intro {
   }
 
   public static String getDiscountLine(Customer customer) {
-    Optional<Discount> discount = computeDiscount(customer.getMemberCard());
-    if (discount.isPresent())
-      return "You got a discount of %" + discount.orElseThrow().globalPercentage();
-    else {
-      return "Earn more points to get a discount";
-    }
+    // further reading: Stream<> and Optional<> are Monads (in FP philosophy)
+    Optional<Discount> discountOptional = computeDiscount(customer.getMemberCard());
+
+    Optional<Integer> gpOptional = discountOptional.map(discount -> discount.globalPercentage());
+
+    Optional<String> strOptional = gpOptional.map(gp -> "You got a discount of %" + gp);
+
+    // complex to read:
+//    return strOptional.isPresent() ? strOptional.get() : "Earn more points to get a discount";
+    return strOptional.orElse("Earn more points to get a discount");
+
+    // -> only executes if discountOptional isPresent (not empty), has a Discount inside
+
+//    StringBuffer message = new StringBuffer();
+//    // Cons: 2 x -> as params
+//    // Cons: Not following FP ideology: = CHANGES DATA in a ->: .append(), instead of returning
+//    discountOptional.map(Discount::globalPercentage)
+//        .ifPresentOrElse(
+//            percentage -> message.append("You got a discount of %").append(percentage),
+//            () -> message.append("Earn more points to get a discount")
+//        );
+//    return message.toString();
+
+        // best way to use Optional is without .get or .orElseThrow or .isPresent
+//    if (gpOptional.isPresent())
+//      return "You got a discount of %" + gpOptional.get();
+//    else {
+//      return "Earn more points to get a discount";
+//    }
   }
 
   private static Optional<Discount> computeDiscount(MemberCard card) {
