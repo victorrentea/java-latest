@@ -22,9 +22,17 @@ public class TrappedOptional {
 
   public void trappedOptional(MyDto dto) {
     MyEntity entity = new MyEntity();
-    Optional.ofNullable(dto.recipientPerson)
-            .map(String::toUpperCase)
-            .ifPresent(name -> entity.setRecipient(name));
+    // don't start ofNullable..... and finish the optional in the same method
+    // with orElse/ifPresent/orElseThrow/orElseGet
+//    Optional.ofNullable(dto.recipientPerson)
+//            .map(String::toUpperCase)
+//            .ifPresent(name -> entity.setRecipient(name));
+
+    // Optional was added to Java to be return type of methods
+    //  largely used in your code/publci api
+    if (dto.recipientPerson != null) {
+      entity.setRecipient(dto.recipientPerson.toUpperCase());
+    }
 
   }
 

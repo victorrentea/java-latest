@@ -22,4 +22,17 @@ public class Biz {
     }
   }
 }
+//class Transaction {
+//  Fee fee;
+//
+//  public Optional<Fee> getFee() {
+//    return Optional.ofNullable(fee);
+//  }
+//}
+
+
+// when NOT to use Optional?
+// - if 90% of my fields can be missing; noise is too high
+// - with a smaller data structure, which only has a dozen of attributes if only three of them are missing
+// and quite important you could wrap the getters in an optional
 

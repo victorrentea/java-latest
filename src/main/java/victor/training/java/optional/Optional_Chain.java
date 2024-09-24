@@ -1,5 +1,6 @@
 package victor.training.java.optional;
 
+import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -35,7 +36,7 @@ class MyMapper {
     dto.recipientPerson = Optional.ofNullable(parcel)
         .flatMap(Parcel::getDelivery)
         .map(Delivery::getAddress)
-        .flatMap(Address::getContactPerson)
+        .flatMap(address -> address.getContactPerson())
         .map(ContactPerson::getName)
         .map(String::toUpperCase)
         .orElse("Unknown");
@@ -91,7 +92,7 @@ class Address {
     this.contactPerson = contactPerson;
   }
 
-  public Optional<ContactPerson> getContactPerson() {
+  public Optional<ContactPerson> getContactPerson() /*throws IOException*/ {
     return Optional.ofNullable(contactPerson);
   }
 }
