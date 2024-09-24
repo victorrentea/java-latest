@@ -17,39 +17,27 @@ public class Optional_Intro {
     // test with 10 points or no MemberCard
     System.out.println(getDiscountLine(new Customer(new MemberCard("bar", 60))));
     System.out.println(getDiscountLine(new Customer(new MemberCard("bar", 10))));
+    System.out.println(getDiscountLine(new Customer()));
   }
 
-  public static String getDiscountLine(Customer customer) {
     // FProgrammers love such tiny functions returing the result of an expression (here chaining Optional operators)
+  public static String getDiscountLine(Customer customer) {
     return computeDiscount(customer.getMemberCard())
         .map(Discount::globalPercentage)
         .map(percentage -> "You got a discount of %" + percentage)
         .orElse("Earn more points to get a discount");
-    // further reading: Stream<> and Optional<> are Monads (in FP philosophy)
-    // complex to read:
-//    return strOptional.isPresent() ? strOptional.get() : "Earn more points to get a discount";
-
-    // -> only executes if discountOptional isPresent (not empty), has a Discount inside
-
-//    StringBuffer message = new StringBuffer();
-//    // Cons: 2 x -> as params
-//    // Cons: Not following FP ideology: = CHANGES DATA in a ->: .append(), instead of returning
-//    discountOptional.map(Discount::globalPercentage)
-//        .ifPresentOrElse(
-//            percentage -> message.append("You got a discount of %").append(percentage),
-//            () -> message.append("Earn more points to get a discount")
-//        );
-//    return message.toString();
-
-        // best way to use Optional is without .get or .orElseThrow or .isPresent
-//    if (gpOptional.isPresent())
-//      return "You got a discount of %" + gpOptional.get();
-//    else {
+//    Optional<Discount> discount = computeDiscount(customer.getMemberCard());
+//    if (discount.isPresent()) {
+//      return "You got a discount of %" + discount.get().globalPercentage();
+//    } else {
 //      return "Earn more points to get a discount";
 //    }
   }
 
   private static Optional<Discount> computeDiscount(MemberCard card) {
+    if (card == null) { // aka Defensive Programming aja Paranoid Programming
+      return Optional.empty();
+    }
     if (card.getFidelityPoints() >= 100) {
       return Optional.of(new Discount(5, Map.of()));
     }
