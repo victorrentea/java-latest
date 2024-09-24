@@ -25,9 +25,11 @@ record Point(
     int y
 ) {
   Point {
-    if (x < 0 || y < 0) {
-      throw new IllegalArgumentException("Negative coordinates are not allowed");
-    }
+//    if (x < 0 || y < 0) {
+//      throw new IllegalArgumentException("Negative coordinates are not allowed");
+//    }
+    if (x<0) {x=-x;}// we are not re-assigning a field but rather messing up with the parameters
+    // before they are assigned to final fields
   }
 
 //  @Override public int x() {return x * 2;} // not recommended
