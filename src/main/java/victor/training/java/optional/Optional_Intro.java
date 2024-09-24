@@ -7,6 +7,7 @@ import victor.training.java.optional.model.MemberCard;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @SuppressWarnings("ConstantConditions")
 public class Optional_Intro {
@@ -19,21 +20,24 @@ public class Optional_Intro {
   }
 
   public static String getDiscountLine(Customer customer) {
-    Discount discount = computeDiscount(customer.getMemberCard());
-    if (discount != null)
-      return "You got a discount of %" + discount.globalPercentage();
-    else
+    Optional<Discount> discount = computeDiscount(customer.getMemberCard());
+    if (discount.isPresent())
+      return "You got a discount of %" + discount.orElseThrow().globalPercentage();
+    else {
       return "Earn more points to get a discount";
+    }
   }
 
-  private static Discount computeDiscount(MemberCard card) {
+  private static Optional<Discount> computeDiscount(MemberCard card) {
     if (card.getFidelityPoints() >= 100) {
-      return new Discount(5, Map.of());
+      return Optional.of(new Discount(5, Map.of()));
     }
     if (card.getFidelityPoints() >= 50) {
-      return new Discount(3, Map.of());
+      return Optional.of(new Discount(3, Map.of())); // full box
     }
-    return Discount.NO_DISCOUNT; // Null Object Pattern: a non-instance value that represents the absence of an object
+//    return Optional.ofNullable(null);
+    return Optional.empty(); // en empty box
+//    return Discount.NO_DISCOUNT; // Null Object Pattern: a non-instance value that represents the absence of an object
   }
 
   public record Discount(int globalPercentage, Map<String, Integer> categoryDiscounts) {
