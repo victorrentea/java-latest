@@ -20,16 +20,14 @@ public class Optional_Intro {
   }
 
   public static String getDiscountLine(Customer customer) {
+    // FProgrammers love such tiny functions returing the result of an expression (here chaining Optional operators)
+    return computeDiscount(customer.getMemberCard())
+        .map(Discount::globalPercentage)
+        .map(percentage -> "You got a discount of %" + percentage)
+        .orElse("Earn more points to get a discount");
     // further reading: Stream<> and Optional<> are Monads (in FP philosophy)
-    Optional<Discount> discountOptional = computeDiscount(customer.getMemberCard());
-
-    Optional<Integer> gpOptional = discountOptional.map(discount -> discount.globalPercentage());
-
-    Optional<String> strOptional = gpOptional.map(gp -> "You got a discount of %" + gp);
-
     // complex to read:
 //    return strOptional.isPresent() ? strOptional.get() : "Earn more points to get a discount";
-    return strOptional.orElse("Earn more points to get a discount");
 
     // -> only executes if discountOptional isPresent (not empty), has a Discount inside
 
