@@ -1,6 +1,7 @@
 package victor.training.java.records;
 
 import lombok.Data;
+import lombok.Value;
 
 public class RecordsIntro {
   public static void main(String[] args) {
@@ -23,9 +24,10 @@ public class RecordsIntro {
   }
 }
 
-@Data //🤬+@Entity = @Getter + @Setter + @ToString + @EqualsAndHashCode
+//@Data //🤬+@Entity = @Getter + @Setter + @ToString + @EqualsAndHashCode
+@Value //💖 = @Data + all fields private final
 class Point {
-  private final int x;
-  private final int y;
+  int x;
+  int y;
 }
 
