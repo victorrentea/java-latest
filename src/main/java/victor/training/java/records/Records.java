@@ -33,7 +33,7 @@ class BookApi {
   private final BookRepo bookRepo; // this injects the bean named "bookRepo" from the Spring context
 //  private final BookRepo differentName; // this injects the bean named "differentName" from the Spring context
 
-  // DTO
+  // DTO = Data Transfer Object (no logic, just data) moving across network
   public record CreateBookRequest(
       @NotBlank String title,
       @NotEmpty List<String> authors,
