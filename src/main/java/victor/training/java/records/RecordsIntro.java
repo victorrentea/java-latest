@@ -3,6 +3,7 @@ package victor.training.java.records;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.Min;
+import lombok.Builder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,6 +13,15 @@ import java.util.Set;
 public class RecordsIntro {
   public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
     Point point = new Point("-1", "1");
+
+    Point point2 = Point.builder() // is a workaround for a weakness of the
+        //java language, the fact that you can't have named parameters
+        // eg: Point p = new Point(x:1, y:1); // available in C#, Python, Kotlin, Scala
+        .x(1)
+//        .y(1) // strength/weakness of builder: you might forget to set a field
+        .build(); // it makes the name of the properties you set clear
+    System.out.println(point2);
+
     Method internal = Point.class.getDeclaredMethod("internal");
     internal.setAccessible(true);
     internal.invoke(point);
@@ -39,14 +49,16 @@ public class RecordsIntro {
 
   private static Point darkLogic(Point point) {
 //    point.setX(point.getX() + 1);
-    Point newPoint = new Point(point.x() + 1, point.y());
+    Point newPoint = point.moveX(1);
     return newPoint;
 
   }
+
 }
 
 //@Data //🤬+@Entity = @Getter + @Setter + @ToString + @EqualsAndHashCode
 //@Value //💖 = @Data + all fields private final
+@Builder // (lombok) add only on immutable objects/records of >5 fields. abusive here.
 record Point( // ! the generated class is FINAL
     @Min(0)
     int x,
@@ -72,6 +84,11 @@ record Point( // ! the generated class is FINAL
     int yy = Integer.parseInt(y);
     return new Point(xx, yy);// call to the canonical constructor
   }
+
+  public Point moveX(int dx) { // deriving new objects
+    return new Point(x() + dx, y());
+  }
+
   private void internal() {
     System.out.println("Magic");
   }
