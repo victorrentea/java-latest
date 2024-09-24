@@ -19,23 +19,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class MicroTypes {
 
-   public Map<Long, Set<Tuple2<String, Integer>>> extremeFP() {
+   public Map<CustomerId, Set<ProductCount>> extremeFP() {
       Long customerId = 1L;
       Integer product1Count = 2;
       Integer product2Count = 4;
-      return Map.of(customerId, Set.of(
-          Tuple.tuple("Table", product1Count),
-          Tuple.tuple("Chair", product2Count)
+      return Map.of(new CustomerId(customerId), Set.of(
+          new ProductCount("Table", product1Count),
+          new ProductCount("Chair", product2Count)
       ));
    }
+   record ProductCount(String name, int count) {}
+   // microtypes: types of 1 field:
+   record CustomerId(Long id) {}
+   record IBAN(String value) {
+      IBAN {
+         assertThat(value).isNotBlank();
+         assertThat(value.length()).isBetween(15, 34);
+      }
+   }
+   record SWIFT(String value) {}
+   record SSN(String value) {}
+   record Email(String value) {}
    
    void lackOfAbstractions() {
-      Map<Long, Set<Tuple2<String, Integer>>> map = extremeFP();
+//      var map = extremeFP(); avoid var
+      Map<CustomerId, Set<ProductCount>> map = extremeFP();
+
       // 🚫Don't use 'var' above
 
-      for (Long cid : map.keySet()) {
+      for (CustomerId cid : map.keySet()) {
          String pl = map.get(cid).stream()
-             .map(t -> t.v2 + " of " + t.v1)
+             .map(t -> t.count() + " of " + t.name())
              .collect(joining(", "));
          System.out.println("cid=" + cid + " got " + pl);
       }

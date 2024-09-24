@@ -1,8 +1,6 @@
 package victor.training.java.records;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
@@ -16,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 public class Records {
@@ -37,12 +36,13 @@ class BookApi {
   public record CreateBookRequest(
       @NotBlank String title,
       @NotEmpty List<String> authors,
-      String teaserVideoUrl // may be absent
+      Optional<String> teaserVideoUrl // may be absent
   ) {
   }
 
   @PostMapping("books")
   @Transactional
+  // @Validated  calls a proxy that validates the request parameters automatically
   public void createBook(@RequestBody @Validated CreateBookRequest request) {
     System.out.println("pretend save title:" + request.title() + " and url:" + request.teaserVideoUrl());
     System.out.println("pretend save authors: " + request.authors());
@@ -63,16 +63,29 @@ class BookApi {
 
 }
 
-@Entity
+@Embeddable // in recent Hibernate versions, @Embeddable can be records
+record Author(
+    String firstName,
+    String lastName
+) {
+}
+@Entity // Hibernate/JPA
 @Data // avoid @Data on @Entity
+//record Book { // JPA mindset requires mutable entities. Records are immutable. So we can't use records for JPA entities
 class Book {
   @Id
   @GeneratedValue
   private Long id;
   private String title;
 
-  private String authorFirstName;
-  private String authorLastName;
+//  private String authorFirstName;
+//  private String authorLastName;
+  @Embedded
+  private Author author; // grouped 2 fields into a single object
+  // !!!!! WITHOUT changing the DB schema. (No ALTER TABLE needed)
+
+  // + 54 more fields
 }
+
 
 
