@@ -27,10 +27,10 @@ public class Records {
 @Slf4j
 @RestController
 
-record BookApi(BookRepo bookRepo) { // 🛑DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
-//@RequiredArgsConstructor
-//class BookApi {
-//  private final BookRepo bookRepo; // this injects the bean named "bookRepo" from the Spring context
+//record BookApi(BookRepo bookRepo) { // 🛑DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
+@RequiredArgsConstructor
+class BookApi {
+  private final BookRepo bookRepo; // this injects the bean named "bookRepo" from the Spring context
 //  private final BookRepo differentName; // this injects the bean named "differentName" from the Spring context
 
   // DTO

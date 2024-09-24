@@ -4,12 +4,17 @@ import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.Min;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.Set;
 
 public class RecordsIntro {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
     Point point = new Point("-1", "1");
+    Method internal = Point.class.getDeclaredMethod("internal");
+    internal.setAccessible(true);
+    internal.invoke(point);
 
     // 1) manual validation
     Validator validator = jakarta.validation.Validation.buildDefaultValidatorFactory().getValidator();
@@ -64,7 +69,9 @@ record Point( // ! the generated class is FINAL
     int yy = Integer.parseInt(y);
     return new Point(xx, yy);// call to the canonical constructor
   }
-
+  private void internal() {
+    System.out.println("Magic");
+  }
 //  @Override public int x() {return x * 2;} // not recommended
 //  @Override public Optional<Integer> x() {return Optional.of(1);} // can't change the getter return type
 
