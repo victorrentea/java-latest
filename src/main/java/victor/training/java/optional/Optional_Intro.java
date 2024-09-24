@@ -1,8 +1,9 @@
 
 package victor.training.java.optional;
 
-import victor.training.cleancode.exception.model.Customer;
-import victor.training.cleancode.exception.model.MemberCard;
+
+import victor.training.java.optional.model.Customer;
+import victor.training.java.optional.model.MemberCard;
 
 import java.util.Map;
 
