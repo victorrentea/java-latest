@@ -5,7 +5,7 @@ import java.time.LocalDate;
 enum CountryEnum {
   RO, ES, FR, UK, CN
 
-  ,IN
+//  ,IN
 }
 
 record Parcel(
@@ -33,23 +33,27 @@ class Plain {
 class CustomsService {
   //	private Map<String, Class<? extends TaxCalculator>> calculators; // configured in application.properties 😮
   public double calculateCustomsTax(Parcel parcel) {
-    // a switch on a string is a code smell
-    // despite the fact that that string appears to have a finite number of values
-    // we have it as a String
-    switch (parcel.originCountry()) {
-      case UK:
-        return calculateUKTax(parcel);
-      case CN:
-        return calculateChinaTax(parcel);
-      case FR:
-      case ES:
-      case RO:
-        return calculateEUTax(parcel);
-      default: // this it's been with us since the 80s
-        // it's time to let go. it results in a runtime error
-        // that could have been a compile time error (EARLIER💖)
-        throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
-    }
+//    switch (parcel.originCountry()) { // statement (does not return a value)
+//      case UK:
+//        return calculateUKTax(parcel);
+//      case CN:
+//        return calculateChinaTax(parcel);
+//      case FR:
+//      case ES:
+//      case RO:
+//        return calculateEUTax(parcel);
+//      default:
+//        throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
+//    }
+
+    double v = switch (parcel.originCountry()) { // switch expression (returns a value)
+      case UK -> calculateUKTax(parcel);
+      case CN -> calculateChinaTax(parcel);
+      case FR, ES, RO -> calculateEUTax(parcel);
+//      default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
+      // a bad practice if you use switch as an expression on an ENUM
+    };
+    return v;
   }
 
   private static double calculateEUTax(Parcel parcel) {
