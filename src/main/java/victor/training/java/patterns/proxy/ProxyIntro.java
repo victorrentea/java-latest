@@ -12,8 +12,12 @@ public class ProxyIntro {
     // TODO 2 : without changing anything below the line (w/o any interface)
     // TODO 3 : so that any new methods in Maths are automatically logged [hard]
     Maths maths = new Maths();
-    LoggingDecorator decorated = new LoggingDecorator(maths);
+    Maths decorated = new LoggingDecorator();
+//    Maths decoratedAgain = new TimingDecorator(decorated);
     SecondGrade secondGrade = new SecondGrade(decorated);
+//    SecondGrade secondGrade = new SecondGrade(new TimingDecorator(new LoggingDecorator(new Maths())));
+//    SecondGrade secondGrade = new SecondGrade(new LoggingDecorator(new Maths()));
+//    SecondGrade secondGrade = new SecondGrade(new TimingDecorator(new Maths()));
     new ProxyIntro().run(secondGrade);
     // TODO 4 : let Spring do its job, and do the same with an Aspect
 //         SpringApplication.run(ProxyIntro.class, args);
@@ -29,20 +33,22 @@ public class ProxyIntro {
     secondGrade.mathClass();
   }
 }
+// REQUIREMENT: in some places/environments, we want to
+// also measure how much time each method takes
 // REQUIREMENT: any method in Maths class should log its arguments
 // without changing the Maths class. use OOP
 @RequiredArgsConstructor
 class LoggingDecorator extends Maths {
-  private final Maths decorated;
+//  private final Maths decorated;
   public int sum(int a, int b) {
     System.out.println("sum(" + a + "," + b + ")");
-    return decorated.sum(a, b);
-//    return super.sum(a, b);
+//    return decorated.sum(a, b);
+    return super.sum(a, b);
   }
   public int product(int a, int b) {
     System.out.println("product(" + a + "," + b + ")");
-    return decorated.product(a, b);
-//    return super.sum(a, b);
+//    return decorated.product(a, b);
+    return super.sum(a, b);
   }
 }
 
