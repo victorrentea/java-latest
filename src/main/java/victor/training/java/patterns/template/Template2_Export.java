@@ -35,8 +35,14 @@ public class Template2_Export {
     // TODO 'the same way you did the export of orders'
     // RUN UNIT TESTS!
 //    new ProductExporter(FOLDER, productRepo).export("products.csv");
-//    exporter.export("products.csv",
-//        productExporter::writeContents);
+    exporter.export("products.csv", writer ->
+    {
+      try {
+        productExporter.writeContents(writer);
+      } catch (IOException e) {
+        throw new RuntimeException(e);
+      }
+    });
   }
 }
 
