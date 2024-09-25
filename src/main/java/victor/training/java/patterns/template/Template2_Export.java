@@ -32,7 +32,7 @@ class FileExporter {
   public File exportOrders() {
     File file = new File(exportFolder, "orders.csv");
     long t0 = System.currentTimeMillis();
-    try (Writer writer = new FileWriter(file)) {
+    try (Writer writer = new FileWriter(file)) { // java 7 try-with-resources
       System.out.println("Starting export to: " + file.getAbsolutePath());
 
       writer.write("OrderID;CustomerId;Amount\n"); // header
