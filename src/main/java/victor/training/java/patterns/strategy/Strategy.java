@@ -1,15 +1,28 @@
 package victor.training.java.patterns.strategy;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 enum CountryEnum {
-  RO, ES, FR, UK, CN
-  ,IN,
+  RO {
+    // DOABLE but weird
+    @Override
+    public void computeTax(Parcel parcel) {
+      System.out.println("OMG!!");
+    }
+  },
+  ES,
+  FR,
+  UK,
+  CN,
+  IN;
 
-//  UNKNOWN
+  public abstract void computeTax(Parcel parcel);
+
+  public static CountryEnum fromIso(String fromAJson) {
+    return valueOf(fromAJson.toUpperCase());
+  }
 }
 
 record Parcel(
@@ -31,8 +44,9 @@ class Plain {
   }
 
   private static Parcel parse(String fromAJson) {
-    return new Parcel(CountryEnum.valueOf(fromAJson.toUpperCase()), 100, 100, LocalDate.now());
+    return new Parcel(CountryEnum.fromIso(fromAJson), 100, 100, LocalDate.now());
   }
+
 }
 
 //@Service
