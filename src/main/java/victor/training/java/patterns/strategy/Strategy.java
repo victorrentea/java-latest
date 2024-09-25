@@ -38,25 +38,15 @@ class Plain {
 class CustomsService {
   //	private Map<String, Class<? extends TaxCalculator>> calculators; // configured in application.properties 😮
   public double calculateCustomsTax(Parcel parcel) {
-//    switch (parcel.originCountry()) { // statement (does not return a value)
-//      case UK:
-//        return calculateUKTax(parcel);
-//      case CN:
-//        return calculateChinaTax(parcel);
-//      case FR:
-//      case ES:
-//      case RO:
-//        return calculateEUTax(parcel);
-//      default:
-//        throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
-//    }
-    return switch (parcel.originCountry()) { // switch expression (returns a value)
-      case UK -> new UKTaxCalculator().calculateTax(parcel);
-      case CN,IN -> new ChinaTaxCalculator().calculateTax(parcel);
-      case FR, ES, RO -> new EUTaxCalculator().calculateTax(parcel);
-      // compilation failure if you don't cover all ENUM values; much earlier, much cheaper to fix
-//      default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
-      // a bad practice if you use switch as an expression on an ENUM
+    var calculator = selectTaxCalculator(parcel.originCountry());
+    return calculator.calculateTax(parcel);
+  }
+
+  private static TaxCalculator selectTaxCalculator(CountryEnum originCountry) { // it's a factory method
+    return switch (originCountry) { // switch expression (returns a value)
+      case UK -> new UKTaxCalculator();
+      case CN, IN -> new ChinaTaxCalculator();
+      case FR, ES, RO -> new EUTaxCalculator();
     };
   }
 }
