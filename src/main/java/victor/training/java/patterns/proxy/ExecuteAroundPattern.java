@@ -12,7 +12,14 @@ public class ExecuteAroundPattern {
     int result = measureTime(  ()   -> sum(2,3)     );
     System.out.println("Computed: " + result);
 
-    int multiplyResult = measureTime(  ()   -> multiply(2,3)     );
+//    int multiplyResult = measureTime(new Supplier<Integer>() {
+//      @Override
+//      public Integer get() {
+//        return multiply(2, 3);
+//      }
+//    });
+    // similar to:
+    int multiplyResult = measureTime(() -> multiply(2, 3));
     System.out.println("Computed: " + multiplyResult);
 
     // private final MeterRegistry meterRegistry; // micrometer = standard in Java to report metrics
@@ -29,6 +36,7 @@ public class ExecuteAroundPattern {
   public static <T> T measureTime(Supplier<T> codeToMeasure) {
     long t0 = System.currentTimeMillis();
     T r = codeToMeasure.get();
+    // when i call .get(), what the caller placed after -> will be executed
     long t1 = System.currentTimeMillis();
     System.out.println("Took " + (t1 - t0) + "ms");
     return r;
