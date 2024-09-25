@@ -1,23 +1,24 @@
 package victor.training.java.patterns.strategy;
 
+import java.awt.*;
+
 public class OMGDontDoThis {
   public static void main(String[] args) {
-    System.out.println(Color.RED.getCode());
-    Color.RED.setCode("FF0001");
-    System.out.println(Color.RED.getCode());
+    System.out.println(HappyColor.RED.getCode());
+    HappyColor.RED.setCode("FF0001");
+    System.out.println(HappyColor.RED.getCode());
   }
 }
 
-enum Color {
+enum HappyColor {
   RED("FF0000"),
   GREEN("00FF00"),
   BLUE("0000FF");
   private String code;
 
-  Color(String code) {
+  HappyColor(String code) {
     this.code = code;
   }
-
   public String getCode() {
     return code;
   }
