@@ -25,7 +25,12 @@ public class ProxyIntro {
         // this runs any method you call on the 'proxy' object below
         // the method called is 'methodIntercepted'
         System.out.println("Calling " + methodIntercepted.getName() + "(" + Arrays.toString(args) + ")");
-        return proxy.invoke(realMathsObject, args); // call the real method
+        long t0 = System.currentTimeMillis();
+        try {
+          return proxy.invoke(realMathsObject, args); // call the real method
+        } finally {
+          System.out.println("Method " + methodIntercepted.getName() + " took " + (System.currentTimeMillis() - t0) + "ms");
+        }
       }
     };
     Maths proxy = (Maths) Enhancer.create(Maths.class, h); // instace of a subclass generated at runtime
@@ -83,16 +88,31 @@ class SecondGrade {
   }
 }
 
-// Thoughts:
-// - HOW about private methods? They are not inherited, so they are not intercepted
+// what can you change in the Maths class so a method cannot be intercepted anymore?
+// Hint: proxing is done by extending the class
 
+//final class Maths { // #3 crashes CGLIB
 class Maths {
+//  public final int sum(int a, int b) { #2 no longer proxied because it's final
+//  public static int sum(int a, int b) { #4 static methods (eg in Util/Helper) are not proxied
+  // @Secured("ROLE_ADMIN") // this does not work if you call methods from within the same class
   public int sum(int a, int b) {
+    return privateMeth(a, b);
+  }
+
+  private static int privateMeth(int a, int b) { // #1 private methods are not intercepted since they are not inherited
     return a + b;
   }
 
+  // method interception is used by Spring (and other frameworks) to implement features like:
+  // @Transactional, @Cacheable, @Async, @Retryable, @Validated, @PreAuthorize, @RoleAllowed, @Secured etc.
   public int product(int a, int b) {
-    return a * b;
+    int result = 0;
+    for (int i = 0; i < b; i++) {
+      result = sum(result, a); // #5 👑 calling my own local method from within the class
+      // does not run the interceptors (according to @Transactional, @Cacheable, etc)
+    }
+    return result;
   }
 }
 
