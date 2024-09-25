@@ -5,20 +5,26 @@ import java.util.Map;
 import java.util.function.Function;
 
 enum CountryEnum {
-  RO {
+  RO(EUTaxCalculator::calculateTax) {
     // DOABLE but weird
-    @Override
-    public void computeTax(Parcel parcel) {
-      System.out.println("OMG!!");
-    }
+//    @Override
+//    public void computeTax(Parcel parcel) {
+//      System.out.println("OMG!!");
+//    }
   },
-  ES,
-  FR,
-  UK,
-  CN,
-  IN;
+  ES(EUTaxCalculator::calculateTax),
+  // coupling+++ between enum and TaxCalculator
+  FR(EUTaxCalculator::calculateTax),
+  UK(UKTaxCalculator::calculateTax),
+  CN(ChinaTaxCalculator::calculateTax),
+  IN(ChinaTaxCalculator::calculateTax);
 
-  public abstract void computeTax(Parcel parcel);
+  public final TaxCalculator calculateTax;
+  CountryEnum(TaxCalculator calculateTax) {
+    this.calculateTax = calculateTax;
+  }
+
+//  public abstract void computeTax(Parcel parcel);
 
   public static CountryEnum fromIso(String fromAJson) {
     return valueOf(fromAJson.toUpperCase());
@@ -56,8 +62,11 @@ class CustomsService {
   //	private Map<String, Class<? extends TaxCalculator>> calculators; // configured in application.properties 😮
   public double calculateCustomsTax(Parcel parcel) {
 //    var calculator = selectTaxCalculator(parcel.originCountry());
-    var calculator = calculators.get(parcel.originCountry());
-    return calculator.calculateTax(parcel);
+
+//    var calculator = calculators.get(parcel.originCountry());
+//    return calculator.calculateTax(parcel);
+
+    return parcel.originCountry().calculateTax.calculateTax(parcel);
   }
   private static final Map<CountryEnum, TaxCalculator> calculators = Map.of(
       CountryEnum.UK, UKTaxCalculator::calculateTax,
