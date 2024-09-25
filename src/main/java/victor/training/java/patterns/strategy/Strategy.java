@@ -5,7 +5,7 @@ import java.time.LocalDate;
 enum CountryEnum {
   RO, ES, FR, UK, CN
 
-//  ,IN
+  ,IN
 }
 
 record Parcel(
@@ -45,11 +45,11 @@ class CustomsService {
 //      default:
 //        throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
 //    }
-
     double v = switch (parcel.originCountry()) { // switch expression (returns a value)
       case UK -> calculateUKTax(parcel);
       case CN -> calculateChinaTax(parcel);
       case FR, ES, RO -> calculateEUTax(parcel);
+      // compilation failure if you don't cover all ENUM values; much earlier, much cheaper to fix
 //      default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
       // a bad practice if you use switch as an expression on an ENUM
     };
