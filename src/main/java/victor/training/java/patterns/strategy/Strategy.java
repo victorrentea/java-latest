@@ -4,8 +4,9 @@ import java.time.LocalDate;
 
 enum CountryEnum {
   RO, ES, FR, UK, CN
+  ,IN,
 
-  ,IN
+//  UNKNOWN
 }
 
 record Parcel(
@@ -19,11 +20,15 @@ class Plain {
   public static void main(String[] args) {
     CustomsService service = new CustomsService();
     System.out.println("Tax for (RO,100,100) = " + service.calculateCustomsTax(
-        new Parcel(CountryEnum.valueOf("RO"), 100, 100, LocalDate.now())));
+        parse("RO")));
     System.out.println("Tax for (CN,100,100) = " + service.calculateCustomsTax(
-        new Parcel(CountryEnum.valueOf("CN"), 100, 100, LocalDate.now())));
-    System.out.println("Tax for (UK,100,100) = " + service.calculateCustomsTax(
-        new Parcel(CountryEnum.valueOf("IN"), 100, 100, LocalDate.now())));
+        parse("CN")));
+    System.out.println("Tax for (UK,100,100) = " + service.calculateCustomsTax(parse("In")));
+    System.out.println("Tax for (UK,100,100) = " + service.calculateCustomsTax(parse("ID")));
+  }
+
+  private static Parcel parse(String fromAJson) {
+    return new Parcel(CountryEnum.valueOf(fromAJson.toUpperCase()), 100, 100, LocalDate.now());
   }
 }
 
@@ -47,7 +52,7 @@ class CustomsService {
 //    }
     double v = switch (parcel.originCountry()) { // switch expression (returns a value)
       case UK -> calculateUKTax(parcel);
-      case CN -> calculateChinaTax(parcel);
+      case CN,IN -> calculateChinaTax(parcel);
       case FR, ES, RO -> calculateEUTax(parcel);
       // compilation failure if you don't cover all ENUM values; much earlier, much cheaper to fix
 //      default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
