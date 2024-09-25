@@ -1,6 +1,7 @@
 package victor.training.java.patterns.strategy;
 
 import java.time.LocalDate;
+import java.util.function.Function;
 
 enum CountryEnum {
   RO, ES, FR, UK, CN
@@ -49,14 +50,28 @@ class CustomsService {
       case FR, ES, RO -> new EUTaxCalculator();
     };
   }
+  {
+    TaxCalculator c1 = new TaxCalculator() {
+      @Override
+      public double calculateTax(Parcel parcel) {
+        return EUTaxCalculator.calculateTax(parcel);
+      }
+    };
+    TaxCalculator c2b = (Parcel parcel) -> {return EUTaxCalculator.calculateTax(parcel);};
+    TaxCalculator c2 = (parcel) -> {return EUTaxCalculator.calculateTax(parcel);};
+    TaxCalculator c3 = (parcel) -> EUTaxCalculator.calculateTax(parcel);
+    TaxCalculator c4 = parcel -> EUTaxCalculator.calculateTax(parcel);
+    TaxCalculator c5 = EUTaxCalculator::calculateTax;
+    Function<Parcel, Double> f = EUTaxCalculator::calculateTax; // target typing allows
+  }
 }
-//@FunctionalInterface // optional, but tells the reader that this is a functional interface
+@FunctionalInterface // optional, but tells the reader that this is a functional interface
   // that can (should) be passed as a lambda
 interface TaxCalculator { // code smell if you define an interface that you implemented, but you never use anywhere with that
   double calculateTax(Parcel parcel);
 }
-class EUTaxCalculator implements TaxCalculator {
-  public double calculateTax(Parcel parcel) {
+class EUTaxCalculator {
+  public static double calculateTax(Parcel parcel) {
     return parcel.tobaccoValue() / 3;
   }
 }
