@@ -55,41 +55,47 @@ abstract class AbstractFileExporter {
     }
   }
 
+  // Java sucks because it allows you to override any public you inherited from your Super! types
+  // other languages like C# or Kotlin don't allow this
+  protected abstract void writeContents(Writer writer) throws IOException;
+  // in Java 8 this signature could be Consumer<Writer>
+
+  // #1 reason for template method
+  /** Override this method if you want to encrypt the exported file */ // "Hook" method
+  protected void encryptFile(File file) { /*NOOP*/ }
+
+  // #2 reason for template method: when superclass provides some tools (methods)
+  // that the sublclasses use to get their job done
   public String escapeCell(Object cellValue) {
     if (cellValue instanceof String s) {
       if (!s.contains("\n")) return s;
+      // abasda|12314|He said ""Ok""| "multiline
+      // content"
       return "\"" + s.replace("\"", "\"\"") + "\"";
     } else {
       return Objects.toString(cellValue);
     }
   }
 
-  // Java sucks because it allows you to override any public you inherited from your Super! types
-  // other languages like C# or Kotlin don't allow this
-  protected abstract void writeContents(Writer writer) throws IOException;
-
-  /** Override this method if you want to encrypt the exported file */
-  protected void encryptFile(File file) { /*NOOP*/ }
 }
 class OrderExporter extends AbstractFileExporter {
   private final OrderRepo orderRepo;
-
   public OrderExporter(File exportFolder, OrderRepo orderRepo) {
     super(exportFolder);
     this.orderRepo = orderRepo;
   }
 
-  @Override
-  protected void encryptFile(File file) {
-    // fun only here, for orders
-  }
-
   protected void writeContents(Writer writer) throws IOException {
     writer.write("OrderID;CustomerId;Amount\n"); // header
     for (Order order : orderRepo.findByActiveTrue()) {// body
-      String csv = order.id() + ";" + order.customerId() + ";" + order.amount() + "\n";
+      String csv = order.id() + ";" + escapeCell(order.customerId()) + ";" + order.amount() + "\n";
       writer.write(csv);
     }
+  }
+
+  @Override
+  protected void encryptFile(File file) {
+    // fun only here, for orders
   }
 
  }
