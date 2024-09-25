@@ -20,11 +20,11 @@ public class StrategySpringApp implements CommandLineRunner {
     // TODO [2] Convert it to Chain Of Responsibility
     // TODO [3] Wire with Spring
     public void run(String... args) {
-        System.out.println("Tax for (RO,100,100) = " + service.calculateCustomsTax(
-                new Parcel("RO", 100, 100, LocalDate.now())));
-        System.out.println("Tax for (CN,100,100) = " + service.calculateCustomsTax(
-                new Parcel("CN", 100, 100, LocalDate.now())));
-        System.out.println("Tax for (UK,100,100) = " + service.calculateCustomsTax(
-                new Parcel("UK", 100, 100, LocalDate.now())));
+//        System.out.println("Tax for (RO,100,100) = " + service.calculateCustomsTax(
+//                new Parcel("RO", 100, 100, LocalDate.now())));
+//        System.out.println("Tax for (CN,100,100) = " + service.calculateCustomsTax(
+//                new Parcel("CN", 100, 100, LocalDate.now())));
+//        System.out.println("Tax for (UK,100,100) = " + service.calculateCustomsTax(
+//                new Parcel("UK", 100, 100, LocalDate.now())));
     }
 }
