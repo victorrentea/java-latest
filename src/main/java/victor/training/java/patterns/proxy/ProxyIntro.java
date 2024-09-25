@@ -24,26 +24,26 @@ public class ProxyIntro {
         System.out.println("At runtime...");
         secondGrade.mathClass();
     }
-
 }
-
 class SecondGrade {
     private final Maths maths;
     SecondGrade(Maths maths) {
         this.maths = maths;
     }
-
     public void mathClass() {
         System.out.println("2+4=" + maths.sum(2, 4));
         System.out.println("1+5=" + maths.sum(1, 5));
         System.out.println("2x3=" + maths.product(2, 3));
     }
 }
+// REQUIREMENT: any method in Maths class should log its arguments
 class Maths {
     public int sum(int a, int b) {
+        System.out.println("sum (" + a + ", " + b + ")");
         return a + b;
     }
     public int product(int a, int b) {
+        System.out.println("product (" + a + ", " + b + ")");
         return a * b;
     }
 }
