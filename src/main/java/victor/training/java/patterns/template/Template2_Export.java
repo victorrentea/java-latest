@@ -28,6 +28,7 @@ public class Template2_Export {
   public void exportOrders()  {
 //    new OrderExporter(FOLDER,orderRepo).export("orders.csv");
     exporter.export("orders.csv", orderExporter::writeContents);
+//    https://projectlombok.org/features/SneakyThrows
   }
 
   public void exportProducts() throws Exception {
