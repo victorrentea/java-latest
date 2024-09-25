@@ -1,51 +1,67 @@
 package victor.training.java.patterns.proxy;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Service;
 
 @SpringBootApplication
 public class ProxyIntro {
-    public static void main(String[] args) {
-        // Play the role of Spring here (there's no framework)
-        // TODO 1 : LOG the arguments of any invocation of a method in Maths w/ decorator
-        // TODO 2 : without changing anything below the line (w/o any interface)
-        // TODO 3 : so that any new methods in Maths are automatically logged [hard]
-        Maths maths = new Maths();
-        SecondGrade secondGrade = new SecondGrade(maths);
-        new ProxyIntro().run(secondGrade);
-        // TODO 4 : let Spring do its job, and do the same with an Aspect
+  public static void main(String[] args) {
+    // Play the role of Spring here (there's no framework)
+    // TODO 1 : LOG the arguments of any invocation of a method in Maths w/ decorator
+    // TODO 2 : without changing anything below the line (w/o any interface)
+    // TODO 3 : so that any new methods in Maths are automatically logged [hard]
+    Maths maths = new Maths();
+    SecondGrade secondGrade = new SecondGrade(maths);
+    new ProxyIntro().run(secondGrade);
+    // TODO 4 : let Spring do its job, and do the same with an Aspect
 //         SpringApplication.run(ProxyIntro.class, args);
-    }
-    // =============== THE LINE =================
-    @Autowired
-    public void run(SecondGrade secondGrade) {
-        System.out.println("At runtime...");
-        secondGrade.mathClass();
-    }
+  }
+
+  // =============== THE LINE =================
+  @Autowired
+  public void run(SecondGrade secondGrade) {
+    System.out.println("At runtime...");
+    secondGrade.mathClass();
+  }
 }
+
 class SecondGrade {
-    private final Maths maths;
-    SecondGrade(Maths maths) {
-        this.maths = maths;
-    }
-    public void mathClass() {
-        System.out.println("2+4=" + maths.sum(2, 4));
-        System.out.println("1+5=" + maths.sum(1, 5));
-        System.out.println("2x3=" + maths.product(2, 3));
-    }
+  private final Maths maths;
+
+  SecondGrade(Maths maths) {
+    this.maths = maths;
+  }
+
+  public void mathClass() {
+    System.out.println("2+4=" + maths.sum(2, 4));
+    System.out.println("1+5=" + maths.sum(1, 5));
+    System.out.println("2x3=" + maths.product(2, 3));
+  }
 }
+
 // REQUIREMENT: any method in Maths class should log its arguments
 class Maths {
-    public int sum(int a, int b) {
-        System.out.println("sum (" + a + ", " + b + ")");
-        return a + b;
+  public int sum(int a, int b) {
+    System.out.println("sum (" + a + ", " + b + ")");
+    long t0 = System.currentTimeMillis();
+    try {
+      return a + b;
+    } finally {
+      long t1 = System.currentTimeMillis();
+      System.out.println("Time Took: " + (t1 - t0));
     }
-    public int product(int a, int b) {
-        System.out.println("product (" + a + ", " + b + ")");
-        return a * b;
+  }
+
+  public int product(int a, int b) {
+    System.out.println("product (" + a + ", " + b + ")");
+    long t0 = System.currentTimeMillis();
+    try {
+      return a * b;
+    } finally {
+      long t1 = System.currentTimeMillis();
+      System.out.println("Time Took: " + (t1 - t0));
     }
+  }
 }
 
 
