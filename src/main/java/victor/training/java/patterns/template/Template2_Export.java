@@ -1,7 +1,6 @@
 package victor.training.java.patterns.template;
 
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import victor.training.java.patterns.template.support.Order;
 import victor.training.java.patterns.template.support.OrderRepo;
 import victor.training.java.patterns.template.support.Product;
@@ -25,9 +24,11 @@ public class Template2_Export {
   // checked exceptions are a design mistake in Java
   // at runtime there's no difference between checked and unchecked exceptions - JVM doesn't care
 //  @SneakyThrows // darkest lombok feature
-  public void exportOrders()  {
+  public void exportOrders() {
 //    new OrderExporter(FOLDER,orderRepo).export("orders.csv");
-    exporter.export("orders.csv", orderExporter::writeContents);
+//    exporter.export("orders.csv", orderExporter::writeContents);
+    exporter.export("orders.csv",
+        writer -> uncheck(() -> orderExporter.writeContents(writer)));
 //    https://projectlombok.org/features/SneakyThrows
   }
 
@@ -35,14 +36,21 @@ public class Template2_Export {
     // TODO 'the same way you did the export of orders'
     // RUN UNIT TESTS!
 //    new ProductExporter(FOLDER, productRepo).export("products.csv");
-    exporter.export("products.csv", writer ->
-    {
-      try {
-        productExporter.writeContents(writer);
-      } catch (IOException e) {
-        throw new RuntimeException(e);
-      }
-    });
+    exporter.export("products.csv",
+        writer -> uncheck(() -> productExporter.writeContents(writer)));
+  }
+
+  @FunctionalInterface
+  interface ThrowingRunnable {
+    void run() throws Exception;
+  }
+
+  private void uncheck(ThrowingRunnable r) {
+    try {
+      r.run();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
   }
 }
 
@@ -78,15 +86,17 @@ class FileExporter {
   // #1 reason for template method
 
 }
+
 class OrderExporter extends FileExporter {
   private final OrderRepo orderRepo;
+
   public OrderExporter(File exportFolder, OrderRepo orderRepo) {
     super(exportFolder);
     this.orderRepo = orderRepo;
   }
 
-  @SneakyThrows // darkest lombok feature
-  public void writeContents(Writer writer) {
+  //  @SneakyThrows // darkest lombok feature
+  public void writeContents(Writer writer) throws IOException {
     writer.write("OrderID;CustomerId;Amount\n"); // header
     for (Order order : orderRepo.findByActiveTrue()) {// body
       String csv = order.id() + ";" + CSVUtil.escapeCell(order.customerId()) + ";" + order.amount() + "\n";
@@ -98,7 +108,7 @@ class OrderExporter extends FileExporter {
 //    // fun only here, for orders
 //  }
 
- }
+}
 
 class ProductExporter extends FileExporter {
   private final ProductRepo productRepo;
