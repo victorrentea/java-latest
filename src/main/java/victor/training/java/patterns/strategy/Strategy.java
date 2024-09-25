@@ -1,6 +1,8 @@
 package victor.training.java.patterns.strategy;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 enum CountryEnum {
@@ -39,16 +41,26 @@ class Plain {
 class CustomsService {
   //	private Map<String, Class<? extends TaxCalculator>> calculators; // configured in application.properties 😮
   public double calculateCustomsTax(Parcel parcel) {
-    var calculator = selectTaxCalculator(parcel.originCountry());
+//    var calculator = selectTaxCalculator(parcel.originCountry());
+    var calculator = calculators.get(parcel.originCountry());
     return calculator.calculateTax(parcel);
   }
+  private static final Map<CountryEnum, TaxCalculator> calculators = Map.of(
+      CountryEnum.UK, UKTaxCalculator::calculateTax,
+      CountryEnum.CN, ChinaTaxCalculator::calculateTax,
+      CountryEnum.IN, ChinaTaxCalculator::calculateTax,
+      CountryEnum.FR, EUTaxCalculator::calculateTax,
+      CountryEnum.ES, EUTaxCalculator::calculateTax,
+      CountryEnum.RO, EUTaxCalculator::calculateTax
+  );
 
   private static TaxCalculator selectTaxCalculator(CountryEnum originCountry) { // it's a factory method
-    return switch (originCountry) { // switch expression (returns a value)
-      case UK -> new UKTaxCalculator();
-      case CN, IN -> new ChinaTaxCalculator();
-      case FR, ES, RO -> new EUTaxCalculator();
-    };
+    return calculators.get(originCountry);
+//    return switch (originCountry) { // switch expression (returns a value)
+//      case UK -> UKTaxCalculator::calculateTax;
+//      case CN, IN -> ChinaTaxCalculator::calculateTax;
+//      case FR, ES, RO -> EUTaxCalculator::calculateTax;
+//    };
   }
   {
     TaxCalculator c1 = new TaxCalculator() {
@@ -62,9 +74,11 @@ class CustomsService {
     TaxCalculator c3 = (parcel) -> EUTaxCalculator.calculateTax(parcel);
     TaxCalculator c4 = parcel -> EUTaxCalculator.calculateTax(parcel);
     TaxCalculator c5 = EUTaxCalculator::calculateTax;
+    // having a custom defined interface rather than using Function interface is better. It's more semantic reach rich.
     Function<Parcel, Double> f = EUTaxCalculator::calculateTax; // target typing allows
   }
 }
+
 @FunctionalInterface // optional, but tells the reader that this is a functional interface
   // that can (should) be passed as a lambda
 interface TaxCalculator { // code smell if you define an interface that you implemented, but you never use anywhere with that
@@ -75,14 +89,14 @@ class EUTaxCalculator {
     return parcel.tobaccoValue() / 3;
   }
 }
-class ChinaTaxCalculator implements TaxCalculator {
-  public double calculateTax(Parcel parcel) {
+class ChinaTaxCalculator {
+  public static double calculateTax(Parcel parcel) {
     // serious > 50 lines of logic
     return parcel.tobaccoValue() + parcel.regularValue();
   }
 }
-class UKTaxCalculator implements TaxCalculator {
-  public double calculateTax(Parcel parcel) {
+class UKTaxCalculator {
+  public static double calculateTax(Parcel parcel) {
     return parcel.tobaccoValue() / 2 + parcel.regularValue();
   }
 }
