@@ -35,9 +35,8 @@ class FileExporter {
     try (Writer writer = new FileWriter(file)) {
       System.out.println("Starting export to: " + file.getAbsolutePath());
 
-      writer.write("OrderID;Date\n");
-
-      for (Order order : orderRepo.findByActiveTrue()) {
+      writer.write("OrderID;CustomerId;Amount\n"); // header
+      for (Order order : orderRepo.findByActiveTrue()) {// body
         String csv = order.id() + ";" + order.customerId() + ";" + order.amount() + "\n";
         writer.write(csv);
       }
@@ -48,7 +47,8 @@ class FileExporter {
       System.out.println("Pretend: Send Error Notification Email"); // TODO CR: only for export orders, not for products
       throw new RuntimeException("Error exporting data", e);
     } finally {
-      System.out.println("Pretend: Metrics: Export finished in: " + (System.currentTimeMillis() - t0));
+      long t1 = System.currentTimeMillis();
+      System.out.println("Pretend: Metrics: Export finished in: " + (t1 - t0));
     }
   }
 
