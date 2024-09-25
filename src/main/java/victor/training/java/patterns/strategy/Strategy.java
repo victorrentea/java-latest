@@ -24,7 +24,7 @@ class Plain {
     System.out.println("Tax for (CN,100,100) = " + service.calculateCustomsTax(
         parse("CN")));
     System.out.println("Tax for (UK,100,100) = " + service.calculateCustomsTax(parse("In")));
-    System.out.println("Tax for (UK,100,100) = " + service.calculateCustomsTax(parse("ID")));
+//    System.out.println("Tax for (UK,100,100) = " + service.calculateCustomsTax(parse("ID")));
   }
 
   private static Parcel parse(String fromAJson) {
@@ -50,35 +50,32 @@ class CustomsService {
 //      default:
 //        throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
 //    }
-    double v = switch (parcel.originCountry()) { // switch expression (returns a value)
-      case UK -> calculateUKTax(parcel);
-      case CN,IN -> calculateChinaTax(parcel);
-      case FR, ES, RO -> calculateEUTax(parcel);
+    return switch (parcel.originCountry()) { // switch expression (returns a value)
+      case UK -> new UKTaxCalculator().calculateTax(parcel);
+      case CN,IN -> new ChinaTaxCalculator().calculateTax(parcel);
+      case FR, ES, RO -> new EUTaxCalculator().calculateTax(parcel);
       // compilation failure if you don't cover all ENUM values; much earlier, much cheaper to fix
 //      default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
       // a bad practice if you use switch as an expression on an ENUM
     };
-    return v;
   }
-
-  private static double calculateEUTax(Parcel parcel) {
+}
+interface TaxCalculator {
+  double calculateTax(Parcel parcel);
+}
+class EUTaxCalculator implements TaxCalculator {
+  public double calculateTax(Parcel parcel) {
     return parcel.tobaccoValue() / 3;
   }
-
-  private static double calculateChinaTax(Parcel parcel) {
+}
+class ChinaTaxCalculator implements TaxCalculator {
+  public double calculateTax(Parcel parcel) {
+    // serious > 50 lines of logic
     return parcel.tobaccoValue() + parcel.regularValue();
   }
-
-  private static double calculateUKTax(Parcel parcel) {
-    // a colleague adds some more code here
-    // a colleague adds some more code here
-    // a colleague adds some more code here
-    // a colleague adds some more code here
-    // a colleague adds some more code here
-    // a colleague adds some more code here
-    // a colleague adds some more code here
-    // a colleague adds some more code here
-    // a colleague adds some more code here
+}
+class UKTaxCalculator implements TaxCalculator {
+  public double calculateTax(Parcel parcel) {
     return parcel.tobaccoValue() / 2 + parcel.regularValue();
   }
 }
