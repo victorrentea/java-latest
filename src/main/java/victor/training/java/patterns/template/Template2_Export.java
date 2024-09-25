@@ -1,6 +1,7 @@
 package victor.training.java.patterns.template;
 
 import lombok.RequiredArgsConstructor;
+import org.jooq.lambda.Unchecked;
 import victor.training.java.patterns.template.support.Order;
 import victor.training.java.patterns.template.support.OrderRepo;
 import victor.training.java.patterns.template.support.Product;
@@ -27,8 +28,12 @@ public class Template2_Export {
   public void exportOrders() {
 //    new OrderExporter(FOLDER,orderRepo).export("orders.csv");
 //    exporter.export("orders.csv", orderExporter::writeContents);
-    exporter.export("orders.csv",
-        writer -> uncheck(() -> orderExporter.writeContents(writer)));
+//    exporter.export("orders.csv", writer -> uncheck(() -> orderExporter.writeContents(writer)));
+
+//    exporter.export("orders.csv", uncheck(orderExporter::writeContents));
+
+    // jool library
+    exporter.export("orders.csv", Unchecked.consumer(orderExporter::writeContents));
 //    https://projectlombok.org/features/SneakyThrows
   }
 
@@ -36,22 +41,40 @@ public class Template2_Export {
     // TODO 'the same way you did the export of orders'
     // RUN UNIT TESTS!
 //    new ProductExporter(FOLDER, productRepo).export("products.csv");
-    exporter.export("products.csv",
-        writer -> uncheck(() -> productExporter.writeContents(writer)));
+
+    exporter.export("products.csv", uncheck(productExporter::writeContents));
+
   }
+
+
+
+  public Integer primarSchool(String s) {
+    return Integer.parseInt(s);
+  }
+  // i wish i had a function that can
+  // take a ThrowingConsumer and convert it into a Consumer
+  // if i had such an utility I could do export("orders.csv", uncheck(orderExporter::writeContents));
+  // I want a function that transforms a function into another function
+  // PANIC MOMENT.
+  // but I never returned the before a function from my function
 
   @FunctionalInterface
-  interface ThrowingRunnable {
-    void run() throws Exception;
+  interface ThrowingConsumer<T> {
+    void accept(T t) throws Exception;
+  }
+// I want to return a consumer(function) that when called will call the 'throwing' parameter
+  // let it throw any chick exceptions it wants, catch those and convert them to runtime
+  public static <T> Consumer<T> uncheck(ThrowingConsumer<T> throwing) {
+    return t -> {
+      try {
+        throwing.accept(t);
+      } catch (Exception e) {
+        throw new RuntimeException(e);
+      }
+    };
   }
 
-  private void uncheck(ThrowingRunnable r) {
-    try {
-      r.run();
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-    }
-  }
+
 }
 
 
