@@ -30,17 +30,16 @@ public class LoggingAspect {
         }
     }
 
-    @Around("@within(victor.training.java.patterns.proxy.Facade))") // all methods inside classes annotated with @Facade
-//    @Around("@annotation(victor.training.spring.aspects.LoggedMethod))") // all methods annotated with @LoggedMethod
+//    @Around("@within(victor.training.java.patterns.proxy.Facade))") // all methods inside classes annotated with @Facade
+    @Around("@annotation(LoggedMethod))") // all methods annotated with @LoggedMethod
 //    @Around("execution(* org.springframework.data.jpa.repository.JpaRepository+.*(..))") // all subtypes of JpaRepository
 //    @Around("execution(* ..*.get*(..))") // all methods starting with "get" everywhere!! = naming convention = dangerous
     public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
 
         if (log.isDebugEnabled()) {
             String methodName = joinPoint.getTarget().getClass().getSimpleName() + "." + joinPoint.getSignature().getName();
-            String currentUsername = "SecurityContextHolder.getContext().getName()"; // TODO
             String argListConcat = Stream.of(joinPoint.getArgs()).map(this::jsonify).collect(joining(","));
-            log.debug("Invoking {}(..) (user:{}): {}", methodName, currentUsername, argListConcat);
+            log.debug("Invoking {}(..){}", methodName, argListConcat);
         }
 
         try {
