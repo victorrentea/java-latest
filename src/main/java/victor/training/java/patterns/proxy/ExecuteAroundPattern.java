@@ -25,6 +25,7 @@ public class ExecuteAroundPattern {
     //  }
   }
 
+
   public static <T> T measureTime(Supplier<T> codeToMeasure) {
     long t0 = System.currentTimeMillis();
     T r = codeToMeasure.get();
