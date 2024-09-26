@@ -13,14 +13,11 @@ public class VisitorPlay {
                 new Square(5),
                 new Square(1));
 
-        double totalPerimeter = 0; // TASK : compute
+        // OOP
+      double totalPerimeter = shapes.stream().mapToDouble(Shape::perimeter).sum();
 
-        // ## instanceOf
-        // ## OOP (behavior next to state)
-        // ## VISITOR 😱
-        // ## switch+sealed
 
-        System.out.println(totalPerimeter);
+      System.out.println(totalPerimeter);
     }
 }
 
