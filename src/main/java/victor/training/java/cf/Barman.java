@@ -7,10 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Optional;
-import java.util.concurrent.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
+import java.util.concurrent.CompletableFuture;
 
 import static java.lang.System.currentTimeMillis;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
@@ -21,7 +18,7 @@ public class Barman {
   @Autowired
   private RestTemplate rest;
 
-//  @FunctionalInterface
+  //  @FunctionalInterface
   interface BeerSupplier {
     Beer getBeer();
   }
@@ -33,7 +30,7 @@ public class Barman {
 
     // Java's CompletableFuture === JavaScript/TypeScript promises Deferred/Promise, async/await
     CompletableFuture<Beer> cfBeer = supplyAsync(() -> fetchBeer(beerType))
-        .exceptionally(e-> new Beer("draught beer"));
+        .exceptionally(e -> new Beer("draught beer"));
     CompletableFuture<Beer> cfWarmBeer = cfBeer.thenApply(b -> warmup(b)); // callback, when beer arrive to me from fetchBeer
     cfWarmBeer.thenAccept(b -> log.info("Drinking warm 🍺: {}", b)); // callback
     Vodka vodka = fetchVodka(); // the initial thread handling this HTTP request (coming from Tomcat in spring boot app)
@@ -61,32 +58,39 @@ public class Barman {
   }
 
 
-    // Callback-based non-blocking concurrency
+  // Callback-based non-blocking concurrency
+  // the bad news, the mess below will indeed non-block the black HTTP thread
+  // but it will still waste 2 threads for the calls.
+  // becahse the fetch beer/vodka methods are blocking inside a thread.
+  // The root is that I'm using a blocking library (RestTemplate, HttpClient...)
+  // to call the external services.
   @GetMapping("/drink-non-blocking")
   public CompletableFuture<DillyDilly> drinkNonBlocking() { // no .get or .join allowed
     String beerType = "IPA";
     long t0 = currentTimeMillis();
     var beer = supplyAsync(() -> fetchBeer(beerType));
-    beer.exceptionally(e-> new Beer("draught beer")); // does not work because you discard the
+    beer.exceptionally(e -> new Beer("draught beer")); // does not work because you discard the
     // new CF returned so the exceptionally is not applied.
-     // you should have used below in combine the value returned by .exceptionally
+    // you should have used below in combine the value returned by .exceptionally
     var vodka = supplyAsync(this::fetchVodka);
-    var dilly = beer.thenCombine(vodka, (b, v) -> new DillyDilly(b,v));
+    var dilly = beer.thenCombine(vodka, (b, v) -> new DillyDilly(b, v));
 
     log.info("HTTP thread blocked for {} millis", currentTimeMillis() - t0);
+//    dilly.thenAccept(dilly -> httpResponse.send(toJson(dilly))) // what you can imagine the web framework will do
     return dilly;
   }
+
 
   @SneakyThrows
   // public void processUploadedFile(File) {5 mins--1h}
   public void auditTheDrink(DillyDilly dilly) {
 //    try{// imagine: DB insert, kafka send, API call, takes time
-      log.info("Auditing the drink: {}", dilly);
-      Thread.sleep(500);
-      if (true) {
-        throw new RuntimeException("DB is down");
-      }
-      log.info("Audit done");
+    log.info("Auditing the drink: {}", dilly);
+    Thread.sleep(500);
+    if (true) {
+      throw new RuntimeException("DB is down");
+    }
+    log.info("Audit done");
 //    } catch (Exception e) {// #1 OK
 //      log.error("Failed to audit the drink", e); // NEVER executes
 //    }
@@ -99,11 +103,19 @@ public class Barman {
 
   private Vodka fetchVodka() {
     return rest.getForObject("http://localhost:9999/vodka", Vodka.class);
+    // if you want to use a non-blocking http client:
+    // CompletableFuture<Vodka> future = WebClient.create().get()
+    //      .uri("http://localhost:9999/vodka")
+    //      .retrieve()
+    //      .bodyToMono(Vodka.class)
+    //      .toFuture();
+    // return future; // now you can have 10K-100K requests in flight with no threads blocked.
+    // the default number of threads that Tomcat will use to handle incoming requests is 200.
   }
 
   private Beer fetchBeer(String beerType) {
     String type = beerType;
-    if(true) {
+    if (true) {
       throw new RuntimeException("Beer is out of stock😫😫😫😫😫");
     }
     return rest.getForObject("http://localhost:9999/beer", Beer.class);
