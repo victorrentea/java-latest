@@ -1,5 +1,6 @@
 package victor.training.java.cf;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,12 +38,23 @@ public class Barman {
     Beer beer = cfBeer.join(); // block current thread until beer is fetched
     DillyDilly dilly = new DillyDilly(beer, vodka);
 
-    // TODO Handle errors
+    auditTheDrink(dilly);
+
     // TODO Fire-and-forget
+    // TODO Handle errors
     // TODO Callback-based non-blocking concurrency
 
     log.info("HTTP thread blocked for {} durationMillis", currentTimeMillis() - t0);
     return dilly;
+  }
+
+  @SneakyThrows
+  // public void processUploadedFile(File) {5 mins--1h}
+  public void auditTheDrink(DillyDilly dilly) {
+    // imagine: DB insert, kafka send, API call, takes time
+    log.info("Auditing the drink: {}", dilly);
+    Thread.sleep(500);
+    log.info("Audit done");
   }
 
   private static Beer warmup(Beer beer1) {
