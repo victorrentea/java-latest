@@ -38,9 +38,9 @@ public class Barman {
     Beer beer = cfBeer.join(); // block current thread until beer is fetched
     DillyDilly dilly = new DillyDilly(beer, vodka);
 
-    auditTheDrink(dilly);
+    // Fire-and-forget
+    CompletableFuture.runAsync(()->auditTheDrink(dilly));
 
-    // TODO Fire-and-forget
     // TODO Handle errors
     // TODO Callback-based non-blocking concurrency
 
@@ -54,6 +54,9 @@ public class Barman {
     // imagine: DB insert, kafka send, API call, takes time
     log.info("Auditing the drink: {}", dilly);
     Thread.sleep(500);
+    if(true) {
+      throw new RuntimeException("DB is down");
+    }
     log.info("Audit done");
   }
 
