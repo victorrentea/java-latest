@@ -53,6 +53,7 @@ public class Experiment {
     URI uri = URI.create("http://localhost:8080/call");
     Thread.sleep(100); // pretend a network call:
 
+
 //    var result = restTemplate.getForObject(uri, String.class);
 
 //    HttpRequest request = HttpRequest.newBuilder().uri(uri).GET().build();
@@ -72,6 +73,7 @@ public class Experiment {
     BigInteger res = ZERO;
     for (int j = 0; j < 10_000_000; j++) { // decrease this number for slower machines
       res = res.add(valueOf(j).sqrt());
+//      Thread.yield();
     }
     blackHole = res.longValue();
     // TODO Fix#1: -Djdk.virtualThreadScheduler.parallelism=20

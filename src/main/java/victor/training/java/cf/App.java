@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.concurrent.Executors;
+
 @SpringBootApplication
 public class App {
   public static void main(String[] args) {
@@ -20,6 +22,7 @@ public class App {
   @Bean
   public ThreadPoolTaskExecutor poolBar() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+    executor.setThreadFactory(Thread.ofVirtual().factory()); // makes no sense
     // how many threads can be running at the same time
     int howMuchLoadCanTheOtherApiCanTake = 50;
     executor.setCorePoolSize(howMuchLoadCanTheOtherApiCanTake);

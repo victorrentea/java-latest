@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import static java.lang.System.currentTimeMillis;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
@@ -101,6 +103,34 @@ public class Barman {
   }
 
 
+
+
+  @GetMapping("/drink-vt")
+  public DillyDilly drinkVT() { // no .get or .join allowed
+    String beerType = "IPA";
+    long t0 = currentTimeMillis();
+    // +1 virtual thread for any task you give it
+    ExecutorService vtExecutor = Executors.newVirtualThreadPerTaskExecutor();
+    var beer = supplyAsync(() -> fetchBeer(beerType), vtExecutor);
+    var vodka = supplyAsync(this::fetchVodka, vtExecutor);
+    // #1 OK        .exceptionally(e->beer.cancel(true));
+
+    var dilly = new DillyDilly(beer.join(), vodka.join()); // OK because we are in a virtual thread
+    log.info("HTTP thread blocked for {} millis", currentTimeMillis() - t0);
+    return dilly;
+  }
+  // has an issue:
+  // 1. INTERRUPTING SUBTASKS
+  // - if the client disconnects, the completable futures are not interrupted
+  // - if the fetchBeer fails, the fetchVodka will not be interrupted
+  // 2. TRACEABILITY
+  // - in the sub task you are not LINKED to the parent task waiting for you
+  // 3. PROPAGATION OF METADATA
+
+
+
+
+
   @SneakyThrows
   // public void processUploadedFile(File) {5 mins--1h}
   public void auditTheDrink(DillyDilly dilly) {
@@ -128,7 +158,7 @@ public class Barman {
     //      .uri("http://localhost:9999/vodka")
     //      .retrieve()
     //      .bodyToMono(Vodka.class)// moving from the Reactive Programming☠️ world to Java8 CompletableFuture
-    //      .toFuture();
+    //      .block(); // OK if #fetchVodka runs on a virtual thread
     // return future; // now you can have 10K-100K requests in flight with no threads blocked.
     // the default number of threads that Tomcat will use to handle incoming requests is 200.
   }
@@ -136,9 +166,9 @@ public class Barman {
   private Beer fetchBeer(String beerType) {
     log.info("Doing the fetchBeer for type: {}", beerType);
     String type = beerType;
-    if (true) {
-      throw new RuntimeException("Beer is out of stock😫😫😫😫😫");
-    }
+//    if (true) {
+//      throw new RuntimeException("Beer is out of stock😫😫😫😫😫");
+//    }
     return rest.getForObject("http://localhost:9999/beer", Beer.class);
   }
 }
