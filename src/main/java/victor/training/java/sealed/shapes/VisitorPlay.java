@@ -13,8 +13,9 @@ public class VisitorPlay {
         new Rectangle(2, 3),
         new Square(1));
 
-    // OOP
-//  double totalPerimeter = shapes.stream().mapToDouble(Shape::perimeter).sum();
+    // OOP💖
+//  double totalPerimeter = shapes.stream()
+//    .mapToDouble(Shape::perimeter).sum();
 
 //    double totalPerimeter = 0;
 //    for (Shape shape : shapes) {
@@ -28,11 +29,11 @@ public class VisitorPlay {
 //    }
 
     // VIsitor design pattern, became 99% anti pattern in java 21
-    PerimiterVisitor visitor = new PerimiterVisitor();
+    AreaVisitor visitor = new AreaVisitor();
     for (Shape shape : shapes) {
       shape.accept(visitor);
     }
-    double totalPerimeter = visitor.getPerimeter();
+    double totalPerimeter = visitor.getArea();
 
 
 
