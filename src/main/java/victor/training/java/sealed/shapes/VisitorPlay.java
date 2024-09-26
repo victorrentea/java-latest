@@ -16,16 +16,25 @@ public class VisitorPlay {
     // OOP
 //  double totalPerimeter = shapes.stream().mapToDouble(Shape::perimeter).sum();
 
-    double totalPerimeter = 0;
+//    double totalPerimeter = 0;
+//    for (Shape shape : shapes) {
+//      if (shape instanceof Square square) {
+//        totalPerimeter += 4 * square.edge();
+//      } else if (shape instanceof Circle circle) {
+//        totalPerimeter += 2 * Math.PI * circle.radius();
+//      } else { // to guard us against future types of shapes
+//        throw new IllegalArgumentException("Unknown shape: " + shape);
+//      }
+//    }
+
+    // VIsitor design pattern, became 99% anti pattern in java 21
+    PerimiterVisitor visitor = new PerimiterVisitor();
     for (Shape shape : shapes) {
-      if (shape instanceof Square square) {
-        totalPerimeter += 4 * square.edge();
-      } else if (shape instanceof Circle circle) {
-        totalPerimeter += 2 * Math.PI * circle.radius();
-      } else { // to guard us against future types of shapes
-        throw new IllegalArgumentException("Unknown shape: " + shape);
-      }
+      shape.accept(visitor);
     }
+    double totalPerimeter = visitor.getPerimeter();
+
+
 
     System.out.println(totalPerimeter);
   }
