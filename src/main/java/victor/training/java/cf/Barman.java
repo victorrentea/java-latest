@@ -40,7 +40,7 @@ public class Barman {
 
     // Fire-and-forget
     try {
-      CompletableFuture<Void> cfVoid = CompletableFuture.runAsync(() -> auditTheDrink(dilly));
+      CompletableFuture.runAsync(() -> auditTheDrink(dilly));
 //    cfVoid.join();// stupidly block the current thread until the task is done
     } catch (Exception e) {
       log.error("Failed to audit the drink", e); // NEVER executes
@@ -56,13 +56,16 @@ public class Barman {
   @SneakyThrows
   // public void processUploadedFile(File) {5 mins--1h}
   public void auditTheDrink(DillyDilly dilly) {
-    // imagine: DB insert, kafka send, API call, takes time
-    log.info("Auditing the drink: {}", dilly);
-    Thread.sleep(500);
-    if(true) {
-      throw new RuntimeException("DB is down");
+    try{// imagine: DB insert, kafka send, API call, takes time
+      log.info("Auditing the drink: {}", dilly);
+      Thread.sleep(500);
+      if (true) {
+        throw new RuntimeException("DB is down");
+      }
+      log.info("Audit done");
+    } catch (Exception e) {// #1 OK
+      log.error("Failed to audit the drink", e); // NEVER executes
     }
-    log.info("Audit done");
   }
 
   private static Beer warmup(Beer beer1) {
