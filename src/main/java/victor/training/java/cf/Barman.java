@@ -25,25 +25,26 @@ public class Barman {
 
   @GetMapping("/drink")
   public DillyDilly drink() {
-    System.out.println("HERE");
+    String beerType = "IPA";
     long t0 = currentTimeMillis();
 
+    // Java's CompletableFuture === JavaScript/TypeScript promises Deferred/Promise, async/await
+    CompletableFuture<Beer> cfBeer = CompletableFuture.supplyAsync(() -> fetchBeer(beerType));
+    CompletableFuture<Beer> cfWarmBeer = cfBeer.thenApply(b -> warmup(b)); // callback, when beer arrive to me from fetchBeer
+    cfWarmBeer.thenAccept(b -> log.info("Drinking warm 🍺: {}", b)); // callback
+    CompletableFuture<Vodka> cfVodka = CompletableFuture.supplyAsync(this::fetchVodka);
 
-    // in Performance training we'll explore the OLDer ways of doing this using Executors.
-    //  🛑 independent tasks ran sequentially take too long. What TODO ?
-    String beerType = "IPA";
-    Beer beer = fetchBeer(beerType);
-    Vodka vodka = fetchVodka();
-
-    Supplier<Beer> s = () -> fetchBeer(beerType);
-    Future<Beer> beerFuture = CompletableFuture.supplyAsync(s);
-    CompletableFuture<Beer> beerCompletableFuture = CompletableFuture.supplyAsync(s);
-
-
+    Beer beer = cfBeer.join(); // block current thread until beer is fetched
+    Vodka vodka = cfVodka.join();// block current thread until vodka is fetched
     DillyDilly dilly = new DillyDilly(beer, vodka);
 
     log.info("HTTP thread blocked for {} durationMillis", currentTimeMillis() - t0);
     return dilly;
+  }
+
+  private static Beer warmup(Beer beer1) {
+    log.info("Warmup the beer: {}", beer1);
+    return beer1;
   }
 
   private Vodka fetchVodka() {
