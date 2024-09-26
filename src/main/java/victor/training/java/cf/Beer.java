@@ -1,8 +1,7 @@
 package victor.training.java.cf;
 
 import lombok.Data;
+import lombok.Value;
 
-@Data
-public class Beer {
-   private String type;
+public record Beer(String type) {
 }

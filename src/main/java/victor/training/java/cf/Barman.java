@@ -16,6 +16,7 @@ public class Barman {
 
   @GetMapping("/drink")
   public DillyDilly drink() {
+    System.out.println("HERE");
     long t0 = currentTimeMillis();
 
     //  🛑 independent tasks ran sequentially take too long. What TODO ?
