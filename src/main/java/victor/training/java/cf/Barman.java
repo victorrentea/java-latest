@@ -30,7 +30,8 @@ public class Barman {
     long t0 = currentTimeMillis();
 
     // Java's CompletableFuture === JavaScript/TypeScript promises Deferred/Promise, async/await
-    CompletableFuture<Beer> cfBeer = CompletableFuture.supplyAsync(() -> fetchBeer(beerType));
+    CompletableFuture<Beer> cfBeer = CompletableFuture.supplyAsync(() -> fetchBeer(beerType))
+        .exceptionally(e-> new Beer("draught beer"));
     CompletableFuture<Beer> cfWarmBeer = cfBeer.thenApply(b -> warmup(b)); // callback, when beer arrive to me from fetchBeer
     cfWarmBeer.thenAccept(b -> log.info("Drinking warm 🍺: {}", b)); // callback
     Vodka vodka = fetchVodka(); // the initial thread handling this HTTP request (coming from Tomcat in spring boot app)
@@ -39,12 +40,17 @@ public class Barman {
     DillyDilly dilly = new DillyDilly(beer, vodka);
 
     // Fire-and-forget
-    try {
-      CompletableFuture.runAsync(() -> auditTheDrink(dilly));
+//    try {
+    CompletableFuture.runAsync(() -> auditTheDrink(dilly))
+        .exceptionally(e -> { // #2 ~ of a catch with promises
+          log.error("Failed to audit the drink, iwas asking for beer type " + beerType, e);
+          return null;
+        });
+
 //    cfVoid.join();// stupidly block the current thread until the task is done
-    } catch (Exception e) {
-      log.error("Failed to audit the drink", e); // NEVER executes
-    }
+//    } catch (Exception e) {
+//      log.error("Failed to audit the drink", e); // NEVER executes
+//    }
 
     // TODO Handle errors
     // TODO Callback-based non-blocking concurrency
@@ -56,16 +62,16 @@ public class Barman {
   @SneakyThrows
   // public void processUploadedFile(File) {5 mins--1h}
   public void auditTheDrink(DillyDilly dilly) {
-    try{// imagine: DB insert, kafka send, API call, takes time
+//    try{// imagine: DB insert, kafka send, API call, takes time
       log.info("Auditing the drink: {}", dilly);
       Thread.sleep(500);
       if (true) {
         throw new RuntimeException("DB is down");
       }
       log.info("Audit done");
-    } catch (Exception e) {// #1 OK
-      log.error("Failed to audit the drink", e); // NEVER executes
-    }
+//    } catch (Exception e) {// #1 OK
+//      log.error("Failed to audit the drink", e); // NEVER executes
+//    }
   }
 
   private static Beer warmup(Beer beer1) {
@@ -79,9 +85,9 @@ public class Barman {
 
   private Beer fetchBeer(String beerType) {
     String type = beerType;
-//    if(true) {
-//      throw new RuntimeException("Beer is out of stock😫😫😫😫😫");
-//    }
+    if(true) {
+      throw new RuntimeException("Beer is out of stock😫😫😫😫😫");
+    }
     return rest.getForObject("http://localhost:9999/beer", Beer.class);
   }
 }
