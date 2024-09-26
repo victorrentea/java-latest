@@ -66,8 +66,10 @@ public class Barman {
   public CompletableFuture<DillyDilly> drinkNonBlocking() { // no .get or .join allowed
     String beerType = "IPA";
     long t0 = currentTimeMillis();
-    var beer = supplyAsync(() -> fetchBeer(beerType))
-        .exceptionally(e-> new Beer("draught beer"));
+    var beer = supplyAsync(() -> fetchBeer(beerType));
+    beer.exceptionally(e-> new Beer("draught beer")); // does not work because you discard the
+    // new CF returned so the exceptionally is not applied.
+     // you should have used below in combine the value returned by .exceptionally
     var vodka = supplyAsync(this::fetchVodka);
     var dilly = beer.thenCombine(vodka, (b, v) -> new DillyDilly(b,v));
 
