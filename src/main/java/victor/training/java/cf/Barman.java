@@ -37,6 +37,10 @@ public class Barman {
     Beer beer = cfBeer.join(); // block current thread until beer is fetched
     DillyDilly dilly = new DillyDilly(beer, vodka);
 
+    // TODO Handle errors
+    // TODO Fire-and-forget
+    // TODO Callback-based non-blocking concurrency
+
     log.info("HTTP thread blocked for {} durationMillis", currentTimeMillis() - t0);
     return dilly;
   }
