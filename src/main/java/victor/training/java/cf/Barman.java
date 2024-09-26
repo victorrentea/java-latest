@@ -35,11 +35,16 @@ public class Barman {
     cfWarmBeer.thenAccept(b -> log.info("Drinking warm 🍺: {}", b)); // callback
     Vodka vodka = fetchVodka(); // the initial thread handling this HTTP request (coming from Tomcat in spring boot app)
 
-    Beer beer = cfBeer.join(); // block current thread until beer is fetched
+    Beer beer = cfBeer.join(); // block current thread until beer is fetched > throws any exception occured during the task
     DillyDilly dilly = new DillyDilly(beer, vodka);
 
     // Fire-and-forget
-    CompletableFuture.runAsync(()->auditTheDrink(dilly));
+    try {
+      CompletableFuture<Void> cfVoid = CompletableFuture.runAsync(() -> auditTheDrink(dilly));
+//    cfVoid.join();// stupidly block the current thread until the task is done
+    } catch (Exception e) {
+      log.error("Failed to audit the drink", e); // NEVER executes
+    }
 
     // TODO Handle errors
     // TODO Callback-based non-blocking concurrency
@@ -71,6 +76,9 @@ public class Barman {
 
   private Beer fetchBeer(String beerType) {
     String type = beerType;
+//    if(true) {
+//      throw new RuntimeException("Beer is out of stock😫😫😫😫😫");
+//    }
     return rest.getForObject("http://localhost:9999/beer", Beer.class);
   }
 }
