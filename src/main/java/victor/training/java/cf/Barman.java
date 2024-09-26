@@ -151,6 +151,7 @@ public class Barman {
 //     <== [Product1, Product2, Product3, Product4, Product5, Product6, Product7, Product8, Product9, Product10]
 // - optimize the network calls
 // - parallelize your work (CPU or network) after JFR profiling your flow
+// - CACHING (with signoff of 2+ super-seniors)
 
 // There are only 2 hard things in Computer Science:
 // cache invalidation and naming things.
