@@ -3,6 +3,7 @@ package victor.training.java.cf;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -17,6 +18,8 @@ import static java.util.concurrent.CompletableFuture.supplyAsync;
 public class Barman {
   @Autowired
   private RestTemplate rest;
+  @Autowired
+  private ThreadPoolTaskExecutor poolBar;
 
   //  @FunctionalInterface
   interface BeerSupplier {
@@ -68,11 +71,27 @@ public class Barman {
   public CompletableFuture<DillyDilly> drinkNonBlocking() { // no .get or .join allowed
     String beerType = "IPA";
     long t0 = currentTimeMillis();
-    var beer = supplyAsync(() -> fetchBeer(beerType));
-    beer.exceptionally(e -> new Beer("draught beer")); // does not work because you discard the
     // new CF returned so the exceptionally is not applied.
     // you should have used below in combine the value returned by .exceptionally
-    var vodka = supplyAsync(this::fetchVodka);
+
+
+    // in a server application, you should never use the default thread pool
+    // in which the CF run by default (ForkJoinPool.commonPool-worker-1) size=N_CPU-1 = 9 (victor)
+    // . You should always provide a custom Executor to the CF factory methods
+    // 1:why?
+    // - Starvation: because the default thread pool is shared by all the CFs in the JVM; starve others
+    // - Metadata propagation: you will lose the ThreadLocal magic metadata
+    //    (Logback MDC, Spring Security Context, Open Telemetry TraceID, etc)
+    //  the thread pool you submit your work should be one managed by Spring/framework
+    //  that is able "lift" the metadata from parent thread to the worker thread
+    // 2: how?
+    // pass a Spring-managed Executor to the CF factory methods
+
+    // Do not block threads (don't do network calls, DB calls, CPU intensive work)
+    // in the default thread pool (ForkJoinPool.commonPool-worker-1)
+    var beer = supplyAsync(() -> fetchBeer(beerType), poolBar)
+        .exceptionally(e -> new Beer("draught beer")); // does not work because you discard the
+    var vodka = supplyAsync(this::fetchVodka, poolBar);
     var dilly = beer.thenCombine(vodka, (b, v) -> new DillyDilly(b, v));
 
     log.info("HTTP thread blocked for {} millis", currentTimeMillis() - t0);
@@ -114,6 +133,7 @@ public class Barman {
   }
 
   private Beer fetchBeer(String beerType) {
+    log.info("Doing the fetchBeer for type: {}", beerType);
     String type = beerType;
     if (true) {
       throw new RuntimeException("Beer is out of stock😫😫😫😫😫");
