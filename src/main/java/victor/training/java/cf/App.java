@@ -20,8 +20,9 @@ public class App {
   @Bean
   public ThreadPoolTaskExecutor poolBar() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-    executor.setCorePoolSize(20);
-    executor.setMaxPoolSize(20);
+    int howMuchLoadCanTheOtherApiCanTake = 50;
+    executor.setCorePoolSize(howMuchLoadCanTheOtherApiCanTake);
+    executor.setMaxPoolSize(howMuchLoadCanTheOtherApiCanTake);
     executor.setQueueCapacity(500);
     executor.setThreadNamePrefix("bar-");
     executor.initialize();
