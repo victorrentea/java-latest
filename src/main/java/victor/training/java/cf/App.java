@@ -20,6 +20,7 @@ public class App {
   @Bean
   public ThreadPoolTaskExecutor poolBar() {
     ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+    // how many threads can be running at the same time
     int howMuchLoadCanTheOtherApiCanTake = 50;
     executor.setCorePoolSize(howMuchLoadCanTheOtherApiCanTake);
     executor.setMaxPoolSize(howMuchLoadCanTheOtherApiCanTake);

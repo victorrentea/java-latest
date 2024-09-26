@@ -80,6 +80,7 @@ public class Barman {
     // . You should always provide a custom Executor to the CF factory methods
     // 1:why?
     // - Starvation: because the default thread pool is shared by all the CFs in the JVM; starve others
+    // ---> other flows using the default thread pool will not be impacted if you exhaust YOUR PRIVATE THREAD POOL
     // - Metadata propagation: you will lose the ThreadLocal magic metadata
     //    (Logback MDC, Spring Security Context, Open Telemetry TraceID, etc)
     //  the thread pool you submit your work should be one managed by Spring/framework
