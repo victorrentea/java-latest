@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.concurrent.Callable;
+import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -35,10 +35,9 @@ public class Barman {
     Beer beer = fetchBeer(beerType);
     Vodka vodka = fetchVodka();
 
-    Runnable r = () -> fetchBeer(beerType);
     Supplier<Beer> s = () -> fetchBeer(beerType);
-    Callable<Beer> c = () -> fetchBeer(beerType);
-    BeerSupplier bs = () -> fetchBeer(beerType);
+    Future<Beer> beerFuture = CompletableFuture.supplyAsync(s);
+    CompletableFuture<Beer> beerCompletableFuture = CompletableFuture.supplyAsync(s);
 
 
     DillyDilly dilly = new DillyDilly(beer, vodka);
