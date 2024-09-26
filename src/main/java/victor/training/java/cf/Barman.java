@@ -32,10 +32,9 @@ public class Barman {
     CompletableFuture<Beer> cfBeer = CompletableFuture.supplyAsync(() -> fetchBeer(beerType));
     CompletableFuture<Beer> cfWarmBeer = cfBeer.thenApply(b -> warmup(b)); // callback, when beer arrive to me from fetchBeer
     cfWarmBeer.thenAccept(b -> log.info("Drinking warm 🍺: {}", b)); // callback
-    CompletableFuture<Vodka> cfVodka = CompletableFuture.supplyAsync(this::fetchVodka);
+    Vodka vodka = fetchVodka(); // the initial thread handling this HTTP request (coming from Tomcat in spring boot app)
 
     Beer beer = cfBeer.join(); // block current thread until beer is fetched
-    Vodka vodka = cfVodka.join();// block current thread until vodka is fetched
     DillyDilly dilly = new DillyDilly(beer, vodka);
 
     log.info("HTTP thread blocked for {} durationMillis", currentTimeMillis() - t0);
