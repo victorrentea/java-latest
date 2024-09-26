@@ -29,11 +29,11 @@ public class VisitorPlay {
 //    }
 
     // VIsitor design pattern, became 99% anti pattern in java 21
-    AreaVisitor visitor = new AreaVisitor();
-    for (Shape shape : shapes) {
-      shape.accept(visitor);
-    }
-    double totalPerimeter = visitor.getArea();
+//    AreaVisitor visitor = new AreaVisitor();
+//    for (Shape shape : shapes) {
+//      shape.accept(visitor);
+//    }
+//    double totalPerimeter = visitor.getArea();
 
 
 
