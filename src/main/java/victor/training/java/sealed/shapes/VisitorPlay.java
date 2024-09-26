@@ -1,6 +1,10 @@
 package victor.training.java.sealed.shapes;
 
 
+import victor.training.java.sealed.shapes.Shape.Circle;
+import victor.training.java.sealed.shapes.Shape.Rectangle;
+import victor.training.java.sealed.shapes.Shape.Square;
+
 import java.util.List;
 
 public class VisitorPlay {
@@ -36,16 +40,12 @@ public class VisitorPlay {
 //    double totalPerimeter = visitor.getArea();
 
 
-    double totalPerimeter = 0;
-    for (Shape shape : shapes) {
-      totalPerimeter += switch (shape) {
-        case Square(int edge) -> 4*edge;
-        case Circle(int radius) -> 2*Math.PI*radius;
-        case Rectangle(int width, int height) -> 2*width + 2*height;
-        // AVOID default, let the compiler fail if you forget a subtype
-//        default -> throw new IllegalArgumentException("Unknown shape: " + shape);
-      };
-    }
+    double totalPerimeter = shapes.stream()
+        .mapToDouble(shape -> switch (shape) {
+          case Square(int edge) -> 4 * edge;
+          case Circle(int radius) -> 2 * Math.PI * radius;
+          case Rectangle(int width, int height) -> 2 * width + 2 * height;
+        }).sum();
 
 
     System.out.println(totalPerimeter);
