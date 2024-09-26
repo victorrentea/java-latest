@@ -107,7 +107,7 @@ public class Barman {
     // CompletableFuture<Vodka> future = WebClient.create().get()
     //      .uri("http://localhost:9999/vodka")
     //      .retrieve()
-    //      .bodyToMono(Vodka.class)
+    //      .bodyToMono(Vodka.class)// moving from the Reactive Programming☠️ world to Java8 CompletableFuture
     //      .toFuture();
     // return future; // now you can have 10K-100K requests in flight with no threads blocked.
     // the default number of threads that Tomcat will use to handle incoming requests is 200.
