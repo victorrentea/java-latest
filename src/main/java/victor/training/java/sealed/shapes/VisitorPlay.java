@@ -36,6 +36,17 @@ public class VisitorPlay {
 //    double totalPerimeter = visitor.getArea();
 
 
+    double totalPerimeter = 0;
+    for (Shape shape : shapes) {
+      totalPerimeter += switch (shape) {
+        case Square(int edge) -> 4*edge;
+        case Circle(int radius) -> 2*Math.PI*radius;
+        case Rectangle(int width, int height) -> 2*width + 2*height;
+        // AVOID default, let the compiler fail if you forget a subtype
+//        default -> throw new IllegalArgumentException("Unknown shape: " + shape);
+      };
+    }
+
 
     System.out.println(totalPerimeter);
   }
