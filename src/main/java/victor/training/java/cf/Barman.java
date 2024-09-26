@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Optional;
 import java.util.concurrent.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static java.lang.System.currentTimeMillis;
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Slf4j
 @RestController
@@ -30,7 +32,7 @@ public class Barman {
     long t0 = currentTimeMillis();
 
     // Java's CompletableFuture === JavaScript/TypeScript promises Deferred/Promise, async/await
-    CompletableFuture<Beer> cfBeer = CompletableFuture.supplyAsync(() -> fetchBeer(beerType))
+    CompletableFuture<Beer> cfBeer = supplyAsync(() -> fetchBeer(beerType))
         .exceptionally(e-> new Beer("draught beer"));
     CompletableFuture<Beer> cfWarmBeer = cfBeer.thenApply(b -> warmup(b)); // callback, when beer arrive to me from fetchBeer
     cfWarmBeer.thenAccept(b -> log.info("Drinking warm 🍺: {}", b)); // callback
@@ -52,10 +54,24 @@ public class Barman {
 //      log.error("Failed to audit the drink", e); // NEVER executes
 //    }
 
-    // TODO Handle errors
-    // TODO Callback-based non-blocking concurrency
+    // Handle errors DONE
 
     log.info("HTTP thread blocked for {} durationMillis", currentTimeMillis() - t0);
+    return dilly;
+  }
+
+
+    // Callback-based non-blocking concurrency
+  @GetMapping("/drink-non-blocking")
+  public CompletableFuture<DillyDilly> drinkNonBlocking() { // no .get or .join allowed
+    String beerType = "IPA";
+    long t0 = currentTimeMillis();
+    var beer = supplyAsync(() -> fetchBeer(beerType))
+        .exceptionally(e-> new Beer("draught beer"));
+    var vodka = supplyAsync(this::fetchVodka);
+    var dilly = beer.thenCombine(vodka, (b, v) -> new DillyDilly(b,v));
+
+    log.info("HTTP thread blocked for {} millis", currentTimeMillis() - t0);
     return dilly;
   }
 
