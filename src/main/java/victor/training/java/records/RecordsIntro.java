@@ -27,6 +27,11 @@ public class RecordsIntro {
 //@Value // getters, ctor, all fields=private+final, hashcode/equals, toString
 
 record Point(@Min(0) int x, @Min(0) int y) {
+  public Point{
+    if (x < 0 || y < 0) { // scary! objects refuse to instantiate if invalid
+      throw new IllegalArgumentException("Negative coordinates");
+    }
+  }
   public Point(String xs, String ys) {
     int xx = Integer.parseInt(xs);// java 22
     this(xx, Integer.parseInt(ys));
