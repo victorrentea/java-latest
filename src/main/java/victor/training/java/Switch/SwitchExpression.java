@@ -24,14 +24,15 @@ class SwitchExpression {
   }
 
   //  core domain logic
-  public static double calculateTax(Parcel parcel) {
+  public static double calculateTax(Parcel parcel) /*throws Exception*/ {
     return switch (parcel.originCountry()) { // switch expression(enum) idiom
       case UK -> computeUkTax(parcel);
       case CN -> computeChinaTax(parcel);
       case RO,FR,DE -> computeEUTax(parcel);
 
       // AVOID default in switch expression
-//      default -> throw new IllegalArgumentException("Unknown country: " + parcel.originCountry());
+      default -> throw new IllegalArgumentException("Unknown country: " + parcel.originCountry());
+//      default -> throw new Exception("Unknown country: " + parcel.originCountry());
     };
   }
 
