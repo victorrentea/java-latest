@@ -32,7 +32,6 @@ class SwitchExpression {
         yield dontSmoke + parcel.regularValue();
       }
       case RO, FR, DE -> computeEUTax(parcel);
-
       // AVOID default in switch expression
       //default -> throw new IllegalArgumentException("Unknown country: " + parcel.originCountry());
 //      default -> throw new Exception("Unknown country: " + parcel.originCountry());

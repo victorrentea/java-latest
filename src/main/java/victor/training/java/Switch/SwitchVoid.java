@@ -60,23 +60,30 @@ record HRMessage(MessageType type, String content, boolean urgent) {
       }
     }*/,
     RAISE,
-    PROMOTE(SomeDIManagedBean::handlePromoteHonest), // #3
+    PROMOTE,//(SomeDIManagedBean::handlePromoteHonest), // #3
     HIRING;
 
 //    abstract void handleMessage(HRMessage message); // #2
 
     //#3 Enum+FP kung-fu (Java 8)
-    public final BiConsumer<SomeDIManagedBean,HRMessage> handlerFunction;
-
-    MessageType(BiConsumer<SomeDIManagedBean, HRMessage> handlerFunction) {
-      this.handlerFunction = handlerFunction;
-    }
+//    public final BiConsumer<SomeDIManagedBean,HRMessage> handlerFunction;
+//
+//    MessageType(BiConsumer<SomeDIManagedBean, HRMessage> handlerFunction) {
+//      this.handlerFunction = handlerFunction;
+//    }
   }
 }
 
+// #4 more unit tests. for (t: HRMessage.Type.values()) { check there is a behavior
+// like always we cover for language weakness with
+// - design patterns (strategy, factory)
+// - gory language features (return Void, abstract method on enum)
+// - unit tests
+
+
 class SomeDIManagedBean {
   public void method(HRMessage message) {
-    message.type().handlerFunction.accept(this, message);
+//    message.type().handlerFunction.accept(this, message);
   }
   public void handlePromoteHonest(HRMessage message) {
     System.out.println(":)");
