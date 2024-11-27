@@ -28,11 +28,11 @@ class EmailService {
       try {
          for (int i = 0; i < MAX_RETRIES; i++) {
             Email email = new Email(); // constructor generates new unique ID
-            email.sender("noreply@corp.com");
-            email.replyTo("/dev/null");
-            email.to(emailAddress);
-            email.subject("Order Placed");
-            email.body("Thank you for your order");
+            email.setSender("noreply@corp.com");
+            email.setReplyTo("/dev/null");
+            email.setTo(emailAddress);
+            email.setSubject("Order Placed");
+            email.setBody("Thank you for your order");
             boolean success = context.send(email);
             if (success) break;
          }

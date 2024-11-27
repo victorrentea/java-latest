@@ -1,12 +1,11 @@
 package victor.training.java.patterns.template;
 
 import lombok.RequiredArgsConstructor;
-import victor.training.java.patterns.template.support.Order;
-import victor.training.java.patterns.template.support.OrderRepo;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.Writer;
+import java.util.List;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -64,4 +63,16 @@ class FileExporter {
             return Objects.toString(cellValue);
         }
     }
+}
+record Order(Long id, Long customerId, Double amount) {
+}
+interface OrderRepo {
+    List<Order> findByActiveTrue(); // 1 Mln orders ;)
+}
+
+interface ProductRepo {
+    List<Product> findAll();
+}
+
+record Product(Long id, String name, Double price, String imageUrl) {
 }
