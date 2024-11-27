@@ -23,15 +23,36 @@ public class IntegrationTest {
   void apiTest() throws Exception {
     mockMvc.perform(post("/books")
             .contentType("application/json")
-            .content("""
+            .content(jsonBody("name"))
+        )
+        .andExpect(status().isOk()); // 200 OK
+  }
+
+  private static String jsonBody(String name) {
+//    String.format("""
+//        {
+//          "title":"%s",
+//          "authors":["author1"],
+//          "teaserVideoUrl": null
+//        }
+//        """, name);
+    System.out.println(" ".repeat(10) + "x");
+    return """
         {
-          "title":"name",
+          "title":"%s",
           "authors":["author1"],
           "teaserVideoUrl": null
         }
-        """)
-        )
-        .andExpect(status().isOk()); // 200 OK
+        """.formatted(name);
+
+    // preview feat removed in 23
+//    return STR."""
+//        {
+//          "title":"\{name}",
+//          "authors":["author1"],
+//          "teaserVideoUrl": null
+//        }
+//        """;
   }
 
 
