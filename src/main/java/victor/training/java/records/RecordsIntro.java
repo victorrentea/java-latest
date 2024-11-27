@@ -7,7 +7,7 @@ import lombok.Value;
 
 public class RecordsIntro {
   public static void main(String[] args) {
-    Point point = Point.from("-1","2");
+    Point point = Point.from("1","2");
     System.out.println(point.x()); // SHOCK! no get- prefix
     validateAnnotations(point);
 
@@ -26,7 +26,8 @@ public class RecordsIntro {
 //@Data // getters, setters, hashcode/equals, toString = perfect for CRUD systems
 //@Value // getters, ctor, all fields=private+final, hashcode/equals, toString
 
-record Point(@Min(0) int x, @Min(0) int y) {
+class A {}
+record Point(@Min(0) int x, @Min(0) int y) /*extends A*/{
   public Point{
     if (x < 0 || y < 0) { // scary! objects refuse to instantiate if invalid
       throw new IllegalArgumentException("Negative coordinates");
@@ -41,7 +42,15 @@ record Point(@Min(0) int x, @Min(0) int y) {
     int yy = Integer.parseInt(ys);
     return new Point(xx, yy);
   }
+  public String toString() {
+    return x + "," + y;
+  }
+  public int x() {
+    return x;
+  }
 }
 
+
+//record Point3D extends Point {}
 
 // let's play.

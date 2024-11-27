@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootApplication
 public class Records {
@@ -32,14 +33,18 @@ class BookApi {
   public record CreateBookRequest(
       @NotBlank String title,
       @NotEmpty List<String> authors,
-      String teaserVideoUrl // may be absent
+      Optional<String> teaserVideoUrl // exceptionally, Optional can be used in the signature of a record
   ) {
+//    public Optional<String> teaserVideoUrl() {
+//      return Optional.ofNullable(teaserVideoUrl);
+//    }
   }
 
   @PostMapping("books")
   @Transactional
   public void createBook(@RequestBody @Validated CreateBookRequest request) {
-    System.out.println("pretend save title:" + request.title() + " and url:" + request.teaserVideoUrl());
+    System.out.println("pretend save title:" + request.title() + " and url:" +
+                       request.teaserVideoUrl().map(String::toLowerCase).orElse("N/A"));
     System.out.println("pretend save authors: " + request.authors());
   }
 
@@ -68,6 +73,12 @@ class Book {
 
   private String authorFirstName;
   private String authorLastName;
+
+  private String review;
+
+  public Optional<String> getReview() {
+    return Optional.ofNullable(review);
+  }
 }
 
 
