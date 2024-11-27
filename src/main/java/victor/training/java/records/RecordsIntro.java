@@ -26,8 +26,11 @@ public class RecordsIntro {
 //@Data // getters, setters, hashcode/equals, toString = perfect for CRUD systems
 //@Value // getters, ctor, all fields=private+final, hashcode/equals, toString
 
+interface Displayable{
+  void display();
+}
 class A {}
-record Point(@Min(0) int x, @Min(0) int y) /*extends A*/{
+record Point(@Min(0) int x, @Min(0) int y) implements Displayable /*extends A*/{
   public Point{
     if (x < 0 || y < 0) { // scary! objects refuse to instantiate if invalid
       throw new IllegalArgumentException("Negative coordinates");
@@ -47,6 +50,11 @@ record Point(@Min(0) int x, @Min(0) int y) /*extends A*/{
   }
   public int x() {
     return x;
+  }
+
+  @Override
+  public void display() {
+    System.out.println("Point at " + x + "," + y);
   }
 }
 
