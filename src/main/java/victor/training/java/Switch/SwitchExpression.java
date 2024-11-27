@@ -34,7 +34,7 @@ class SwitchExpression {
       case RO, FR, DE -> computeEUTax(parcel);
 
       // AVOID default in switch expression
-      default -> throw new IllegalArgumentException("Unknown country: " + parcel.originCountry());
+      //default -> throw new IllegalArgumentException("Unknown country: " + parcel.originCountry());
 //      default -> throw new Exception("Unknown country: " + parcel.originCountry());
     };
     System.out.println("AFTER SWITCH");
