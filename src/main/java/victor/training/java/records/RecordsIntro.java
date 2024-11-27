@@ -1,5 +1,6 @@
 package victor.training.java.records;
 
+import groovy.lang.Tuple3;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import jakarta.validation.constraints.Min;
@@ -7,6 +8,8 @@ import lombok.Value;
 
 public class RecordsIntro {
   public static void main(String[] args) {
+//    Tuple3<String, String, Integer> t3; >>>> replace with records
+//    t3.getV3() = what does that integer MEAN?
     Point point = Point.from("1","2");
     System.out.println(point.x()); // SHOCK! no get- prefix
     validateAnnotations(point);
@@ -30,7 +33,15 @@ interface Displayable{
   void display();
 }
 class A {}
+
+
+//class X extends Record {
+//}
+
+
 record Point(@Min(0) int x, @Min(0) int y) implements Displayable /*extends A*/{
+//  private String extra; // can't hide your state
+
   public Point{
     if (x < 0 || y < 0) { // scary! objects refuse to instantiate if invalid
       throw new IllegalArgumentException("Negative coordinates");
