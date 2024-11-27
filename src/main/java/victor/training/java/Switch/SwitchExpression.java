@@ -28,7 +28,8 @@ class SwitchExpression {
     return switch (parcel.originCountry()) { // switch expression(enum) idiom
       case UK -> computeUkTax(parcel);
       case CN -> computeChinaTax(parcel);
-      case RO,FR -> computeEUTax(parcel);
+      case RO,FR,DE -> computeEUTax(parcel);
+
       // AVOID default in switch expression
 //      default -> throw new IllegalArgumentException("Unknown country: " + parcel.originCountry());
     };
