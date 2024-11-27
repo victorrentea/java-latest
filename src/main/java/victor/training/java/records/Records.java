@@ -9,10 +9,12 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.test.annotation.Timed;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,12 +26,16 @@ public class Records {
 }
 
 @RestController
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 //record BookApi(BookRepo bookRepo) { // 🛑DON'T: proxies don't work on final classes => eg @Secured/@Transactional.. won't work
 class BookApi {
   private final BookRepo bookRepo;
 
-  // DTO
+  public BookApi(BookRepo bookRepo) {
+    this.bookRepo = bookRepo;
+  }
+
+  // DTOs [inside the classes]
   public record CreateBookRequest(
       @NotBlank String title,
       @NotEmpty List<String> authors,
@@ -42,6 +48,8 @@ class BookApi {
 
   @PostMapping("books")
   @Transactional
+//  @Timed()
+//  @Secured
   public void createBook(@RequestBody @Validated CreateBookRequest request) {
     System.out.println("pretend save title:" + request.title() + " and url:" +
                        request.teaserVideoUrl().map(String::toLowerCase).orElse("N/A"));
@@ -60,12 +68,19 @@ class BookApi {
   public List<SearchBookResult> search(@RequestParam String name) {
     return bookRepo.search(name);
   }
-
 }
 
+// Tuple<String, Integer> t = functionReturning2Things(); // NO
+// Result r = functionReturning2Things();
+//record REsult(String name, int age) {
+
+//@Document/ cassandra/redis can work with records
+
+
+//🛑DON'T with JPA/ORM/Hibernate's, because phylosophy is built on mutable objects
 @Entity
 @Data // avoid @Data on @Entity
-class Book {
+class Book { // + hibernate might want to subclass the entity (proxy)
   @Id
   @GeneratedValue
   private Long id;
