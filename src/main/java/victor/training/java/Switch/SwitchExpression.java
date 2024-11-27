@@ -25,19 +25,24 @@ class SwitchExpression {
 
   //  core domain logic
   public static double calculateTax(Parcel parcel) {
-    double result = 0;
-    switch (parcel.originCountry()) {
-      case "UK":
-        result = parcel.tobaccoValue() / 2 + parcel.regularValue();
-        break;
-      case "CN":
-        result = parcel.tobaccoValue() + parcel.regularValue();
-        break;
-      case "RO":
-        result = parcel.tobaccoValue() / 3;
-        break;
-    }
-    return result;
+    return switch (parcel.originCountry()) {
+      case "UK" -> computeUkTax(parcel);
+      case "CN" -> computeChinaTax(parcel);
+      case "RO" -> computeRoTax(parcel);
+      default -> throw new IllegalArgumentException("Unknown country: " + parcel.originCountry());
+    };
+  }
+
+  private static double computeRoTax(Parcel parcel) {
+    return parcel.tobaccoValue() / 3;
+  }
+
+  private static double computeChinaTax(Parcel parcel) {
+    return parcel.tobaccoValue() + parcel.regularValue();
+  }
+
+  private static double computeUkTax(Parcel parcel) {
+    return parcel.tobaccoValue() / 2 + parcel.regularValue();
   }
 }
 
