@@ -3,34 +3,44 @@ package victor.training.java.Switch;
 
 class SwitchVoid {
   public void handleMessage(HRMessage message) {
-    switch (message.type()) {
+    int useless = switch (message.type()) {
       case RAISE -> handleRaiseSalary(message.content());
       case PROMOTE -> handlePromote(message.content());
       case FIRE -> {
         if (message.urgent())
-          handleDismissUrgent(message.content());
+          yield handleDismissUrgent(message.content());
         else
-          handleDismiss(message.content());
+          yield handleDismiss(message.content());
       }
-      case HIRING -> System.out.println("We're hiring!");
-      default ->
-        throw new IllegalArgumentException("Should never happen in prod: unknown message type" + message.type());
+      case HIRING -> handleHiring();
+//      default ->
+//        throw new IllegalArgumentException("Should never happen in prod: unknown message type" + message.type());
     };
   }
 
-  private void handlePromote(String content) {
+  private static int handleHiring() {
+    System.out.println("We're hiring!");
+    return 0;
   }
 
-  private void handleDismissUrgent(String content) {
-    System.out.println(":( !!");
-  }
-
-  private void handleDismiss(String content) {
-    System.out.println(":( !!");
-  }
-
-  private void handleRaiseSalary(String content) {
+  private int handlePromote(String content) {
     System.out.println(":)");
+    return 0;
+  }
+
+  private int handleDismissUrgent(String content) {
+    System.out.println(":( !!");
+    return 0;
+  }
+
+  private int handleDismiss(String content) {
+    System.out.println(":( !!");
+    return 0;
+  }
+
+  private int handleRaiseSalary(String content) {
+    System.out.println(":)");
+    return 0;
   }
 
 }
