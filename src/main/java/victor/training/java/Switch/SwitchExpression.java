@@ -2,7 +2,6 @@ package victor.training.java.Switch;
 
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Stream;
 
 import static java.lang.Double.parseDouble;
@@ -12,6 +11,7 @@ class SwitchExpression {
     Stream.of(
         "RO|100|100|2021-01-01",
         "CN|100|100|2021-01-01",
+        "FR|100|100|2021-01-01",
         "UK|100|100|2021-01-01"
     ).forEach(SwitchExpression::process);
   }
@@ -19,21 +19,22 @@ class SwitchExpression {
   // parsing (infrastructure)
   private static void process(String flatParcelLine) {
     String[] a = flatParcelLine.split("\\|");
-    Parcel parcel = new Parcel(a[0], parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
+    Parcel parcel = new Parcel(CountryEnum.valueOf(a[0]), parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
     System.out.println(calculateTax(parcel));
   }
 
   //  core domain logic
   public static double calculateTax(Parcel parcel) {
-    return switch (parcel.originCountry()) {
-      case "UK" -> computeUkTax(parcel);
-      case "CN" -> computeChinaTax(parcel);
-      case "RO" -> computeRoTax(parcel);
-      default -> throw new IllegalArgumentException("Unknown country: " + parcel.originCountry());
+    return switch (parcel.originCountry()) { // switch expression(enum) idiom
+      case UK -> computeUkTax(parcel);
+      case CN -> computeChinaTax(parcel);
+      case RO,FR -> computeEUTax(parcel);
+      // AVOID default in switch expression
+//      default -> throw new IllegalArgumentException("Unknown country: " + parcel.originCountry());
     };
   }
 
-  private static double computeRoTax(Parcel parcel) {
+  private static double computeEUTax(Parcel parcel) {
     return parcel.tobaccoValue() / 3;
   }
 
@@ -47,7 +48,7 @@ class SwitchExpression {
 }
 
 record Parcel(
-    String originCountry,
+    CountryEnum originCountry,
     double tobaccoValue,
     double regularValue,
     LocalDate date) {
@@ -57,6 +58,8 @@ enum CountryEnum {
   RO,
   UK,
   CN,
+  FR,
+  DE
 }
 
 // explore: non-enhaustive vs default?
