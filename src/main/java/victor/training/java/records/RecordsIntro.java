@@ -48,8 +48,8 @@ record Point(@Min(0) int x, @Min(0) int y) implements Displayable /*extends A*/{
     }
   }
   public Point(String xs, String ys) {
-    int xx = Integer.parseInt(xs);// java 22
-    this(xx, Integer.parseInt(ys));
+//    int xx = Integer.parseInt(xs);// java 22
+    this( Integer.parseInt(xs), Integer.parseInt(ys));
   }
   public static Point from(String xs, String ys) {// better than constructors on records?
     int xx = Integer.parseInt(xs);

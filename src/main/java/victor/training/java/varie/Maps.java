@@ -1,7 +1,10 @@
+package victor.training.java.varie;
+
 import java.util.HashMap;
 import java.util.Map;
 
-void main() {
+public class Maps {
+  public static void main() {
 //  Map<String, Integer> map = new HashMap<>();
 //  map.put("one", 1);
 //  map.put("two", 2);
@@ -17,3 +20,4 @@ void main() {
 // new HashMap<>(){{ "idiom"
 // Map.of
 // Map.ofEntries
+}
