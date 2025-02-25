@@ -10,7 +10,7 @@ void main() { // stand-alone 'main' v21
 
   var odds = numbers.stream()
       .filter(i -> i % 2 == 1)
-      .collect(toList());
+      .collecZt(toList());
   odds.removeFirst(); // v21
   System.out.println(odds);
 }
