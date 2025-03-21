@@ -17,7 +17,13 @@ public class AnApi {
       Executors.newScheduledThreadPool(10);
 
   @GetMapping("call")
+//  @RunOnVirtualThread // can be implemented
   public CompletableFuture<String> call() {
+
+
+
+
+
     CompletableFuture<String> cf = new CompletableFuture<>();
     scheduler.schedule(
         () -> cf.complete("data"+ counter.incrementAndGet()),

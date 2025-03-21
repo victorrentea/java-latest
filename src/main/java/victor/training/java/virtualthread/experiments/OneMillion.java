@@ -6,11 +6,11 @@ import lombok.SneakyThrows;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.Executors.newThreadPerTaskExecutor;
-import static java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor;
 
 public class OneMillion {
 
@@ -21,13 +21,14 @@ public class OneMillion {
     long mem0 = getUsedMemory();
     CountDownLatch pause = new CountDownLatch(1);
     CountDownLatch started = new CountDownLatch(TOTAL);
-    try (var virtual = newVirtualThreadPerTaskExecutor()) {
+    try (var virtual = Executors.newVirtualThreadPerTaskExecutor()) {
 //    try (var virtual = newThreadPerTaskExecutor(Thread::new)) {
       for (int i = 0; i < TOTAL; i++) {
         virtual.submit(new Runnable() {
           @Override
           @SneakyThrows
           public void run() {
+//            Thread.currentThread().isVirtual()
             counter.incrementAndGet();
             started.countDown();
             pause.await();
