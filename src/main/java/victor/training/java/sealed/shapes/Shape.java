@@ -1,6 +1,8 @@
 package victor.training.java.sealed.shapes;
 
 
-public interface Shape {
+public sealed interface Shape
+    permits Circle, Square, Rectangle {
+  double perimeter();
 }
 
