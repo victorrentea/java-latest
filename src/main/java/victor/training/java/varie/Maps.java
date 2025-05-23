@@ -8,6 +8,5 @@ void main() {
   System.out.println(map);
 }
 
-// new HashMap<>(){{ "idiom"
 // Map.of
 // Map.ofEntries

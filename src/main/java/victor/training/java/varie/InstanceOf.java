@@ -18,7 +18,8 @@ public class InstanceOf {
 
   private static void method(Object obj) {
 //    if (obj instanceof Point(Position ...)) {
-    if (obj instanceof Point point) {
+    if (obj instanceof Point) {
+      Point point = (Point) obj;
       Position position = point.position();
       System.out.println("At position = " + position);
 

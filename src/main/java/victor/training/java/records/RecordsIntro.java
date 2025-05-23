@@ -1,5 +1,6 @@
 package victor.training.java.records;
 
+import java.util.List;
 import java.util.Objects;
 
 public class RecordsIntro {

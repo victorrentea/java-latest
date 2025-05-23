@@ -2,9 +2,6 @@ package victor.training.java.virtualthread.experiments;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
 import org.awaitility.Awaitility;
 import org.springframework.web.client.RestTemplate;
 import victor.training.java.Util;
@@ -46,7 +43,7 @@ public class Experiment {
 
   private static final RestTemplate restTemplate = new RestTemplate();
 
-  private static final org.apache.http.client.HttpClient apacheClient = org.apache.http.impl.client.HttpClients.createDefault();
+//  private static final org.apache.http.client.HttpClient apacheClient = org.apache.http.impl.client.HttpClients.createDefault();
 
   @SneakyThrows
   private static void io() {

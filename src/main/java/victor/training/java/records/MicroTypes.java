@@ -1,49 +1,38 @@
 package victor.training.java.records;
 
-import org.jooq.lambda.tuple.Tuple;
-import org.jooq.lambda.tuple.Tuple2;
-import org.junit.jupiter.api.Test;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.client.RestTemplate;
-
-import java.net.URI;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static java.util.stream.Collectors.joining;
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class MicroTypes {
 
-   public Map<Long, Set<Tuple2<String, Integer>>> extremeFP() {
+   public static void main(String[] args) {
+      new MicroTypes().primitiveObsession("CARD");
+   }
+
+   //<editor-fold desc="fetchData()">
+   public Map<Long, Map<String, Integer>> fetchData(String paymentMethod) {
       Long customerId = 1L;
       Integer product1Count = 2;
       Integer product2Count = 4;
-      return Map.of(customerId, Set.of(
-          Tuple.tuple("Table", product1Count),
-          Tuple.tuple("Chair", product2Count)
+      return Map.of(customerId, Map.of(
+          "Table", product1Count,
+          "Chair", product2Count
       ));
    }
-   
-   void lackOfAbstractions() {
-      Map<Long, Set<Tuple2<String, Integer>>> map = extremeFP();
-      // 🚫Don't use 'var' above
+   //</editor-fold>
 
-      for (Long cid : map.keySet()) {
-         String pl = map.get(cid).stream()
-             .map(t -> t.v2 + " of " + t.v1)
+   public void primitiveObsession(String paymentMethod) {
+      if (!"CARD".equals(paymentMethod) && !"CASH".equals(paymentMethod)) {
+         throw new IllegalArgumentException("Only CARD payment method is supported");
+      }
+      Map<Long, Map<String, Integer>> map = fetchData(paymentMethod);
+
+      for (var e : map.entrySet()) { // iterating map entries 🤢
+         String pl = e.getValue().entrySet().stream()
+             .map(entry -> entry.getValue() + " pcs. of " + entry.getKey())
              .collect(joining(", "));
-         System.out.println("cid=" + cid + " got " + pl);
+         System.out.println("cid=" + e.getKey() + " got " + pl);
       }
    }
-
-   public void varUsecase() {
-      ResponseEntity<List<String>> response = new RestTemplate().exchange(new RequestEntity<>(HttpMethod.POST, URI.create("http://some-url")), new ParameterizedTypeReference<List<String>>() {
-      });
-   }
-
 }
