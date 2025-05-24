@@ -5,7 +5,6 @@ import java.util.Map;
 import static java.util.stream.Collectors.joining;
 
 public class MicroTypes {
-
    public static void main(String[] args) {
       new MicroTypes().primitiveObsession("CARD");
    }
@@ -26,9 +25,9 @@ public class MicroTypes {
       if (!"CARD".equals(paymentMethod) && !"CASH".equals(paymentMethod)) {
          throw new IllegalArgumentException("Only CARD payment method is supported");
       }
-      Map<Long, Map<String, Integer>> map = fetchData(paymentMethod);
+      var customerIdToProductCounts = fetchData(paymentMethod);
 
-      for (var e : map.entrySet()) { // iterating map entries 🤢
+      for (var e : customerIdToProductCounts.entrySet()) { // iterating map entries 🤢
          String pl = e.getValue().entrySet().stream()
              .map(entry -> entry.getValue() + " pcs. of " + entry.getKey())
              .collect(joining(", "));

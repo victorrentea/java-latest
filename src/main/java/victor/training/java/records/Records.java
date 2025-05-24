@@ -1,10 +1,9 @@
 package victor.training.java.records;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringApplication;
@@ -28,7 +27,7 @@ public class Records {
 class BookApi {
   private final BookRepo bookRepo;
 
-  // DTO
+  // API DTO, obiecte volatile, persistente {Mongo,Redis..}\ {JPA}
   public record CreateBookRequest(
       @NotBlank String title,
       @NotEmpty List<String> authors,
@@ -45,6 +44,7 @@ class BookApi {
 
   // ----
 
+//  @Builder pt orice record > 5 campuri
   public record SearchBookResult(
       long id,
       String name
@@ -66,8 +66,19 @@ class Book {
   private Long id;
   private String title;
 
-  private String authorFirstName;
-  private String authorLastName;
+  @Embeddable
+  public record AuthorName(
+      // manevra asta nu necesita ALTER TABLE. e doar de mapare de Hib
+      String firstName,
+      String lastName
+  ) {}
+  // in tabela au ramas urmatoarele coloane:
+  // author_first_name, author_last_name, id, title
+
+  @Embedded
+  private AuthorName authorName;
+//  private String authorFirstName;
+//  private String authorLastName;
 }
 
 

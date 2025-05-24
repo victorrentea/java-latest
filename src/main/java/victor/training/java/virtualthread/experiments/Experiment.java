@@ -22,11 +22,17 @@ public class Experiment {
     Util.sleepMillis(1000); // allow the SpringApp to restart
     RunMonitor monitor = new RunMonitor();
     try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-      for (int taskId = 0; taskId < 3; taskId++) {
+      for (int taskId = 0; taskId < 30; taskId++) {
         Runnable work = () -> {
+          // Tstart=...
+          // AICI inca nu sunt in metoda syncronized
+          log.info("am pornit calare pe un PT🐴");
 //          io(); // add a prior warmup call
 //          cpu();
-          locks();
+          locks(); // cand un VT calare pe un PT da sa intre intr-un bloc/metoda syncrhonized,
+          // PT se lipeste de VT, care nu mai poate fi demontat
+
+          // Tend=...
         };
         executor.submit(monitor.run(taskId, work));
       }
@@ -69,6 +75,7 @@ public class Experiment {
     BigInteger res = ZERO;
     for (int j = 0; j < 10_000_000; j++) { // decrease this number for slower machines
       res = res.add(valueOf(j).sqrt());
+//      if (j%10000==0) Thread.yield();
     }
     blackHole = res.longValue();
     // TODO Fix#1: -Djdk.virtualThreadScheduler.parallelism=20

@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static java.lang.Thread.sleep;
 import static java.util.concurrent.Executors.newThreadPerTaskExecutor;
+import static java.util.concurrent.Executors.newVirtualThreadPerTaskExecutor;
 
 public class OneMillion {
 
@@ -21,7 +22,7 @@ public class OneMillion {
     long mem0 = getUsedMemory();
     CountDownLatch pause = new CountDownLatch(1);
     CountDownLatch started = new CountDownLatch(TOTAL);
-    try (var virtual = Executors.newVirtualThreadPerTaskExecutor()) {
+    try (var virtual = newVirtualThreadPerTaskExecutor()) {
 //    try (var virtual = newThreadPerTaskExecutor(Thread::new)) {
       for (int i = 0; i < TOTAL; i++) {
         virtual.submit(new Runnable() {
@@ -29,10 +30,11 @@ public class OneMillion {
           @SneakyThrows
           public void run() {
 //            Thread.currentThread().isVirtual()
-            counter.incrementAndGet();
-            started.countDown();
-            pause.await();
-            counter.decrementAndGet();
+            counter.incrementAndGet(); // total ++
+            started.countDown(); // stau un pic sa vina si fratii mei, ceilalti 999.999
+            // AICI am 1M in mem
+            pause.await(); // astept sa ma lase sa pornesc
+            counter.decrementAndGet(); // mor (adica total--)
           }
         });
       }

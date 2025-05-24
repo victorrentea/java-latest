@@ -31,6 +31,8 @@ public class VisitorPlay {
     var totalPerimeter2 = shapes.stream().mapToDouble(Shape::perimeter).sum();
 
     System.out.println(totalPerimeter);
+
+    shapes.forEach(shape -> shape.banu());
   }
 }
 

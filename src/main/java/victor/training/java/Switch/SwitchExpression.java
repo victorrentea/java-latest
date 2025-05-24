@@ -1,7 +1,10 @@
 package victor.training.java.Switch;
 
 
+import lombok.Data;
+
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -19,39 +22,60 @@ class SwitchExpression {
   // parsing (infrastructure)
   private static void process(String flatParcelLine) {
     String[] a = flatParcelLine.split("\\|");
-    Parcel parcel = new Parcel(a[0], parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
+    // mapper string din request/fisier -> enum
+    Parcel parcel = new Parcel(CountryEnum.valueOf(a[0]), parseDouble(a[1]), parseDouble(a[2]), LocalDate.parse(a[3]));
     System.out.println(calculateTax(parcel));
   }
 
   //  core domain logic
   public static double calculateTax(Parcel parcel) {
-    double result = 0;
-    switch (parcel.originCountry()) {
-      case "UK":
-        result = parcel.tobaccoValue() / 2 + parcel.regularValue();
-        break;
-      case "CN":
-        result = parcel.tobaccoValue() + parcel.regularValue();
-        break;
-      case "RO":
-        result = parcel.tobaccoValue() / 3;
-        break;
-    }
-    return result;
+//    parcel.originCountry().calculateTax() @robert
+    return switch (parcel.originCountry()) {
+      case UK -> parcel.tobaccoValue() / 2 + parcel.regularValue();
+      case CN -> parcel.tobaccoValue() + parcel.regularValue();
+      case RO -> rux(parcel);
+      // daca Parcel#date > 1 mai, / 2 + 10
+
+      // daca fol switch(enum) ca expr=> NU PUNE default
+      //default -> throw new IllegalStateException("Unexpected value: " + parcel.originCountry());
+    };
+  }
+
+  private static double rux(Parcel parcel) {
+    if (parcel.date().isBefore(LocalDate.parse("01.05.2025")))
+      return parcel.tobaccoValue() / 3;
+    return parcel.tobaccoValue() / 2 + 10;
   }
 }
 
 record Parcel(
-    String originCountry,
+    CountryEnum originCountry,
     double tobaccoValue,
     double regularValue,
     LocalDate date) {
 }
 
 enum CountryEnum {
-  RO,
-  UK,
-  CN,
+  RO { //@robert
+    @Override
+    double calculateTax() {
+      return 1;
+    }
+  },
+  UK {
+    @Override
+    double calculateTax() {
+      return 2;
+    }
+  },
+  CN {
+    @Override
+    double calculateTax() {
+      return 3;
+    }
+  };/*,
+  DB*/
+  abstract double calculateTax();
 }
 
 // explore: non-enhaustive vs default?
