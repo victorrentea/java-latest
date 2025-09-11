@@ -4,6 +4,8 @@ import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Map;
+import java.util.function.Function;
 
 
 class Strategy {
@@ -40,16 +42,32 @@ class CustomsService {
     return taxCalculator.calculateTax(parcel);
   }
 
+  Map<Country, Class<? extends TaxCalculator>> countryToTaxCalculator = Map.of(
+      Country.UK, UKTaxService.class,
+//      Country.CN, ChinaTaxService.class,
+      Country.FR, UETaxService.class,
+      Country.ES, UETaxService.class,
+      Country.RO, UETaxService.class
+  );
+
+//  private static final Map<Country, Function<Parcel, Double>> taxFunctions = Map.of(
+//      Country.UK, p -> new UKTaxService().calculateTax(p),
+//      Country.CN, p -> new ChinaTaxService().calculateTax(p),
+//      Country.FR, p -> new UETaxService().calculateTax(p),
+//      Country.ES, p -> new UETaxService().calculateTax(p),
+//      Country.RO, p -> new UETaxService().calculateTax(p)
+//  );
   // STATIC FACTORY METHOD PATTERN
   private static TaxCalculator selectTaxCalculator(Parcel parcel) {
-    var r = switch (parcel.originCountry()) {
-      case UK -> new UKTaxService();
-      case CN -> new ChinaTaxService();
-      case FR, ES, RO -> new UETaxService();
-      //  NU PUNE default daca switch expression e pe enum
-      default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
-    };
-    return p->0;
+//    var r = switch (parcel.originCountry()) {
+//      case UK -> new UKTaxService();
+//      case CN -> new ChinaTaxService();
+//      case FR, ES, RO -> new UETaxService();
+//      default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
+//    };
+//    return p->0;
+
+    return parcel.originCountry().calculator;
   }
 }
 // "STRATEGY" pattern
