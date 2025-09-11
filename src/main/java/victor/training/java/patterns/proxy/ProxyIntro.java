@@ -3,19 +3,48 @@ package victor.training.java.patterns.proxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cglib.proxy.Callback;
+import org.springframework.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.MethodInterceptor;
+import org.springframework.cglib.proxy.MethodProxy;
 import org.springframework.stereotype.Service;
+import org.springframework.test.annotation.Timed;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.Reader;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import static java.lang.System.currentTimeMillis;
 
 public class ProxyIntro {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws FileNotFoundException {
     // Play the role of Spring here (there's no framework)
     // TODO 1 : LOG the arguments of any invocation of a method in Maths w/ decorator
     // TODO 2 : without changing anything below the line (w/o any interface)
     // TODO 3 : so that any new methods in Maths are automatically logged [hard]
-    Maths real = new Maths();
-    Maths decorata = new MathsCuMetrica(new MathsCuLogging(real));
-    SecondGrade secondGrade = new SecondGrade(decorata);
+    Maths real = new Maths(); // instanta curata din beanul tau @Service (eg)
+//    Maths decorata = new MathsCuMetrica(new MathsCuLogging(real));
+
+    Callback h = new MethodInterceptor() {
+      @Override
+      public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+        long start = currentTimeMillis();
+
+        Object r = method.invoke(real, args);
+
+        long end = currentTimeMillis();
+        System.out.println(method.getName() + " called with " + Arrays.toString(args) + " returning " + r + " took " + (end - start) + " ms");
+        return r;
+      }
+    };
+    Maths proxy = (Maths) Enhancer.create(Maths.class, h);
+    // CGLIB genereaza inmem bytecodeul unei subclasa la clasa ta.
+
+    SecondGrade secondGrade = new SecondGrade(proxy);
     new ProxyIntro().run(secondGrade);
 //    SpringApplication.run(ProxyIntro.class, args);
   }
@@ -74,6 +103,11 @@ class SecondGrade {
   }
 }
 class Maths {
+//  @Timed()
+//  @Secured("ROLE_ADMIN")
+//  @PreAuthorize("
+//  @Transactional
+//  @Cacheable
   public int sum(int a, int b) {
     return a + b;
   }
