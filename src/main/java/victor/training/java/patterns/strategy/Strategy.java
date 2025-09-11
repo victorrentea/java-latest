@@ -18,10 +18,6 @@ class Strategy {
   }
 }
 
-enum Country {
-  UK, CN, FR, ES, RO
-}
-
 record Parcel(
     Country originCountry,
     double tobaccoValue,
@@ -46,15 +42,18 @@ class CustomsService {
 
   // STATIC FACTORY METHOD PATTERN
   private static TaxCalculator selectTaxCalculator(Parcel parcel) {
-    return switch (parcel.originCountry()) {
+    var r = switch (parcel.originCountry()) {
       case UK -> new UKTaxService();
       case CN -> new ChinaTaxService();
       case FR, ES, RO -> new UETaxService();
+      //  NU PUNE default daca switch expression e pe enum
       default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
     };
+    return p->0;
   }
 }
 // "STRATEGY" pattern
+@FunctionalInterface
 interface TaxCalculator {
   double calculateTax(Parcel parcel);
 }
