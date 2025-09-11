@@ -29,32 +29,40 @@ record Parcel(
 @Data
 class CustomsService {
   public double calculateCustomsTax(Parcel parcel) {
+    TaxCalculator taxCalculator;
     switch (parcel.originCountry()) {
       case "UK":
-        return UKTaxService.calculateBrexitTax(parcel);
+        taxCalculator = new UKTaxService();
+        break;
       case "CN":
-        return ChinaTaxService.calculateChinaTax(parcel);
+        taxCalculator = new ChinaTaxService();
+        break;
       case "FR":
       case "ES":
       case "RO":
-        return UETaxService.calculateUETax(parcel);
+        taxCalculator = new UETaxService();
+        break;
       default:
         throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
     }
+    return taxCalculator.calculateTax(parcel);
   }
 }
-class UETaxService {
-  public static double calculateUETax(Parcel parcel) {
+interface TaxCalculator {
+  double calculateTax(Parcel parcel);
+}
+class UETaxService implements TaxCalculator {
+  public double calculateTax(Parcel parcel) {
     return parcel.tobaccoValue() / 3;
   }
 }
-class ChinaTaxService {
-  public static double calculateChinaTax(Parcel parcel) {
+class ChinaTaxService implements TaxCalculator {
+  public double calculateTax(Parcel parcel) {
     return parcel.tobaccoValue() + parcel.regularValue() + 25;
   }
 }
-class UKTaxService {
-  public static double calculateBrexitTax(Parcel parcel) {
+class UKTaxService implements TaxCalculator {
+  public double calculateTax(Parcel parcel) {
     // un pic de cod in plus
     return parcel.tobaccoValue() / 2 + parcel.regularValue();
   }
