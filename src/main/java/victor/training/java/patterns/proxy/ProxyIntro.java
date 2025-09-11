@@ -5,39 +5,65 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Service;
 
-@SpringBootApplication
+import static java.lang.System.currentTimeMillis;
+
 public class ProxyIntro {
   public static void main(String[] args) {
     // Play the role of Spring here (there's no framework)
     // TODO 1 : LOG the arguments of any invocation of a method in Maths w/ decorator
     // TODO 2 : without changing anything below the line (w/o any interface)
     // TODO 3 : so that any new methods in Maths are automatically logged [hard]
-
-    Maths maths = new Maths();
-
-    SecondGrade secondGrade = new SecondGrade(maths);
-
+    Maths real = new Maths();
+    Maths decorata = new MathsCuMetrica(new MathsCuLogging(real));
+    SecondGrade secondGrade = new SecondGrade(decorata);
     new ProxyIntro().run(secondGrade);
-
-    // TODO 4 : let Spring do its job, and do the same with an Aspect
-    SpringApplication.run(ProxyIntro.class, args);
+//    SpringApplication.run(ProxyIntro.class, args);
   }
 
   // =============== THE LINE =================
 
-  @Autowired
   public void run(SecondGrade secondGrade) {
     System.out.println("At runtime...");
     secondGrade.mathClass();
   }
-
 }
-
-@Service
-class SecondGrade {
+class MathsCuMetrica extends Maths {
   private final Maths maths;
 
+  MathsCuMetrica(Maths maths) {
+    this.maths = maths;
+  }
+
+  @Override
+  public int sum(int a, int b) {
+    long start = currentTimeMillis();
+    int r = maths.sum(a, b);
+    long end = currentTimeMillis();
+    System.out.println("sum took " + (end - start) + " ms");
+    return r;
+  }
+}
+class MathsCuLogging extends Maths {
+  private final Maths maths;
+
+  MathsCuLogging(Maths maths) {
+    this.maths = maths;
+  }
+
+  @Override
+  public int sum(int a, int b) {
+    int r = maths.sum(a, b);
+    System.out.println("sum called with " + a + "," + b + " returning " + r);
+    return r;
+  }
+}
+// scriind cod doar deasupra liniei, afla ce-a facut fii-ta la mate azi.
+// printeaza toate apelurile catre Maths pe care le-a facut SecondGrade, cu param si return value
+// ==============
+class SecondGrade {
+  private final Maths maths;
   SecondGrade(Maths maths) {
+    System.out.println("ce-mi injecteaza aici? "+ maths.getClass());
     this.maths = maths;
   }
 
@@ -47,13 +73,10 @@ class SecondGrade {
     System.out.println("2x3=" + maths.product(2, 3));
   }
 }
-
-@Service
 class Maths {
   public int sum(int a, int b) {
     return a + b;
   }
-
   public int product(int a, int b) {
     int total = 0;
     for (int i = 0; i < a; i++) {
