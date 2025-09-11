@@ -3,10 +3,12 @@ package victor.training.java.patterns.proxy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.cglib.proxy.Callback;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Timed;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import static java.lang.System.currentTimeMillis;
-
+@SpringBootApplication
 public class ProxyIntro {
   public static void main(String[] args) throws FileNotFoundException {
     // Play the role of Spring here (there's no framework)
@@ -45,13 +47,18 @@ public class ProxyIntro {
     // CGLIB genereaza inmem bytecodeul unei subclasa la clasa ta.
 
     SecondGrade secondGrade = new SecondGrade(proxy);
-    new ProxyIntro().run(secondGrade);
-//    SpringApplication.run(ProxyIntro.class, args);
+//    new ProxyIntro().run();
+    SpringApplication.run(ProxyIntro.class, args);
   }
 
   // =============== THE LINE =================
 
-  public void run(SecondGrade secondGrade) {
+  @Autowired
+  SecondGrade secondGrade;
+
+  @EventListener(ApplicationStartedEvent.class)
+  public void run() {
+
     System.out.println("At runtime...");
     secondGrade.mathClass();
   }
@@ -89,6 +96,7 @@ class MathsCuLogging extends Maths {
 // scriind cod doar deasupra liniei, afla ce-a facut fii-ta la mate azi.
 // printeaza toate apelurile catre Maths pe care le-a facut SecondGrade, cu param si return value
 // ==============
+@Service
 class SecondGrade {
   private final Maths maths;
   SecondGrade(Maths maths) {
@@ -102,12 +110,15 @@ class SecondGrade {
     System.out.println("2x3=" + maths.product(2, 3));
   }
 }
+@Service
 class Maths {
 //  @Timed()
 //  @Secured("ROLE_ADMIN")
 //  @PreAuthorize("
 //  @Transactional
 //  @Cacheable
+
+  @LoggedMethod
   public int sum(int a, int b) {
     return a + b;
   }
