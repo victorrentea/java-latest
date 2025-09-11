@@ -71,6 +71,9 @@ class CustomsService {
 //  );
   // STATIC FACTORY METHOD PATTERN
   private TaxCalculator selectTaxCalculator(Parcel parcel) {
+//    validatoruLuiAlex.validate();
+//    dupa aia for cu cele ramase
+
     for (TaxCalculator taxCalculator : taxCalculators) {
       if (taxCalculator.isEligible(parcel))
         return taxCalculator;
@@ -89,7 +92,7 @@ interface TaxCalculator {
 }
 
 @Service
-@Order(1)
+@Order(10)
 class ChinaTaxService implements TaxCalculator {
   @Override
   public boolean isEligible(Parcel parcel) {
@@ -102,7 +105,7 @@ class ChinaTaxService implements TaxCalculator {
 }
 
 @Service
-@Order(9999)
+@Order(100)
 class DefaultTaxService implements TaxCalculator {
   @Override
   public boolean isEligible(Parcel parcel) {
@@ -115,7 +118,7 @@ class DefaultTaxService implements TaxCalculator {
 }
 
 @Service
-@Order(1)
+@Order(20) // sa fie loc si de 15 maine 🤪
 class UETaxService implements TaxCalculator {
   @Override
   public boolean isEligible(Parcel parcel) {
@@ -129,8 +132,7 @@ class UETaxService implements TaxCalculator {
 }
 
 @Service
-@Order(1)
-
+@Order(40)
 class UKTaxService implements TaxCalculator {
   @Override
   public boolean isEligible(Parcel parcel) {
