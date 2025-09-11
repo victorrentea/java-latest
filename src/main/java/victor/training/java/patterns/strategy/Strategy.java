@@ -31,16 +31,32 @@ class CustomsService {
   public double calculateCustomsTax(Parcel parcel) {
     switch (parcel.originCountry()) {
       case "UK":
-        return parcel.tobaccoValue() / 2 + parcel.regularValue();
+        return UKTaxService.calculateBrexitTax(parcel);
       case "CN":
-        return parcel.tobaccoValue() + parcel.regularValue();
+        return ChinaTaxService.calculateChinaTax(parcel);
       case "FR":
       case "ES":
       case "RO":
-        return parcel.tobaccoValue() / 3;
+        return UETaxService.calculateUETax(parcel);
       default:
         throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
     }
+  }
+}
+class UETaxService {
+  public static double calculateUETax(Parcel parcel) {
+    return parcel.tobaccoValue() / 3;
+  }
+}
+class ChinaTaxService {
+  public static double calculateChinaTax(Parcel parcel) {
+    return parcel.tobaccoValue() + parcel.regularValue() + 25;
+  }
+}
+class UKTaxService {
+  public static double calculateBrexitTax(Parcel parcel) {
+    // un pic de cod in plus
+    return parcel.tobaccoValue() / 2 + parcel.regularValue();
   }
 }
 

@@ -8,17 +8,20 @@ import org.springframework.cglib.proxy.Callback;
 import org.springframework.cglib.proxy.Enhancer;
 import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.test.annotation.Timed;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.function.Supplier;
 
 import static java.lang.System.currentTimeMillis;
 @SpringBootApplication
@@ -96,6 +99,15 @@ class MathsCuLogging extends Maths {
 // scriind cod doar deasupra liniei, afla ce-a facut fii-ta la mate azi.
 // printeaza toate apelurile catre Maths pe care le-a facut SecondGrade, cu param si return value
 // ==============
+class Util {
+  public static <T> T log(Supplier<T> supplier) {
+    long t0 = currentTimeMillis();
+    T r = supplier.get();
+    long t1 = currentTimeMillis();
+    System.out.println("returned " + r + " took " + (t1 - t0) + " ms");
+    return r;
+  }
+}
 @Service
 class SecondGrade {
   private final Maths maths;
@@ -105,27 +117,29 @@ class SecondGrade {
   }
 
   public void mathClass() {
-    System.out.println("2+4=" + maths.sum(2, 4));
+    // la call-site
+    System.out.println("2+4=" + Util.log(() -> maths.sum(2, 4)));
     System.out.println("1+5=" + maths.sum(1, 5));
     System.out.println("2x3=" + maths.product(2, 3));
   }
 }
 @Service
-class Maths {
+/*🚫final */class Maths {
 //  @Timed()
 //  @Secured("ROLE_ADMIN")
 //  @PreAuthorize("
 //  @Transactional
 //  @Cacheable
 
+  // la declaration site.
   @LoggedMethod
-  public int sum(int a, int b) {
+  public /*🚫static*/ int sum(int a, int b) {
     return a + b;
   }
-  public int product(int a, int b) {
+  public /*🚫final*/ int product(int a, int b) {
     int total = 0;
     for (int i = 0; i < a; i++) {
-      total = sum(total, b);
+      total = sum(total, b); // 👑🚫 Principala tzeapa: adnotarile nu au efect cand chemi metoda in aceeasi clasa!!
     }
     return total;
   }
