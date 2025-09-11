@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -21,7 +21,7 @@ class Strategy {
   }
 
   public static void main(String[] args) {
-      SpringApplication.run(Strategy.class, args);
+    SpringApplication.run(Strategy.class, args);
   }
 
 
@@ -59,7 +59,7 @@ class CustomsService {
   }
 
 
-//  private static final Map<Country, Function<Parcel, Double>> taxFunctions = Map.of(
+  //  private static final Map<Country, Function<Parcel, Double>> taxFunctions = Map.of(
 //      Country.UK, p -> new UKTaxService().calculateTax(p),
 //      Country.CN, p -> new ChinaTaxService().calculateTax(p),
 //      Country.FR, p -> new UETaxService().calculateTax(p),
@@ -68,31 +68,56 @@ class CustomsService {
 //  );
   // STATIC FACTORY METHOD PATTERN
   private TaxCalculator selectTaxCalculator(Parcel parcel) {
-    Class<? extends TaxCalculator> clazz = parcel.originCountry().calculatorClass;
-    return spring.getBean(clazz); // risk: N
+    for (TaxCalculator taxCalculator : taxCalculators) {
+      if (taxCalculator.isEligible(parcel))
+        return taxCalculator;
+    }
+    throw new IllegalArgumentException("No tax calculator for country " + parcel.originCountry());
   }
+
   @Autowired
-  ApplicationContext spring;
+  List<TaxCalculator> taxCalculators; // toate Care Implementeaza
 }
-// "STRATEGY" pattern
-@FunctionalInterface
+
+// "CHAIN OF RESPONSIBILITY" pattern
 interface TaxCalculator {
+  boolean isEligible(Parcel parcel);
   double calculateTax(Parcel parcel);
 }
-@Service
-class UETaxService implements TaxCalculator {
-  public double calculateTax(Parcel parcel) {
-    return parcel.tobaccoValue() / 3;
-  }
-}
+
 @Service
 class ChinaTaxService implements TaxCalculator {
+  @Override
+  public boolean isEligible(Parcel parcel) {
+    return parcel.originCountry() == Country.CN;
+  }
+
   public double calculateTax(Parcel parcel) {
     return parcel.tobaccoValue() + parcel.regularValue() + 25;
   }
 }
+
+
+@Service
+class UETaxService implements TaxCalculator {
+  @Override
+  public boolean isEligible(Parcel parcel) {
+    return List.of(Country.FR, Country.ES, Country.RO)
+        .contains(parcel.originCountry());
+  }
+
+  public double calculateTax(Parcel parcel) {
+    return parcel.tobaccoValue() / 3;
+  }
+}
+
 @Service
 class UKTaxService implements TaxCalculator {
+  @Override
+  public boolean isEligible(Parcel parcel) {
+    return parcel.originCountry() == Country.UK;
+  }
+
   public double calculateTax(Parcel parcel) {
     // un pic de cod in plus
     return parcel.tobaccoValue() / 2 + parcel.regularValue();
