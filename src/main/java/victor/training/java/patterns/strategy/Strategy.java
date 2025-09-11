@@ -6,6 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -33,6 +34,8 @@ class Strategy {
     System.out.println("Tax for " + cn + " = " + service.calculateCustomsTax(cn));
     Parcel uk = new Parcel(Country.UK, 100, 100, LocalDate.now());
     System.out.println("Tax for " + uk + " = " + service.calculateCustomsTax(uk));
+    Parcel chad = new Parcel(Country.CHAD, 100, 100, LocalDate.now());
+    System.out.println("Tax for " + chad + " = " + service.calculateCustomsTax(chad));
   }
 }
 
@@ -86,6 +89,7 @@ interface TaxCalculator {
 }
 
 @Service
+@Order(1)
 class ChinaTaxService implements TaxCalculator {
   @Override
   public boolean isEligible(Parcel parcel) {
@@ -97,8 +101,21 @@ class ChinaTaxService implements TaxCalculator {
   }
 }
 
+@Service
+@Order(9999)
+class DefaultTaxService implements TaxCalculator {
+  @Override
+  public boolean isEligible(Parcel parcel) {
+    return true;
+  }
+  @Override
+  public double calculateTax(Parcel parcel) {
+    return 25;
+  }
+}
 
 @Service
+@Order(1)
 class UETaxService implements TaxCalculator {
   @Override
   public boolean isEligible(Parcel parcel) {
@@ -112,6 +129,8 @@ class UETaxService implements TaxCalculator {
 }
 
 @Service
+@Order(1)
+
 class UKTaxService implements TaxCalculator {
   @Override
   public boolean isEligible(Parcel parcel) {
