@@ -4,7 +4,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Country {
-  UK(UKTaxService.class),
+  UK(UKTaxService.class) {
+    @Override
+    public double calculateTax(Parcel parcel) {
+      return 0; // logica de business in ultimul loc in care te-asteptai s-o gasesti.
+    }
+  },
 //  CN, FR, ES, RO, CHAD;
   CN(ChinaTaxService.class),
   FR(UETaxService.class),
@@ -14,5 +19,5 @@ public enum Country {
 
   public final Class<? extends TaxCalculator> calculatorClass;
 
-
+  public abstract double calculateTax(Parcel parcel);
 }
