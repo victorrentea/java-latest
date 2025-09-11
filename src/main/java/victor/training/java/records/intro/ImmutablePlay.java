@@ -22,6 +22,10 @@ public class ImmutablePlay {
 
     unknownFierceCode(obj);
 
+
+
+
+
     System.out.println("After:   " + obj);
 
     assertThat(original).describedAs("State should not change!").isEqualTo(obj.toString());
