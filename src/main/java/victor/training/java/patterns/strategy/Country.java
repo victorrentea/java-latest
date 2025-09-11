@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Country {
-  UK(new UKTaxService()),
+  UK(UKTaxService.class),
 //  CN, FR, ES, RO, CHAD;
-  CN(new ChinaTaxService()),
-  FR(new UETaxService()),
-  ES(new UETaxService()),
-  RO(new UETaxService()),
-  CHAD(new UETaxService());
+  CN(ChinaTaxService.class),
+  FR(UETaxService.class),
+  ES(UETaxService.class),
+  RO(UETaxService.class),
+  CHAD(UETaxService.class);
 
-  public final TaxCalculator calculator;
+  public final Class<? extends TaxCalculator> calculatorClass;
 }

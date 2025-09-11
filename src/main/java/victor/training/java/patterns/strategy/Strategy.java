@@ -1,16 +1,32 @@
 package victor.training.java.patterns.strategy;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Map;
-import java.util.function.Function;
 
 
+@SpringBootApplication
 class Strategy {
+  private final CustomsService service;
+
+  Strategy(CustomsService service) {
+    this.service = service;
+  }
+
   public static void main(String[] args) {
-    CustomsService service = new CustomsService();
+      SpringApplication.run(Strategy.class, args);
+  }
+
+
+  @EventListener(ApplicationStartedEvent.class)
+  public void run() {
     Parcel ro = new Parcel(Country.RO, 100, 100, LocalDate.now());
     System.out.println("Tax for " + ro + " = " + service.calculateCustomsTax(ro));
     Parcel cn = new Parcel(Country.CN, 100, 100, LocalDate.now());
@@ -42,13 +58,6 @@ class CustomsService {
     return taxCalculator.calculateTax(parcel);
   }
 
-  Map<Country, Class<? extends TaxCalculator>> countryToTaxCalculator = Map.of(
-      Country.UK, UKTaxService.class,
-//      Country.CN, ChinaTaxService.class,
-      Country.FR, UETaxService.class,
-      Country.ES, UETaxService.class,
-      Country.RO, UETaxService.class
-  );
 
 //  private static final Map<Country, Function<Parcel, Double>> taxFunctions = Map.of(
 //      Country.UK, p -> new UKTaxService().calculateTax(p),
@@ -58,33 +67,31 @@ class CustomsService {
 //      Country.RO, p -> new UETaxService().calculateTax(p)
 //  );
   // STATIC FACTORY METHOD PATTERN
-  private static TaxCalculator selectTaxCalculator(Parcel parcel) {
-//    var r = switch (parcel.originCountry()) {
-//      case UK -> new UKTaxService();
-//      case CN -> new ChinaTaxService();
-//      case FR, ES, RO -> new UETaxService();
-//      default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
-//    };
-//    return p->0;
-
-    return parcel.originCountry().calculator;
+  private TaxCalculator selectTaxCalculator(Parcel parcel) {
+    Class<? extends TaxCalculator> clazz = parcel.originCountry().calculatorClass;
+    return spring.getBean(clazz); // risk: N
   }
+  @Autowired
+  ApplicationContext spring;
 }
 // "STRATEGY" pattern
 @FunctionalInterface
 interface TaxCalculator {
   double calculateTax(Parcel parcel);
 }
+@Service
 class UETaxService implements TaxCalculator {
   public double calculateTax(Parcel parcel) {
     return parcel.tobaccoValue() / 3;
   }
 }
+@Service
 class ChinaTaxService implements TaxCalculator {
   public double calculateTax(Parcel parcel) {
     return parcel.tobaccoValue() + parcel.regularValue() + 25;
   }
 }
+@Service
 class UKTaxService implements TaxCalculator {
   public double calculateTax(Parcel parcel) {
     // un pic de cod in plus
