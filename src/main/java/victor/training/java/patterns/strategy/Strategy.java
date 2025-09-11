@@ -9,17 +9,21 @@ import java.time.LocalDate;
 class Strategy {
   public static void main(String[] args) {
     CustomsService service = new CustomsService();
-    Parcel ro = new Parcel("RO", 100, 100, LocalDate.now());
+    Parcel ro = new Parcel(Country.RO, 100, 100, LocalDate.now());
     System.out.println("Tax for " + ro + " = " + service.calculateCustomsTax(ro));
-    Parcel cn = new Parcel("CN", 100, 100, LocalDate.now());
+    Parcel cn = new Parcel(Country.CN, 100, 100, LocalDate.now());
     System.out.println("Tax for " + cn + " = " + service.calculateCustomsTax(cn));
-    Parcel uk = new Parcel("UK", 100, 100, LocalDate.now());
+    Parcel uk = new Parcel(Country.UK, 100, 100, LocalDate.now());
     System.out.println("Tax for " + uk + " = " + service.calculateCustomsTax(uk));
   }
 }
 
+enum Country {
+  UK, CN, FR, ES, RO
+}
+
 record Parcel(
-    String originCountry,
+    Country originCountry,
     double tobaccoValue,
     double regularValue,
     LocalDate date) {
@@ -32,6 +36,9 @@ class CustomsService {
   // - case sa aiba o linie
   // - switch sa fie singur in metoda
   // - ai default throw
+
+  // LEGE: n-ai voie cu Stringuri cu valori finite precunoscute
+  //   -> enum la margine <=> iff daca faci logica ce depinde de el
   public double calculateCustomsTax(Parcel parcel) {
     TaxCalculator taxCalculator = selectTaxCalculator(parcel);
     return taxCalculator.calculateTax(parcel);
@@ -40,9 +47,9 @@ class CustomsService {
   // STATIC FACTORY METHOD PATTERN
   private static TaxCalculator selectTaxCalculator(Parcel parcel) {
     return switch (parcel.originCountry()) {
-      case "UK" -> new UKTaxService();
-      case "CN" -> new ChinaTaxService();
-      case "FR", "ES", "RO" -> new UETaxService();
+      case UK -> new UKTaxService();
+      case CN -> new ChinaTaxService();
+      case FR, ES, RO -> new UETaxService();
       default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
     };
   }
