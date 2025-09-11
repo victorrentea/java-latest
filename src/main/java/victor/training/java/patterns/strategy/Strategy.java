@@ -28,26 +28,26 @@ record Parcel(
 @Service
 @Data
 class CustomsService {
+  // 3 reguli pt un switch curat:
+  // - case sa aiba o linie
+  // - switch sa fie singur in metoda
+  // - ai default throw
   public double calculateCustomsTax(Parcel parcel) {
-    TaxCalculator taxCalculator;
-    switch (parcel.originCountry()) {
-      case "UK":
-        taxCalculator = new UKTaxService();
-        break;
-      case "CN":
-        taxCalculator = new ChinaTaxService();
-        break;
-      case "FR":
-      case "ES":
-      case "RO":
-        taxCalculator = new UETaxService();
-        break;
-      default:
-        throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
-    }
+    TaxCalculator taxCalculator = selectTaxCalculator(parcel);
     return taxCalculator.calculateTax(parcel);
   }
+
+  // STATIC FACTORY METHOD PATTERN
+  private static TaxCalculator selectTaxCalculator(Parcel parcel) {
+    return switch (parcel.originCountry()) {
+      case "UK" -> new UKTaxService();
+      case "CN" -> new ChinaTaxService();
+      case "FR", "ES", "RO" -> new UETaxService();
+      default -> throw new IllegalArgumentException("Not a valid country ISO2 code: " + parcel.originCountry());
+    };
+  }
 }
+// "STRATEGY" pattern
 interface TaxCalculator {
   double calculateTax(Parcel parcel);
 }
