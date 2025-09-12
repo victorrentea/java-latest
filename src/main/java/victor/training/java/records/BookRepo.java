@@ -7,9 +7,10 @@ import victor.training.java.records.BookApi.SearchBookResult;
 import java.util.List;
 
 public interface BookRepo extends JpaRepository<Book, Long> {
-  @Query("select new BookApi$SearchBookResult(book.id, book.title)\n" +
-         "from Book book\n" +
-         "where UPPER(book.name) LIKE UPPER('%' || ?1 || '%')")
+  @Query("""
+      select new BookApi$SearchBookResult(book.id, book.title)
+      from Book book
+      where UPPER(book.name) LIKE UPPER('%' || ?1 || '%')""")
   List<SearchBookResult> search(String name);
 
   //region complex native SQL

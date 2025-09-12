@@ -27,6 +27,8 @@ public class BookingTest {
     wireMock.stubFor(get(urlEqualTo("/weather")).willReturn(
             aResponse().withFixedDelay(10).withBody("Rain")));
 
-
+String s= """
+    {"f1":1}
+    """;
   }
 }
