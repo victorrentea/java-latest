@@ -89,6 +89,7 @@ class CustomsService {
 interface TaxCalculator {
   boolean isEligible(Parcel parcel);
   double calculateTax(Parcel parcel);
+//  default int order() {return 1;}
 }
 
 @Service

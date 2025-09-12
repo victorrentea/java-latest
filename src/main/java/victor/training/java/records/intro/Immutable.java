@@ -26,7 +26,7 @@ public record Immutable(
     // NU pe JPA
     ImmutableList<Integer> list) {
 
-//  public Immutable move(float newLat, float newLong) {}
+  //  public Immutable move(float newLat, float newLong) {}
   public Immutable translate(float deltaLat, float deltaLong) {
     return new Immutable(name, lat + deltaLat, lon + deltaLong, other, list);
   }
