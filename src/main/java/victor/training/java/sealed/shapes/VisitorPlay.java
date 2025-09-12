@@ -30,6 +30,7 @@ public class VisitorPlay {
           case Circle(int radius) -> 2 * Math.PI * radius;
           case Rectangle(int width, int height) -> 2 * (width + height);
           case Square(int edge) -> 4 * edge;
+          default -> throw new IllegalStateException("Unexpected value: " + shape);
         }).sum();
 
     // OOP: behavior kept next to state
