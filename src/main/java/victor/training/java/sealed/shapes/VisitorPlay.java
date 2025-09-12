@@ -15,6 +15,20 @@ public class VisitorPlay {
 
         double totalPerimeter = 0; // TASK : compute
 
+        // OOP: behavior kept next to state
+        for (Shape shape : shapes) {
+            totalPerimeter += shape.calculatePerimeter();
+        }
+
+        //
+
+
+
+
+
+
+
+
         // ## instanceOf
         // ## OOP (behavior next to state)
         // ## VISITOR 😱
