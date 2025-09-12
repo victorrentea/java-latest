@@ -1,12 +1,7 @@
 package victor.training.java.sealed.shapes;
 
-public interface Shape {
-  void accept(ShapeVisitor shapeVisitor);
+// java21
+public sealed interface Shape permits Circle,Rectangle,Square {
 }
-record Rectangle(int width, int height) implements Shape {
-  @Override
-  public void accept(ShapeVisitor shapeVisitor) {
-    shapeVisitor.visit(this);
-  }
-}
+//record Sfera (int r) implements Shape {}
 

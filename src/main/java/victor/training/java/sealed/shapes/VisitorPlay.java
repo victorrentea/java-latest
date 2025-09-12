@@ -1,6 +1,8 @@
 package victor.training.java.sealed.shapes;
 
 
+import org.w3c.dom.css.Rect;
+
 import java.util.List;
 
 public class VisitorPlay {
@@ -10,10 +12,25 @@ public class VisitorPlay {
         new Square(10), // 4 * E
         new Circle(5), // 2 * PI * R
         new Square(5),
-        new Rectangle(2,3),
+        new Rectangle(2, 3),
         new Square(1));
-    double totalPerimeter = 0; // TASK : compute
 
+    // TS/JS/Py/Go: Destructurare
+    // let {a,b} = f();
+    // ===
+    // let ab=f();
+    // let a=ab.a;
+    // let b=ab.b;
+    //
+
+    // function f() { return {a:1, b:2}; }
+
+    double totalPerimeter = shapes.stream()
+        .mapToDouble(shape -> switch (shape) {
+          case Circle(int radius) -> 2 * Math.PI * radius;
+          case Rectangle(int width, int height) -> 2 * (width + height);
+          case Square(int edge) -> 4 * edge;
+        }).sum();
 
     // OOP: behavior kept next to state
 //        for (Shape shape : shapes) {
@@ -34,16 +51,20 @@ public class VisitorPlay {
     // ## VISITOR 😱 : vrei sa te asiguri la compilare ca nu ratezi vreun subtip
     // + te protejeaza de a uita un subtip din ierarhie
     // + poti adauga operatii noi per element fara sa atingi clasa elementului
-    PerimeterVisitor perimeterVisitor = new PerimeterVisitor();
-    for (Shape shape : shapes) {
-      shape.accept(perimeterVisitor);
-    }
-    totalPerimeter = perimeterVisitor.getTotalPerimeter();
+//    PerimeterVisitor perimeterVisitor = new PerimeterVisitor();
+//    for (Shape shape : shapes) {
+//      shape.accept(perimeterVisitor);
+//    }
+//    totalPerimeter = perimeterVisitor.getTotalPerimeter();
 
     // ## switch+sealed; in Java 21 Visitor e antipattern
 
 
     System.out.println(totalPerimeter);
+  }
+
+  private static Rectangle f() {
+    return null;
   }
 }
 
