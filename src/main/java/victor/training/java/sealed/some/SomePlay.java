@@ -8,14 +8,17 @@ import static victor.training.java.sealed.some.Maybe.*;
 
 public class SomePlay {
   public static void main(String[] args) {
-    switch (someRepoMethod(new Random().nextBoolean())) {
+    Maybe<String> maybeEntity = findById(new Random().nextBoolean());
+    switch (maybeEntity) { // Scala-like
       case Some(var data) -> System.out.println("Got: " + data);
-      case None() -> System.out.println("Got nada");
+      case None() -> System.out.println("Got nada/ciu-ciu");
     }
+//    (Some)maybeEntity
+//    optionalEntity.get()
   }
 
-  static Maybe<String> someRepoMethod(boolean b) {
-    return b ?  new Some<>("data") : new None<>();
+  static Maybe<String> findById(boolean id) {
+    return id ? new Some<>("data") : new None<>();
   }
 }
 
